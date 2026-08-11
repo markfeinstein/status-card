@@ -66,6 +66,7 @@ hide_person: false  # hide person entities in card
 list_mode: false  # enable buk mode for accessing entities as text you can copy (easy to add hidden_entities)
 hide_content_name: false  # hide names for domains/device classes/exta entities
 show_total_number: false  # lets you show how many entities of a domain are on and how many in total e.g. 1/4 on
+badge_active_count: false # badge mode can show active count while show_total_entities keeps all entities in the popup
 square: false # renders card items as a rounded square instaed of a circle
 show_total_entities: false # lets you choose between showing only 'on' entities or all entities that belongs to a domain
 theme: optional # choose a theme to sytle your card
@@ -114,6 +115,7 @@ customization:  # customize almost everything
     invert: true  # if true only off entities will be shown
     show_total_number: false  # lets you show how many entities of a domain are on and how many in total e.g. 1/4 on
     show_total_entities: false # lets you choose between showing only 'on' entities or all entities that belongs to a domain
+    badge_active_count: false # badge mode uses the active count even when all entities are shown in the popup
     invert_state: false # you can invert the extra_entity state filter
     state: "on" | "off" # specify the value that an extra_entity needs to show
     name: test_name    # change the name of domain/device_class/extra_entitiy

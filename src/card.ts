@@ -415,6 +415,32 @@ export class StatusCard extends LitElement {
     return customization?.show_total_number === true;
   }
 
+  private _shouldUseActiveBadgeCount(
+    type: string,
+    deviceClass?: string,
+  ): boolean {
+    return (
+      this.getCustomizationForType(typeKey(type, deviceClass))
+        ?.badge_active_count === true || this._config.badge_active_count === true
+    );
+  }
+
+  private _activeBadgeEntities(entities: HassEntity[]): HassEntity[] {
+    return entities.filter((entity) => {
+      const domain = computeDomain(entity.entity_id);
+      const deviceClass = entity.attributes?.device_class;
+      const customization = this.getCustomizationForType(
+        typeKey(domain, deviceClass),
+      );
+      return isEntityActive(
+        entity,
+        domain,
+        deviceClass,
+        customization?.invert === true,
+      );
+    });
+  }
+
   public _isOn(domain: string, deviceClass?: string): HassEntity[] {
     const ents = this._baseEntities(domain, deviceClass);
 
@@ -1073,6 +1099,11 @@ export class StatusCard extends LitElement {
       color,
       background_color,
     });
+    const badgeCount =
+      customization?.badge_active_count === true ||
+      this._config.badge_active_count === true
+        ? this._activeBadgeEntities(entities).length
+        : entities.length;
 
     return html`
       <ha-tab-group-tab
@@ -1084,7 +1115,7 @@ export class StatusCard extends LitElement {
         style=${styleMap(badgeStyles)}
         data-badge=${ifDefined(
           showBadge && entities.length > 0
-            ? String(entities.length)
+            ? String(badgeCount)
             : undefined,
         )}
       >
@@ -1166,6 +1197,9 @@ export class StatusCard extends LitElement {
     const name =
       getCustomName(this._config, domain, deviceClass) ||
       this.computeLabel({ name: deviceClass || domain });
+    const badgeCount = this._shouldUseActiveBadgeCount(domain, deviceClass)
+      ? active.length
+      : entities.length;
 
     let stateText;
     if (this._shouldShowTotalNumbers(domain, deviceClass)) {
@@ -1196,7 +1230,7 @@ export class StatusCard extends LitElement {
         style=${styleMap(badgeStyles)}
         data-badge=${ifDefined(
           showBadge && entities.length > 0
-            ? String(entities.length)
+            ? String(badgeCount)
             : undefined,
         )}
       >

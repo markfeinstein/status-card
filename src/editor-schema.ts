@@ -181,6 +181,7 @@ export function getAppearanceSchema(
           selector: { boolean: {} },
         },
         { name: "badge_mode", selector: { boolean: {} } },
+        { name: "badge_active_count", selector: { boolean: {} } },
         { name: "no_background", selector: { boolean: {} } },
       ],
     },
@@ -278,6 +279,7 @@ export const getItemAppearanceSchema = (
         schema: [
           ...(!isGroup ? [{ name: "invert", selector: { boolean: {} } }] : []),
           { name: "badge_mode", selector: { boolean: {} } },
+          { name: "badge_active_count", selector: { boolean: {} } },
           ...(badgeMode
             ? ([
                 {

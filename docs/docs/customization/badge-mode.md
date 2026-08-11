@@ -9,6 +9,7 @@ Compact display: icon + badge count instead of a full content item. Badge mode i
 - **Global:** `badge_mode: true` enables badge mode for all items
 - **Per Item:** Individually enable per item via customization
 - **Person Badges:** Show home/away icons
+- **Active Count:** `badge_active_count: true` keeps the badge count on active entities even when `show_total_entities` makes the popup show all entities
 
 <img class="doc-img-responsive" src="../img/badge_mode.png" alt="Badge Mode Feature">
 
@@ -21,6 +22,7 @@ Compact display: icon + badge count instead of a full content item. Badge mode i
 | **Badge Mode** | Enable badge mode (global or per item) |
 | **Badge Color** | Global badge color |
 | **Badge Text Color** | Global badge text color |
+| **Active Count** | Use the active entity count for badge mode while keeping all matching entities available in the popup |
 
 
 <img class="doc-img-responsive" src="../img/badge_editor.png" alt="Badge Mode Editor">
@@ -32,6 +34,8 @@ Compact display: icon + badge count instead of a full content item. Badge mode i
 ```yaml
 type: custom:status-card
 badge_mode: true
+badge_active_count: true
+show_total_entities: true
 badge_color: red
 badge_text_color: white
 ```
