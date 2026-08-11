@@ -878,19 +878,92 @@ export class StatusCard extends LitElement {
     return entityId === pattern;
   }
 
+  private _matchNativeGroupValue(actual: unknown, expected: unknown): boolean {
+    if (Array.isArray(expected)) {
+      return expected.some((value) => this._matchNativeGroupValue(actual, value));
+    }
+    if (typeof expected === "string" && expected.startsWith("!")) {
+      return !this._matchNativeGroupValue(actual, expected.slice(1));
+    }
+    if (
+      typeof expected === "string" &&
+      /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/.test(expected)
+    ) {
+      const [, op, numberText] = expected.match(
+        /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/,
+      ) || [undefined, undefined, undefined];
+      const wanted = Number(numberText);
+      const received = Number(actual);
+      if (!Number.isFinite(wanted) || !Number.isFinite(received)) return false;
+      if (op === ">") return received > wanted;
+      if (op === ">=") return received >= wanted;
+      if (op === "<") return received < wanted;
+      if (op === "<=") return received <= wanted;
+    }
+    if (typeof expected === "string" && expected.includes("*")) {
+      return this._matchNativeGroupPattern(String(actual), expected);
+    }
+    return actual === expected;
+  }
+
+  private _nativeGroupMatchesFilter(
+    entity: HassEntity,
+    key: string,
+    expected: unknown,
+  ): boolean {
+    if (key === "state") return this._matchNativeGroupValue(entity.state, expected);
+    if (key === "entity_id") {
+      return this._matchNativeGroupValue(entity.entity_id, expected);
+    }
+    if (key === "attributes" && expected && typeof expected === "object") {
+      return Object.entries(expected).every(([attrKey, attrExpected]) => {
+        const value = attrKey.split(":").reduce<unknown>(
+          (current, part) =>
+            current && typeof current === "object"
+              ? (current as Record<string, unknown>)[part]
+              : undefined,
+          entity.attributes,
+        );
+        return this._matchNativeGroupValue(value, attrExpected);
+      });
+    }
+    return true;
+  }
+
   private _nativeGroupEntities(config: LovelaceCardConfig): HassEntity[] {
     const domains = Array.isArray(config.domains) ? config.domains : [];
     const excludes = Array.isArray(config.exclude_entities)
       ? config.exclude_entities
       : [];
+    const filters = Array.isArray(config.filters)
+      ? config.filters
+      : ([
+          config.state !== undefined
+            ? { key: "state", value: config.state }
+            : undefined,
+          config.attributes !== undefined
+            ? { key: "attributes", value: config.attributes }
+            : undefined,
+        ].filter(Boolean) as Array<{ key: string; value: unknown }>);
     const seen = new Set<string>();
     return domains
       .flatMap((domain) => this._totalEntities(String(domain)))
       .filter((entity) => {
         if (seen.has(entity.entity_id)) return false;
         seen.add(entity.entity_id);
-        return !excludes.some((pattern: string) =>
-          this._matchNativeGroupPattern(entity.entity_id, String(pattern)),
+        if (
+          excludes.some((pattern: string) =>
+            this._matchNativeGroupPattern(entity.entity_id, String(pattern)),
+          )
+        ) {
+          return false;
+        }
+        return filters.every((filter) =>
+          this._nativeGroupMatchesFilter(
+            entity,
+            String(filter.key),
+            filter.value,
+          ),
         );
       });
   }

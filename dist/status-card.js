@@ -98,8 +98,8 @@ let ht = class extends HTMLElement {
       this[i] = a;
     } };
     return { get: o, set(a) {
-      const c = o == null ? void 0 : o.call(this);
-      n == null || n.call(this, a), this.requestUpdate(t, c, s);
+      const l = o == null ? void 0 : o.call(this);
+      n == null || n.call(this, a), this.requestUpdate(t, l, s);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
@@ -195,17 +195,17 @@ let ht = class extends HTMLElement {
     var n, a;
     const s = this.constructor, o = s._$Eh.get(t);
     if (o !== void 0 && this._$Em !== o) {
-      const c = s.getPropertyOptions(o), r = typeof c.converter == "function" ? { fromAttribute: c.converter } : ((n = c.converter) == null ? void 0 : n.fromAttribute) !== void 0 ? c.converter : Ot;
+      const l = s.getPropertyOptions(o), r = typeof l.converter == "function" ? { fromAttribute: l.converter } : ((n = l.converter) == null ? void 0 : n.fromAttribute) !== void 0 ? l.converter : Ot;
       this._$Em = o;
-      const l = r.fromAttribute(i, c.type);
-      this[o] = l ?? ((a = this._$Ej) == null ? void 0 : a.get(o)) ?? l, this._$Em = null;
+      const c = r.fromAttribute(i, l.type);
+      this[o] = c ?? ((a = this._$Ej) == null ? void 0 : a.get(o)) ?? c, this._$Em = null;
     }
   }
   requestUpdate(t, i, s, o = !1, n) {
     var a;
     if (t !== void 0) {
-      const c = this.constructor;
-      if (o === !1 && (n = this[t]), s ?? (s = c.getPropertyOptions(t)), !((s.hasChanged ?? fe)(n, i) || s.useDefault && s.reflect && n === ((a = this._$Ej) == null ? void 0 : a.get(t)) && !this.hasAttribute(c._$Eu(t, s)))) return;
+      const l = this.constructor;
+      if (o === !1 && (n = this[t]), s ?? (s = l.getPropertyOptions(t)), !((s.hasChanged ?? fe)(n, i) || s.useDefault && s.reflect && n === ((a = this._$Ej) == null ? void 0 : a.get(t)) && !this.hasAttribute(l._$Eu(t, s)))) return;
       this.C(t, i, s);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
@@ -236,8 +236,8 @@ let ht = class extends HTMLElement {
       }
       const o = this.constructor.elementProperties;
       if (o.size > 0) for (const [n, a] of o) {
-        const { wrapped: c } = a, r = this[n];
-        c !== !0 || this._$AL.has(n) || r === void 0 || this.C(n, void 0, a, r);
+        const { wrapped: l } = a, r = this[n];
+        l !== !0 || this._$AL.has(n) || r === void 0 || this.C(n, void 0, a, r);
       }
     }
     let t = !1;
@@ -287,22 +287,22 @@ ht.elementStyles = [], ht.shadowRootOptions = { mode: "open" }, ht[gt("elementPr
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Ct = globalThis, Ve = (e) => e, It = Ct.trustedTypes, $e = It ? It.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, k1 = "$lit$", Q = `lit$${Math.random().toFixed(9).slice(2)}$`, T1 = "?" + Q, ni = `<${T1}>`, lt = document, vt = () => lt.createComment(""), yt = (e) => e === null || typeof e != "object" && typeof e != "function", _e = Array.isArray, ai = (e) => _e(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", Wt = `[ 	
+const Ct = globalThis, Ve = (e) => e, It = Ct.trustedTypes, $e = It ? It.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, k1 = "$lit$", Q = `lit$${Math.random().toFixed(9).slice(2)}$`, T1 = "?" + Q, ni = `<${T1}>`, ct = document, vt = () => ct.createComment(""), yt = (e) => e === null || typeof e != "object" && typeof e != "function", _e = Array.isArray, ai = (e) => _e(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", Wt = `[ 	
 \f\r]`, _t = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Me = /-->/g, we = />/g, ot = RegExp(`>|${Wt}(?:([^\\s"'>=/]+)(${Wt}*=${Wt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Ee = /'/g, Se = /"/g, z1 = /^(?:script|style|textarea|title)$/i, ri = (e) => (t, ...i) => ({ _$litType$: e, strings: t, values: i }), _ = ri(1), R = Symbol.for("lit-noChange"), T = Symbol.for("lit-nothing"), xe = /* @__PURE__ */ new WeakMap(), rt = lt.createTreeWalker(lt, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Ee = /'/g, Se = /"/g, z1 = /^(?:script|style|textarea|title)$/i, ri = (e) => (t, ...i) => ({ _$litType$: e, strings: t, values: i }), _ = ri(1), F = Symbol.for("lit-noChange"), T = Symbol.for("lit-nothing"), xe = /* @__PURE__ */ new WeakMap(), rt = ct.createTreeWalker(ct, 129);
 function D1(e, t) {
   if (!_e(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return $e !== void 0 ? $e.createHTML(t) : t;
 }
-const ci = (e, t) => {
+const li = (e, t) => {
   const i = e.length - 1, s = [];
   let o, n = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", a = _t;
-  for (let c = 0; c < i; c++) {
-    const r = e[c];
-    let l, d, h = -1, u = 0;
-    for (; u < r.length && (a.lastIndex = u, d = a.exec(r), d !== null); ) u = a.lastIndex, a === _t ? d[1] === "!--" ? a = Me : d[1] !== void 0 ? a = we : d[2] !== void 0 ? (z1.test(d[2]) && (o = RegExp("</" + d[2], "g")), a = ot) : d[3] !== void 0 && (a = ot) : a === ot ? d[0] === ">" ? (a = o ?? _t, h = -1) : d[1] === void 0 ? h = -2 : (h = a.lastIndex - d[2].length, l = d[1], a = d[3] === void 0 ? ot : d[3] === '"' ? Se : Ee) : a === Se || a === Ee ? a = ot : a === Me || a === we ? a = _t : (a = ot, o = void 0);
-    const p = a === ot && e[c + 1].startsWith("/>") ? " " : "";
-    n += a === _t ? r + ni : h >= 0 ? (s.push(l), r.slice(0, h) + k1 + r.slice(h) + Q + p) : r + Q + (h === -2 ? c : p);
+  for (let l = 0; l < i; l++) {
+    const r = e[l];
+    let c, d, h = -1, u = 0;
+    for (; u < r.length && (a.lastIndex = u, d = a.exec(r), d !== null); ) u = a.lastIndex, a === _t ? d[1] === "!--" ? a = Me : d[1] !== void 0 ? a = we : d[2] !== void 0 ? (z1.test(d[2]) && (o = RegExp("</" + d[2], "g")), a = ot) : d[3] !== void 0 && (a = ot) : a === ot ? d[0] === ">" ? (a = o ?? _t, h = -1) : d[1] === void 0 ? h = -2 : (h = a.lastIndex - d[2].length, c = d[1], a = d[3] === void 0 ? ot : d[3] === '"' ? Se : Ee) : a === Se || a === Ee ? a = ot : a === Me || a === we ? a = _t : (a = ot, o = void 0);
+    const p = a === ot && e[l + 1].startsWith("/>") ? " " : "";
+    n += a === _t ? r + ni : h >= 0 ? (s.push(c), r.slice(0, h) + k1 + r.slice(h) + Q + p) : r + Q + (h === -2 ? l : p);
   }
   return [D1(e, n + (e[i] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), s];
 };
@@ -311,12 +311,12 @@ class bt {
     let o;
     this.parts = [];
     let n = 0, a = 0;
-    const c = t.length - 1, r = this.parts, [l, d] = ci(t, i);
-    if (this.el = bt.createElement(l, s), rt.currentNode = this.el.content, i === 2 || i === 3) {
+    const l = t.length - 1, r = this.parts, [c, d] = li(t, i);
+    if (this.el = bt.createElement(c, s), rt.currentNode = this.el.content, i === 2 || i === 3) {
       const h = this.el.content.firstChild;
       h.replaceWith(...h.childNodes);
     }
-    for (; (o = rt.nextNode()) !== null && r.length < c; ) {
+    for (; (o = rt.nextNode()) !== null && r.length < l; ) {
       if (o.nodeType === 1) {
         if (o.hasAttributes()) for (const h of o.getAttributeNames()) if (h.endsWith(k1)) {
           const u = d[a++], p = o.getAttribute(h).split(Q), m = /([.?@])?(.*)/.exec(u);
@@ -339,18 +339,18 @@ class bt {
     }
   }
   static createElement(t, i) {
-    const s = lt.createElement("template");
+    const s = ct.createElement("template");
     return s.innerHTML = t, s;
   }
 }
 function ut(e, t, i = e, s) {
-  var a, c;
-  if (t === R) return t;
+  var a, l;
+  if (t === F) return t;
   let o = s !== void 0 ? (a = i._$Co) == null ? void 0 : a[s] : i._$Cl;
   const n = yt(t) ? void 0 : t._$litDirective$;
-  return (o == null ? void 0 : o.constructor) !== n && ((c = o == null ? void 0 : o._$AO) == null || c.call(o, !1), n === void 0 ? o = void 0 : (o = new n(e), o._$AT(e, i, s)), s !== void 0 ? (i._$Co ?? (i._$Co = []))[s] = o : i._$Cl = o), o !== void 0 && (t = ut(e, o._$AS(e, t.values), o, s)), t;
+  return (o == null ? void 0 : o.constructor) !== n && ((l = o == null ? void 0 : o._$AO) == null || l.call(o, !1), n === void 0 ? o = void 0 : (o = new n(e), o._$AT(e, i, s)), s !== void 0 ? (i._$Co ?? (i._$Co = []))[s] = o : i._$Cl = o), o !== void 0 && (t = ut(e, o._$AS(e, t.values), o, s)), t;
 }
-class li {
+class ci {
   constructor(t, i) {
     this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = i;
   }
@@ -361,17 +361,17 @@ class li {
     return this._$AM._$AU;
   }
   u(t) {
-    const { el: { content: i }, parts: s } = this._$AD, o = ((t == null ? void 0 : t.creationScope) ?? lt).importNode(i, !0);
+    const { el: { content: i }, parts: s } = this._$AD, o = ((t == null ? void 0 : t.creationScope) ?? ct).importNode(i, !0);
     rt.currentNode = o;
-    let n = rt.nextNode(), a = 0, c = 0, r = s[0];
+    let n = rt.nextNode(), a = 0, l = 0, r = s[0];
     for (; r !== void 0; ) {
       if (a === r.index) {
-        let l;
-        r.type === 2 ? l = new pt(n, n.nextSibling, this, t) : r.type === 1 ? l = new r.ctor(n, r.name, r.strings, this, t) : r.type === 6 && (l = new pi(n, this, t)), this._$AV.push(l), r = s[++c];
+        let c;
+        r.type === 2 ? c = new pt(n, n.nextSibling, this, t) : r.type === 1 ? c = new r.ctor(n, r.name, r.strings, this, t) : r.type === 6 && (c = new pi(n, this, t)), this._$AV.push(c), r = s[++l];
       }
       a !== (r == null ? void 0 : r.index) && (n = rt.nextNode(), a++);
     }
-    return rt.currentNode = lt, o;
+    return rt.currentNode = ct, o;
   }
   p(t) {
     let i = 0;
@@ -398,7 +398,7 @@ class pt {
     return this._$AB;
   }
   _$AI(t, i = this) {
-    t = ut(this, t, i), yt(t) ? t === T || t == null || t === "" ? (this._$AH !== T && this._$AR(), this._$AH = T) : t !== this._$AH && t !== R && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : ai(t) ? this.k(t) : this._(t);
+    t = ut(this, t, i), yt(t) ? t === T || t == null || t === "" ? (this._$AH !== T && this._$AR(), this._$AH = T) : t !== this._$AH && t !== F && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : ai(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -407,15 +407,15 @@ class pt {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== T && yt(this._$AH) ? this._$AA.nextSibling.data = t : this.T(lt.createTextNode(t)), this._$AH = t;
+    this._$AH !== T && yt(this._$AH) ? this._$AA.nextSibling.data = t : this.T(ct.createTextNode(t)), this._$AH = t;
   }
   $(t) {
     var n;
     const { values: i, _$litType$: s } = t, o = typeof s == "number" ? this._$AC(t) : (s.el === void 0 && (s.el = bt.createElement(D1(s.h, s.h[0]), this.options)), s);
     if (((n = this._$AH) == null ? void 0 : n._$AD) === o) this._$AH.p(i);
     else {
-      const a = new li(o, this), c = a.u(this.options);
-      a.p(i), this.T(c), this._$AH = a;
+      const a = new ci(o, this), l = a.u(this.options);
+      a.p(i), this.T(l), this._$AH = a;
     }
   }
   _$AC(t) {
@@ -454,11 +454,11 @@ class Gt {
   _$AI(t, i = this, s, o) {
     const n = this.strings;
     let a = !1;
-    if (n === void 0) t = ut(this, t, i, 0), a = !yt(t) || t !== this._$AH && t !== R, a && (this._$AH = t);
+    if (n === void 0) t = ut(this, t, i, 0), a = !yt(t) || t !== this._$AH && t !== F, a && (this._$AH = t);
     else {
-      const c = t;
-      let r, l;
-      for (t = n[0], r = 0; r < n.length - 1; r++) l = ut(this, c[s + r], i, r), l === R && (l = this._$AH[r]), a || (a = !yt(l) || l !== this._$AH[r]), l === T ? t = T : t !== T && (t += (l ?? "") + n[r + 1]), this._$AH[r] = l;
+      const l = t;
+      let r, c;
+      for (t = n[0], r = 0; r < n.length - 1; r++) c = ut(this, l[s + r], i, r), c === F && (c = this._$AH[r]), a || (a = !yt(c) || c !== this._$AH[r]), c === T ? t = T : t !== T && (t += (c ?? "") + n[r + 1]), this._$AH[r] = c;
     }
     a && !o && this.j(t);
   }
@@ -487,7 +487,7 @@ class ui extends Gt {
     super(t, i, s, o, n), this.type = 5;
   }
   _$AI(t, i = this) {
-    if ((t = ut(this, t, i, 0) ?? T) === R) return;
+    if ((t = ut(this, t, i, 0) ?? T) === F) return;
     const s = this._$AH, o = t === T && s !== T || t.capture !== s.capture || t.once !== s.once || t.passive !== s.passive, n = t !== T && (s === T || o);
     o && this.element.removeEventListener(this.name, this, s), n && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
@@ -523,8 +523,8 @@ const _i = (e, t, i) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ct = globalThis;
-let F = class extends ht {
+const lt = globalThis;
+let N = class extends ht {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -546,14 +546,14 @@ let F = class extends ht {
     super.disconnectedCallback(), (t = this._$Do) == null || t.setConnected(!1);
   }
   render() {
-    return R;
+    return F;
   }
 };
 var S1;
-F._$litElement$ = !0, F.finalized = !0, (S1 = ct.litElementHydrateSupport) == null || S1.call(ct, { LitElement: F });
-const Kt = ct.litElementPolyfillSupport;
-Kt == null || Kt({ LitElement: F });
-(ct.litElementVersions ?? (ct.litElementVersions = [])).push("4.2.2");
+N._$litElement$ = !0, N.finalized = !0, (S1 = lt.litElementHydrateSupport) == null || S1.call(lt, { LitElement: N });
+const Kt = lt.litElementPolyfillSupport;
+Kt == null || Kt({ LitElement: N });
+(lt.litElementVersions ?? (lt.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -574,18 +574,18 @@ const mi = { attribute: !0, type: String, converter: Ot, reflect: !1, hasChanged
   let n = globalThis.litPropertyMetadata.get(o);
   if (n === void 0 && globalThis.litPropertyMetadata.set(o, n = /* @__PURE__ */ new Map()), s === "setter" && ((e = Object.create(e)).wrapped = !0), n.set(i.name, e), s === "accessor") {
     const { name: a } = i;
-    return { set(c) {
+    return { set(l) {
       const r = t.get.call(this);
-      t.set.call(this, c), this.requestUpdate(a, r, e, !0, c);
-    }, init(c) {
-      return c !== void 0 && this.C(a, void 0, e, c), c;
+      t.set.call(this, l), this.requestUpdate(a, r, e, !0, l);
+    }, init(l) {
+      return l !== void 0 && this.C(a, void 0, e, l), l;
     } };
   }
   if (s === "setter") {
     const { name: a } = i;
-    return function(c) {
+    return function(l) {
       const r = this[a];
-      t.call(this, c), this.requestUpdate(a, r, e, !0, c);
+      t.call(this, l), this.requestUpdate(a, r, e, !0, l);
     };
   }
   throw Error("Unsupported decorator location: " + s);
@@ -610,7 +610,7 @@ function A(e) {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const me = { ATTRIBUTE: 1, CHILD: 2 }, Bt = (e) => (...t) => ({ _$litDirective$: e, values: t });
-let Ft = class {
+let Nt = class {
   constructor(t) {
   }
   get _$AU() {
@@ -635,19 +635,19 @@ const { I: Ci } = fi, ke = (e) => e, Te = () => document.createComment(""), mt =
   var n;
   const s = e._$AA.parentNode, o = t === void 0 ? e._$AB : t._$AA;
   if (i === void 0) {
-    const a = s.insertBefore(Te(), o), c = s.insertBefore(Te(), o);
-    i = new Ci(a, c, e, e.options);
+    const a = s.insertBefore(Te(), o), l = s.insertBefore(Te(), o);
+    i = new Ci(a, l, e, e.options);
   } else {
-    const a = i._$AB.nextSibling, c = i._$AM, r = c !== e;
+    const a = i._$AB.nextSibling, l = i._$AM, r = l !== e;
     if (r) {
-      let l;
-      (n = i._$AQ) == null || n.call(i, e), i._$AM = e, i._$AP !== void 0 && (l = e._$AU) !== c._$AU && i._$AP(l);
+      let c;
+      (n = i._$AQ) == null || n.call(i, e), i._$AM = e, i._$AP !== void 0 && (c = e._$AU) !== l._$AU && i._$AP(c);
     }
     if (a !== o || r) {
-      let l = i._$AA;
-      for (; l !== a; ) {
-        const d = ke(l).nextSibling;
-        ke(s).insertBefore(l, o), l = d;
+      let c = i._$AA;
+      for (; c !== a; ) {
+        const d = ke(c).nextSibling;
+        ke(s).insertBefore(c, o), c = d;
       }
     }
   }
@@ -664,7 +664,7 @@ const ze = (e, t, i) => {
   const s = /* @__PURE__ */ new Map();
   for (let o = t; o <= i; o++) s.set(e[o], o);
   return s;
-}, tt = Bt(class extends Ft {
+}, tt = Bt(class extends Nt {
   constructor(e) {
     if (super(e), e.type !== me.CHILD) throw Error("repeat() can only be used in text expressions");
   }
@@ -673,7 +673,7 @@ const ze = (e, t, i) => {
     i === void 0 ? i = t : t !== void 0 && (s = t);
     const o = [], n = [];
     let a = 0;
-    for (const c of e) o[a] = s ? s(c, a) : a, n[a] = i(c, a), a++;
+    for (const l of e) o[a] = s ? s(l, a) : a, n[a] = i(l, a), a++;
     return { values: n, keys: o };
   }
   render(e, t, i) {
@@ -682,15 +682,15 @@ const ze = (e, t, i) => {
   update(e, [t, i, s]) {
     const o = bi(e), { values: n, keys: a } = this.dt(t, i, s);
     if (!Array.isArray(o)) return this.ut = a, n;
-    const c = this.ut ?? (this.ut = []), r = [];
-    let l, d, h = 0, u = o.length - 1, p = 0, m = n.length - 1;
+    const l = this.ut ?? (this.ut = []), r = [];
+    let c, d, h = 0, u = o.length - 1, p = 0, m = n.length - 1;
     for (; h <= u && p <= m; ) if (o[h] === null) h++;
     else if (o[u] === null) u--;
-    else if (c[h] === a[p]) r[p] = nt(o[h], n[p]), h++, p++;
-    else if (c[u] === a[m]) r[m] = nt(o[u], n[m]), u--, m--;
-    else if (c[h] === a[m]) r[m] = nt(o[h], n[m]), mt(e, r[m + 1], o[h]), h++, m--;
-    else if (c[u] === a[p]) r[p] = nt(o[u], n[p]), mt(e, o[h], o[u]), u--, p++;
-    else if (l === void 0 && (l = ze(a, p, m), d = ze(c, h, u)), l.has(c[h])) if (l.has(c[u])) {
+    else if (l[h] === a[p]) r[p] = nt(o[h], n[p]), h++, p++;
+    else if (l[u] === a[m]) r[m] = nt(o[u], n[m]), u--, m--;
+    else if (l[h] === a[m]) r[m] = nt(o[h], n[m]), mt(e, r[m + 1], o[h]), h++, m--;
+    else if (l[u] === a[p]) r[p] = nt(o[u], n[p]), mt(e, o[h], o[u]), u--, p++;
+    else if (c === void 0 && (c = ze(a, p, m), d = ze(l, h, u)), c.has(l[h])) if (c.has(l[u])) {
       const b = d.get(a[p]), g = b !== void 0 ? o[b] : null;
       if (g === null) {
         const f = mt(e, o[h]);
@@ -707,7 +707,7 @@ const ze = (e, t, i) => {
       const b = o[h++];
       b !== null && Yt(b);
     }
-    return this.ut = a, yi(e, r), R;
+    return this.ut = a, yi(e, r), F;
   }
 });
 /**
@@ -715,7 +715,7 @@ const ze = (e, t, i) => {
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const at = Bt(class extends Ft {
+const at = Bt(class extends Nt {
   constructor(e) {
     var t;
     if (super(e), e.type !== me.ATTRIBUTE || e.name !== "class" || ((t = e.strings) == null ? void 0 : t.length) > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
@@ -736,7 +736,7 @@ const at = Bt(class extends Ft {
       const a = !!t[n];
       a === this.st.has(n) || (o = this.nt) != null && o.has(n) || (a ? (i.add(n), this.st.add(n)) : (i.remove(n), this.st.delete(n)));
     }
-    return R;
+    return F;
   }
 });
 /**
@@ -744,7 +744,7 @@ const at = Bt(class extends Ft {
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const O1 = "important", Li = " !" + O1, E = Bt(class extends Ft {
+const O1 = "important", Li = " !" + O1, E = Bt(class extends Nt {
   constructor(e) {
     var t;
     if (super(e), e.type !== me.ATTRIBUTE || e.name !== "style" || ((t = e.strings) == null ? void 0 : t.length) > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
@@ -767,7 +767,7 @@ const O1 = "important", Li = " !" + O1, E = Bt(class extends Ft {
         s.includes("-") || n ? i.setProperty(s, n ? o.slice(0, -11) : o, n ? O1 : "") : i[s] = o;
       }
     }
-    return R;
+    return F;
   }
 });
 /**
@@ -809,7 +809,7 @@ function H(e, t) {
     i = null;
   }, s;
 }
-var Oe = "M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z", Ie = "M12,4A4,4 0 0,1 16,8C16,9.95 14.6,11.58 12.75,11.93L8.07,7.25C8.42,5.4 10.05,4 12,4M12.28,14L18.28,20L20,21.72L18.73,23L15.73,20H4V18C4,16.16 6.5,14.61 9.87,14.14L2.78,7.05L4.05,5.78L12.28,14M20,18V19.18L15.14,14.32C18,14.93 20,16.35 20,18Z", Pe = "M19,18.31V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V16.3C4.54,16.12 3.95,16 3,16A1,1 0 0,1 2,15A1,1 0 0,1 3,14C3.82,14 4.47,14.08 5,14.21V12.3C4.54,12.12 3.95,12 3,12A1,1 0 0,1 2,11A1,1 0 0,1 3,10C3.82,10 4.47,10.08 5,10.21V8.3C4.54,8.12 3.95,8 3,8A1,1 0 0,1 2,7A1,1 0 0,1 3,6C3.82,6 4.47,6.08 5,6.21V4A2,2 0 0,1 7,2H17A2,2 0 0,1 19,4V6.16C20.78,6.47 21.54,7.13 21.71,7.29C22.1,7.68 22.1,8.32 21.71,8.71C21.32,9.1 20.8,9.09 20.29,8.71V8.71C20.29,8.71 19.25,8 17,8C15.74,8 14.91,8.41 13.95,8.9C12.91,9.41 11.74,10 10,10C9.64,10 9.31,10 9,9.96V7.95C9.3,8 9.63,8 10,8C11.26,8 12.09,7.59 13.05,7.11C14.09,6.59 15.27,6 17,6V4H7V20H17V18C18.5,18 18.97,18.29 19,18.31M17,10C15.27,10 14.09,10.59 13.05,11.11C12.09,11.59 11.26,12 10,12C9.63,12 9.3,12 9,11.95V13.96C9.31,14 9.64,14 10,14C11.74,14 12.91,13.41 13.95,12.9C14.91,12.42 15.74,12 17,12C19.25,12 20.29,12.71 20.29,12.71V12.71C20.8,13.1 21.32,13.1 21.71,12.71C22.1,12.32 22.1,11.69 21.71,11.29C21.5,11.08 20.25,10 17,10M17,14C15.27,14 14.09,14.59 13.05,15.11C12.09,15.59 11.26,16 10,16C9.63,16 9.3,16 9,15.95V17.96C9.31,18 9.64,18 10,18C11.74,18 12.91,17.41 13.95,16.9C14.91,16.42 15.74,16 17,16C19.25,16 20.29,16.71 20.29,16.71V16.71C20.8,17.1 21.32,17.1 21.71,16.71C22.1,16.32 22.1,15.69 21.71,15.29C21.5,15.08 20.25,14 17,14Z", Vi = "M11 9C8.79 9 7 10.79 7 13S8.79 17 11 17 15 15.21 15 13 13.21 9 11 9M11 15C9.9 15 9 14.11 9 13S9.9 11 11 11 13 11.9 13 13 12.11 15 11 15M7 4H14C16.21 4 18 5.79 18 8V9H16V8C16 6.9 15.11 6 14 6H7C5.9 6 5 6.9 5 8V20H16V18H18V22H3V8C3 5.79 4.79 4 7 4M19 10.5C19 10.5 21 12.67 21 14C21 15.1 20.1 16 19 16S17 15.1 17 14C17 12.67 19 10.5 19 10.5", $i = "M22.1 21.5L2.4 1.7L1.1 3L3.8 5.7C3.3 6.3 3 7.1 3 8V22H18V19.9L20.8 22.7L22.1 21.5M9.6 11.5L12.4 14.3C12.1 14.7 11.6 15 11 15C9.9 15 9 14.1 9 13C9 12.4 9.3 11.9 9.6 11.5M16 17.9V20H5V8C5 7.7 5.1 7.4 5.2 7.1L8.2 10.1C7.5 10.8 7 11.9 7 13C7 15.2 8.8 17 11 17C12.1 17 13.2 16.5 13.9 15.8L16 17.9M17 13.8C17.1 12.5 19 10.5 19 10.5S21 12.7 21 14C21 15 20.2 15.9 19.2 16L17 13.8M9.2 6L7.2 4H14C16.2 4 18 5.8 18 8V9H16V8C16 6.9 15.1 6 14 6H9.2Z", Mi = "M6,6.9L3.87,4.78L5.28,3.37L7.4,5.5L6,6.9M13,1V4H11V1H13M20.13,4.78L18,6.9L16.6,5.5L18.72,3.37L20.13,4.78M4.5,10.5V12.5H1.5V10.5H4.5M19.5,10.5H22.5V12.5H19.5V10.5M6,20H18A2,2 0 0,1 20,22H4A2,2 0 0,1 6,20M12,5A6,6 0 0,1 18,11V19H6V11A6,6 0 0,1 12,5Z", wi = "M18 14.8L9 5.8C9.9 5.3 10.9 5 12 5C15.3 5 18 7.7 18 11V14.8M20.1 4.8L18.7 3.4L16.6 5.5L18 6.9L20.1 4.8M19.5 10.5V12.5H22.5V10.5H19.5M4.5 10.5H1.5V12.5H4.5V10.5M1.1 3L6.6 8.5C6.2 9.2 6 10.1 6 11V19H17.1L18.1 20H6C4.9 20 4 20.9 4 22H20.1L20.8 22.7L22.1 21.4L2.4 1.7L1.1 3M13 1H11V4H13V1Z", Ei = "M18.75 22.16L16 19.16L17.16 18L18.75 19.59L22.34 16L23.5 17.41L18.75 22.16M11 15H13V17H11V15M11 7H13V13H11V7M12 2C17.5 2 22 6.5 22 12L21.92 13.31C21.31 13.11 20.67 13 19.94 13L20 12C20 7.58 16.42 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C12.71 20 13.39 19.91 14.05 19.74C14.13 20.42 14.33 21.06 14.62 21.65C13.78 21.88 12.9 22 12 22C6.47 22 2 17.5 2 12C2 6.5 6.47 2 12 2Z", Si = "M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z", Ge = "M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z", Ze = "M18 12C18 11 17.74 10.04 17.3 9.2L18.76 7.74C19.54 8.97 20 10.43 20 12C20 13.39 19.64 14.68 19 15.82L17.5 14.32C17.82 13.6 18 12.83 18 12M2.39 1.73L1.11 3L5.5 7.37C4.55 8.68 4 10.27 4 12C4 13.57 4.46 15.03 5.24 16.26L6.7 14.8C6.25 13.97 6 13 6 12C6 10.83 6.34 9.74 6.92 8.81L15.19 17.08C14.26 17.66 13.17 18 12 18V15L8 19L12 23V20C13.73 20 15.32 19.45 16.63 18.5L20.84 22.73L22.11 21.46L2.39 1.73M12 6V8.8L12.1 8.9L16 5L12 1V4C10.62 4 9.32 4.36 8.18 5L9.68 6.5C10.4 6.18 11.18 6 12 6Z", Be = "M5.06 7C4.63 7 4.22 7.14 3.84 7.42C3.46 7.7 3.24 8.06 3.14 8.5L2.11 12.91C1.86 14 2.06 14.92 2.69 15.73C2.81 15.85 2.93 15.97 3.04 16.07C3.63 16.64 4.28 17 5.22 17C6.16 17 6.91 16.59 7.47 16.05C8.1 16.67 8.86 17 9.8 17C10.64 17 11.44 16.63 12 16.07C12.68 16.7 13.45 17 14.3 17C15.17 17 15.91 16.67 16.54 16.05C17.11 16.62 17.86 17 18.81 17C19.76 17 20.43 16.65 21 16.06C21.09 15.97 21.18 15.87 21.28 15.77C21.94 14.95 22.14 14 21.89 12.91L20.86 8.5C20.73 8.06 20.5 7.7 20.13 7.42C19.77 7.14 19.38 7 18.94 7H5.06M18.89 8.97L19.97 13.38C20.06 13.81 19.97 14.2 19.69 14.55C19.44 14.86 19.13 15 18.75 15C18.44 15 18.17 14.9 17.95 14.66C17.73 14.43 17.61 14.16 17.58 13.84L16.97 9L18.89 8.97M5.06 9H7.03L6.42 13.84C6.3 14.63 5.91 15 5.25 15C4.84 15 4.53 14.86 4.31 14.55C4.03 14.2 3.94 13.81 4.03 13.38L5.06 9M9.05 9H11V13.7C11 14.05 10.89 14.35 10.64 14.62C10.39 14.88 10.08 15 9.7 15C9.36 15 9.07 14.88 8.84 14.59C8.61 14.3 8.5 14 8.5 13.66V13.5L9.05 9M13 9H14.95L15.5 13.5C15.58 13.92 15.5 14.27 15.21 14.57C14.95 14.87 14.61 15 14.2 15C13.89 15 13.61 14.88 13.36 14.62C13.11 14.35 13 14.05 13 13.7V9Z", xi = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.67C6,21.4 6.6,22 7.33,22H16.67A1.33,1.33 0 0,0 18,20.67V5.33C18,4.6 17.4,4 16.67,4Z", ki = "M13 14H11V8H13M13 18H11V16H13M16.7 4H15V2H9V4H7.3C6.6 4 6 4.6 6 5.3V20.6C6 21.4 6.6 22 7.3 22H16.6C17.3 22 17.9 21.4 17.9 20.7V5.3C18 4.6 17.4 4 16.7 4Z", Ti = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.66C6,21.4 6.6,22 7.33,22H16.66C17.4,22 18,21.4 18,20.67V5.33C18,4.6 17.4,4 16.67,4M11,20V14.5H9L13,7V12.5H15", zi = "M16.75 21.16L14 18.16L15.16 17L16.75 18.59L20.34 15L21.5 16.41L16.75 21.16M12 18C12 14.69 14.69 12 18 12V5.33C18 4.6 17.4 4 16.67 4H15V2H9V4H7.33C6.6 4 6 4.6 6 5.33V20.67C6 21.4 6.6 22 7.33 22H13.54C12.58 20.94 12 19.54 12 18Z", Di = "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21", Fe = "M20.84,22.73L18.11,20H3V19L5,17V11C5,9.86 5.29,8.73 5.83,7.72L1.11,3L2.39,1.73L22.11,21.46L20.84,22.73M19,15.8V11C19,7.9 16.97,5.17 14,4.29C14,4.19 14,4.1 14,4A2,2 0 0,0 12,2A2,2 0 0,0 10,4C10,4.1 10,4.19 10,4.29C9.39,4.47 8.8,4.74 8.26,5.09L19,15.8M12,23A2,2 0 0,0 14,21H10A2,2 0 0,0 12,23Z", Oi = "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21M19.75,3.19L18.33,4.61C20.04,6.3 21,8.6 21,11H23C23,8.07 21.84,5.25 19.75,3.19M1,11H3C3,8.6 3.96,6.3 5.67,4.61L4.25,3.19C2.16,5.25 1,8.07 1,11Z", Ii = "M3,2H21A1,1 0 0,1 22,3V5A1,1 0 0,1 21,6H20V13A1,1 0 0,1 19,14H13V16.17C14.17,16.58 15,17.69 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.69 9.83,16.58 11,16.17V14H5A1,1 0 0,1 4,13V6H3A1,1 0 0,1 2,5V3A1,1 0 0,1 3,2M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z", Pi = "M3 2H21C21.55 2 22 2.45 22 3V5C22 5.55 21.55 6 21 6H20V7C20 7.55 19.55 8 19 8H13V10.17C14.17 10.58 15 11.7 15 13C15 14.66 13.66 16 12 16C10.34 16 9 14.66 9 13C9 11.69 9.84 10.58 11 10.17V8H5C4.45 8 4 7.55 4 7V6H3C2.45 6 2 5.55 2 5V3C2 2.45 2.45 2 3 2M12 12C11.45 12 11 12.45 11 13C11 13.55 11.45 14 12 14C12.55 14 13 13.55 13 13C13 12.45 12.55 12 12 12Z", Re = "M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z", Mt = "M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z", Ne = "M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M9.31,17L11.75,14.56L14.19,17L15.25,15.94L12.81,13.5L15.25,11.06L14.19,10L11.75,12.44L9.31,10L8.25,11.06L10.69,13.5L8.25,15.94L9.31,17Z", je = "M19 19H5V8H19M16 1V3H8V1H6V3H5C3.9 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3H18V1M10.88 12H7.27L10.19 14.11L9.08 17.56L12 15.43L14.92 17.56L13.8 14.12L16.72 12H13.12L12 8.56L10.88 12Z", Gi = "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z", Zi = "M1.2,4.47L2.5,3.2L20,20.72L18.73,22L16.73,20H4A2,2 0 0,1 2,18V6C2,5.78 2.04,5.57 2.1,5.37L1.2,4.47M7,4L9,2H15L17,4H20A2,2 0 0,1 22,6V18C22,18.6 21.74,19.13 21.32,19.5L16.33,14.5C16.76,13.77 17,12.91 17,12A5,5 0 0,0 12,7C11.09,7 10.23,7.24 9.5,7.67L5.82,4H7M7,12A5,5 0 0,0 12,17C12.5,17 13.03,16.92 13.5,16.77L11.72,15C10.29,14.85 9.15,13.71 9,12.28L7.23,10.5C7.08,10.97 7,11.5 7,12M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9Z", Bi = "M5,11L6.5,6.5H17.5L19,11M17.5,16A1.5,1.5 0 0,1 16,14.5A1.5,1.5 0 0,1 17.5,13A1.5,1.5 0 0,1 19,14.5A1.5,1.5 0 0,1 17.5,16M6.5,16A1.5,1.5 0 0,1 5,14.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 6.5,16M18.92,6C18.72,5.42 18.16,5 17.5,5H6.5C5.84,5 5.28,5.42 5.08,6L3,12V20A1,1 0 0,0 4,21H5A1,1 0 0,0 6,20V19H18V20A1,1 0 0,0 19,21H20A1,1 0 0,0 21,20V12L18.92,6Z", Fi = "M20.5,19.85L6.41,5.76L2.41,1.76L1.11,3L4.57,6.46L3,11V19A1,1 0 0,0 4,20H5A1,1 0 0,0 6,19V18H16.11L20.84,22.73L22.11,21.46L20.5,19.85M6.5,15A1.5,1.5 0 0,1 5,13.5A1.5,1.5 0 0,1 6.5,12A1.5,1.5 0 0,1 8,13.5A1.5,1.5 0 0,1 6.5,15M5,10L5.78,7.67L8.11,10H5M17.5,5.5L19,10H13.2L16.12,12.92C16.5,12.17 17.37,11.86 18.12,12.21C18.87,12.57 19.18,13.47 18.83,14.21C18.68,14.5 18.43,14.77 18.12,14.92L21,17.8V11L18.92,5C18.71,4.4 18.14,4 17.5,4H7.2L8.7,5.5H17.5Z", Ri = "M1,10V12A9,9 0 0,1 10,21H12C12,14.92 7.07,10 1,10M1,14V16A5,5 0 0,1 6,21H8A7,7 0 0,0 1,14M1,18V21H4A3,3 0 0,0 1,18M21,3H3C1.89,3 1,3.89 1,5V8H3V5H21V19H14V21H21A2,2 0 0,0 23,19V5C23,3.89 22.1,3 21,3Z", Ni = "M1.6,1.27L0.25,2.75L1.41,3.8C1.16,4.13 1,4.55 1,5V8H3V5.23L18.2,19H14V21H20.41L22.31,22.72L23.65,21.24M6.5,3L8.7,5H21V16.14L23,17.95V5C23,3.89 22.1,3 21,3M1,10V12A9,9 0 0,1 10,21H12C12,14.92 7.08,10 1,10M1,14V16A5,5 0 0,1 6,21H8A7,7 0 0,0 1,14M1,18V21H4A3,3 0 0,0 1,18Z", ji = "M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z", Ui = "M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z", Wi = "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z", qi = "M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z", Ki = "M12 20C16.4 20 20 16.4 20 12S16.4 4 12 4 4 7.6 4 12 7.6 20 12 20M12 2C17.5 2 22 6.5 22 12S17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2M12.5 12.8L7.7 15.6L7 14.2L11 11.9V7H12.5V12.8Z", Rt = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z", Ue = "M12,23A1,1 0 0,1 11,22V19H7A2,2 0 0,1 5,17V7A2,2 0 0,1 7,5H21A2,2 0 0,1 23,7V17A2,2 0 0,1 21,19H16.9L13.2,22.71C13,22.89 12.76,23 12.5,23H12M3,15H1V3A2,2 0 0,1 3,1H19V3H3V15Z", We = "M21.4 7.5C22.2 8.3 22.2 9.6 21.4 10.3L18.6 13.1L10.8 5.3L13.6 2.5C14.4 1.7 15.7 1.7 16.4 2.5L18.2 4.3L21.2 1.3L22.6 2.7L19.6 5.7L21.4 7.5M15.6 13.3L14.2 11.9L11.4 14.7L9.3 12.6L12.1 9.8L10.7 8.4L7.9 11.2L6.4 9.8L3.6 12.6C2.8 13.4 2.8 14.7 3.6 15.4L5.4 17.2L1.4 21.2L2.8 22.6L6.8 18.6L8.6 20.4C9.4 21.2 10.7 21.2 11.4 20.4L14.2 17.6L12.8 16.2L15.6 13.3Z", qe = "M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H11V6H4M20,18V6H18.76C19,6.54 18.95,7.07 18.95,7.13C18.88,7.8 18.41,8.5 18.24,8.75L15.91,11.3L19.23,11.28L19.24,12.5L14.04,12.47L14,11.47C14,11.47 17.05,8.24 17.2,7.95C17.34,7.67 17.91,6 16.5,6C15.27,6.05 15.41,7.3 15.41,7.3L13.87,7.31C13.87,7.31 13.88,6.65 14.25,6H13V18H15.58L15.57,17.14L16.54,17.13C16.54,17.13 17.45,16.97 17.46,16.08C17.5,15.08 16.65,15.08 16.5,15.08C16.37,15.08 15.43,15.13 15.43,15.95H13.91C13.91,15.95 13.95,13.89 16.5,13.89C19.1,13.89 18.96,15.91 18.96,15.91C18.96,15.91 19,17.16 17.85,17.63L18.37,18H20M8.92,16H7.42V10.2L5.62,10.76V9.53L8.76,8.41H8.92V16Z", Yi = "M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z", Ji = "M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z", Ke = "M16,11H18V13H16V11M12,3H19C20.11,3 21,3.89 21,5V19H22V21H2V19H10V5C10,3.89 10.89,3 12,3M12,5V19H19V5H12Z", Ye = "M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z", Xi = "M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z", Je = "M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z", Xe = "M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z", Qi = "M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12.5,2C17,2 17.11,5.57 14.75,6.75C13.76,7.24 13.32,8.29 13.13,9.22C13.61,9.42 14.03,9.73 14.35,10.13C18.05,8.13 22.03,8.92 22.03,12.5C22.03,17 18.46,17.1 17.28,14.73C16.78,13.74 15.72,13.3 14.79,13.11C14.59,13.59 14.28,14 13.88,14.34C15.87,18.03 15.08,22 11.5,22C7,22 6.91,18.42 9.27,17.24C10.25,16.75 10.69,15.71 10.89,14.79C10.4,14.59 9.97,14.27 9.65,13.87C5.96,15.85 2,15.07 2,11.5C2,7 5.56,6.89 6.74,9.26C7.24,10.25 8.29,10.68 9.22,10.87C9.41,10.39 9.73,9.97 10.14,9.65C8.15,5.96 8.94,2 12.5,2Z", ts = "M12.5,2C9.64,2 8.57,4.55 9.29,7.47L15,13.16C15.87,13.37 16.81,13.81 17.28,14.73C18.46,17.1 22.03,17 22.03,12.5C22.03,8.92 18.05,8.13 14.35,10.13C14.03,9.73 13.61,9.42 13.13,9.22C13.32,8.29 13.76,7.24 14.75,6.75C17.11,5.57 17,2 12.5,2M3.28,4L2,5.27L4.47,7.73C3.22,7.74 2,8.87 2,11.5C2,15.07 5.96,15.85 9.65,13.87C9.97,14.27 10.4,14.59 10.89,14.79C10.69,15.71 10.25,16.75 9.27,17.24C6.91,18.42 7,22 11.5,22C13.8,22 14.94,20.36 14.94,18.21L18.73,22L20,20.72L3.28,4Z", wt = "M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z", Qe = "M5 5V19H7V21H3V3H7V5H5M20 7H7V9H20V7M20 11H7V13H20V11M20 15H7V17H20V15Z", es = "M17 14V17H14V19H17V22H19V19H22V17H19V14M20 11V12.3C19.4 12.1 18.7 12 18 12C16.8 12 15.6 12.4 14.7 13H7V11H20M12.1 17H7V15H12.8C12.5 15.6 12.2 16.3 12.1 17M7 7H20V9H7V7M5 19H7V21H3V3H7V5H5V19Z", Jt = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z", Xt = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z", is = "M1 4.27L2.28 3L6 6.72L21 21.72L19.73 23L17.72 21C16.56 20.85 15.65 19.94 15.5 18.78L14 17.27V21H4V7.27L1 4.27M19.77 7.23C20.22 7.68 20.5 8.31 20.5 9L20.5 18.67L19 17.18V11.29C18.69 11.42 18.36 11.5 18 11.5C16.62 11.5 15.5 10.38 15.5 9C15.5 7.93 16.17 7.03 17.11 6.67L15 4.56L16.06 3.5L19.78 7.22L19.77 7.23M11.82 10H12V5H6.82L5.06 3.24C5.34 3.09 5.66 3 6 3H12C13.1 3 14 3.9 14 5V12H15C16.1 12 17 12.9 17 14V15.18L11.82 10M6 10H6.73L6 9.27V10M6 12V19H12V15.27L8.73 12H6M18 10C18.55 10 19 9.55 19 9C19 8.45 18.55 8 18 8C17.45 8 17 8.45 17 9C17 9.55 17.45 10 18 10Z", ss = "M19.77,7.23L19.78,7.22L16.06,3.5L15,4.56L17.11,6.67C16.17,7.03 15.5,7.93 15.5,9A2.5,2.5 0 0,0 18,11.5C18.36,11.5 18.69,11.42 19,11.29V18.5A1,1 0 0,1 18,19.5A1,1 0 0,1 17,18.5V14A2,2 0 0,0 15,12H14V5A2,2 0 0,0 12,3H6A2,2 0 0,0 4,5V21H14V13.5H15.5V18.5A2.5,2.5 0 0,0 18,21A2.5,2.5 0 0,0 20.5,18.5V9C20.5,8.31 20.22,7.68 19.77,7.23M12,13.5V19H6V12H12V13.5M12,10H6V5H12V10M18,10A1,1 0 0,1 17,9A1,1 0 0,1 18,8A1,1 0 0,1 19,9A1,1 0 0,1 18,10Z", os = "M9 6V11H7V7H5V11H3V9H1V21H3V19H5V21H7V19H9V21H11V19H13V21H15V19H17V21H19V19H21V21H23V9H21V11H19V7H17V11H15V6H13V11H11V6H9M3 13H5V17H3V13M7 13H9V17H7V13M11 13H13V17H11V13M15 13H17V17H15V13M19 13H21V17H19V13Z", ns = "M7 21V7H5V11H3V9H1V21H3V19H5V21H7M3 17V13H5V17H3M21 9V11H19V7H17V21H19V19H21V21H23V9H21M21 17H19V13H21V17Z", t1 = "M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.4 19,16.5 17.3,18C15.9,16.7 14,16 12,16C10,16 8.2,16.7 6.7,18C5,16.5 4,14.4 4,12A8,8 0 0,1 12,4M14,5.89C13.62,5.9 13.26,6.15 13.1,6.54L11.81,9.77L11.71,10C11,10.13 10.41,10.6 10.14,11.26C9.73,12.29 10.23,13.45 11.26,13.86C12.29,14.27 13.45,13.77 13.86,12.74C14.12,12.08 14,11.32 13.57,10.76L13.67,10.5L14.96,7.29L14.97,7.26C15.17,6.75 14.92,6.17 14.41,5.96C14.28,5.91 14.15,5.89 14,5.89M10,6A1,1 0 0,0 9,7A1,1 0 0,0 10,8A1,1 0 0,0 11,7A1,1 0 0,0 10,6M7,9A1,1 0 0,0 6,10A1,1 0 0,0 7,11A1,1 0 0,0 8,10A1,1 0 0,0 7,9M17,9A1,1 0 0,0 16,10A1,1 0 0,0 17,11A1,1 0 0,0 18,10A1,1 0 0,0 17,9Z", e1 = "M13 5C15.21 5 17 6.79 17 9C17 10.5 16.2 11.77 15 12.46V11.24C15.61 10.69 16 9.89 16 9C16 7.34 14.66 6 13 6S10 7.34 10 9C10 9.89 10.39 10.69 11 11.24V12.46C9.8 11.77 9 10.5 9 9C9 6.79 10.79 5 13 5M20 20.5C19.97 21.32 19.32 21.97 18.5 22H13C12.62 22 12.26 21.85 12 21.57L8 17.37L8.74 16.6C8.93 16.39 9.2 16.28 9.5 16.28H9.7L12 18V9C12 8.45 12.45 8 13 8S14 8.45 14 9V13.47L15.21 13.6L19.15 15.79C19.68 16.03 20 16.56 20 17.14V20.5M20 2H4C2.9 2 2 2.9 2 4V12C2 13.11 2.9 14 4 14H8V12L4 12L4 4H20L20 12H18V14H20V13.96L20.04 14C21.13 14 22 13.09 22 12V4C22 2.9 21.11 2 20 2Z", i1 = "M15,12C13.89,12 13,12.89 13,14A2,2 0 0,0 15,16A2,2 0 0,0 17,14C17,12.89 16.1,12 15,12M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M14,9C14,7.89 13.1,7 12,7C10.89,7 10,7.89 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9M9,12A2,2 0 0,0 7,14A2,2 0 0,0 9,16A2,2 0 0,0 11,14C11,12.89 10.1,12 9,12Z", as = "M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z", rs = "M24 13L20 17V14H11V12H20V9L24 13M4 20V12H1L11 3L18 9.3V10H15.79L11 5.69L6 10.19V18H16V16H18V20H4Z", cs = "M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22", ls = "M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z", s1 = "M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M19,19H15V21H19A2,2 0 0,0 21,19V15H19M19,3H15V5H19V9H21V5A2,2 0 0,0 19,3M5,5H9V3H5A2,2 0 0,0 3,5V9H5M5,15H3V19A2,2 0 0,0 5,21H9V19H5V15Z", ds = "M21 17.2L6.8 3H19C20.1 3 21 3.9 21 5V17.2M20.7 22L19.7 21H5C3.9 21 3 20.1 3 19V4.3L2 3.3L3.3 2L22 20.7L20.7 22M16.8 18L12.9 14.1L11 16.5L8.5 13.5L5 18H16.8Z", hs = "M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M9,21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9V21Z", us = "M12,2C9.76,2 7.78,3.05 6.5,4.68L16.31,14.5C17.94,13.21 19,11.24 19,9A7,7 0 0,0 12,2M3.28,4L2,5.27L5.04,8.3C5,8.53 5,8.76 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H14.73L18.73,22L20,20.72L3.28,4M9,20V21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9Z", ps = "M12,2C9.76,2 7.78,3.05 6.5,4.68L7.93,6.11C8.84,4.84 10.32,4 12,4A5,5 0 0,1 17,9C17,10.68 16.16,12.16 14.89,13.06L16.31,14.5C17.94,13.21 19,11.24 19,9A7,7 0 0,0 12,2M3.28,4L2,5.27L5.04,8.3C5,8.53 5,8.76 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H14.73L18.73,22L20,20.72L3.28,4M7.23,10.5L12.73,16H10V13.58C8.68,13 7.66,11.88 7.23,10.5M9,20V21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9Z", fs = "M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M12,4A5,5 0 0,0 7,9C7,11.05 8.23,12.81 10,13.58V16H14V13.58C15.77,12.81 17,11.05 17,9A5,5 0 0,0 12,4Z", o1 = "M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z", n1 = "M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,0 14,15A2,2 0 0,0 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17Z", a1 = "M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z", r1 = "M16.37,16.1L11.75,11.47L11.64,11.36L3.27,3L2,4.27L5.18,7.45C5.06,7.95 5,8.46 5,9C5,14.25 12,22 12,22C12,22 13.67,20.15 15.37,17.65L18.73,21L20,19.72M12,6.5A2.5,2.5 0 0,1 14.5,9C14.5,9.73 14.17,10.39 13.67,10.85L17.3,14.5C18.28,12.62 19,10.68 19,9A7,7 0 0,0 12,2C10,2 8.24,2.82 6.96,4.14L10.15,7.33C10.61,6.82 11.26,6.5 12,6.5Z", _s = "M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z", ms = "M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z", c1 = "M8 7C6.9 7 6 7.9 6 9V15C6 16.11 6.9 17 8 17H11V15H8V9H11V7H8M14 7C12.9 7 12 7.9 12 9V15C12 16.11 12.9 17 14 17H16C17.11 17 18 16.11 18 15V9C18 7.9 17.11 7 16 7H14M14 9H16V15H14V9", gs = "M10,0.2C9,0.2 8.2,1 8.2,2C8.2,3 9,3.8 10,3.8C11,3.8 11.8,3 11.8,2C11.8,1 11,0.2 10,0.2M15.67,1A7.33,7.33 0 0,0 23,8.33V7A6,6 0 0,1 17,1H15.67M18.33,1C18.33,3.58 20.42,5.67 23,5.67V4.33C21.16,4.33 19.67,2.84 19.67,1H18.33M21,1A2,2 0 0,0 23,3V1H21M7.92,4.03C7.75,4.03 7.58,4.06 7.42,4.11L2,5.8V11H3.8V7.33L5.91,6.67L2,22H3.8L6.67,13.89L9,17V22H10.8V15.59L8.31,11.05L9.04,8.18L10.12,10H15V8.2H11.38L9.38,4.87C9.08,4.37 8.54,4.03 7.92,4.03Z", Cs = "M11.4 8.2H15V10H13.2L11.4 8.2M19.67 1H18.33C18.33 3.58 20.42 5.67 23 5.67V4.33C21.16 4.33 19.67 2.84 19.67 1M21 1C21 2.11 21.9 3 23 3V1H21M17 1H15.67C15.67 5.05 18.95 8.33 23 8.33V7C19.69 7 17 4.31 17 1M10 3.8C11 3.8 11.8 3 11.8 2S11 .2 10 .2 8.2 1 8.2 2 9 3.8 10 3.8M2.39 1.73L1.11 3L3.46 5.35L2 5.8V11H3.8V7.33L5.05 6.94L5.68 7.57L2 22H3.8L6.67 13.89L9 17V22H10.8V15.59L8.31 11.05L8.5 10.37L20.84 22.73L22.11 21.46L2.39 1.73M9.38 4.87C9.08 4.37 8.54 4.03 7.92 4.03C7.75 4.03 7.58 4.06 7.42 4.11L7.34 4.14L11.35 8.15L9.38 4.87Z", vs = "M18,4L20,8H17L15,4H13L15,8H12L10,4H8L10,8H7L5,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V4H18Z", ys = "M22.11 21.46L20.84 22.73L18.11 20H4C2.9 20 2 19.11 2 18V6C2 5.42 2.25 4.9 2.65 4.54L1.11 3L2.39 1.73L22.11 21.46M21.88 18.68C21.96 18.47 22 18.24 22 18V4H18L20 8H17L15 4H13L15 8H12L10 4H8L8.8 5.6L21.88 18.68Z", Et = "M4,17V9H2V7H6V17H4M22,15C22,16.11 21.1,17 20,17H16V15H20V13H18V11H20V9H16V7H20A2,2 0 0,1 22,9V10.5A1.5,1.5 0 0,1 20.5,12A1.5,1.5 0 0,1 22,13.5V15M14,15V17H8V13C8,11.89 8.9,11 10,11H12V9H8V7H12A2,2 0 0,1 14,9V11C14,12.11 13.1,13 12,13H10V15H14Z", bs = "M14,19H18V5H14M6,19H10V5H6V19Z", Ls = "M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z", As = "M8,5.14V19.14L19,12.14L8,5.14Z", Hs = "M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.36,6.88 4,9.28 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,9.28 18.64,6.88 16.56,5.44M13,3H11V13H13", Qt = "M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3M12,19A7,7 0 0,1 5,12A7,7 0 0,1 12,5A7,7 0 0,1 19,12A7,7 0 0,1 12,19Z", l1 = "M16,7V3H14V7H10V3H8V7H8C7,7 6,8 6,9V14.5L9.5,18V21H14.5V18L18,14.5V9C18,8 17,7 16,7Z", d1 = "M20.84 22.73L15.31 17.2L14.5 18V21H9.5V18L6 14.5V9C6 8.7 6.1 8.41 6.25 8.14L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73M18 14.5V9C18 8 17 7 16 7V3H14V7H10.2L17.85 14.65L18 14.5M10 3H8V4.8L10 6.8V3Z", Vs = "M19,12C19,15.86 15.86,19 12,19C8.14,19 5,15.86 5,12C5,8.14 8.14,5 12,5C15.86,5 19,8.14 19,12Z", $s = "M12.5,5A7.5,7.5 0 0,0 5,12.5A7.5,7.5 0 0,0 12.5,20A7.5,7.5 0 0,0 20,12.5A7.5,7.5 0 0,0 12.5,5M7,10H9A1,1 0 0,1 10,11V12C10,12.5 9.62,12.9 9.14,12.97L10.31,15H9.15L8,13V15H7M12,10H14V11H12V12H14V13H12V14H14V15H12A1,1 0 0,1 11,14V11A1,1 0 0,1 12,10M16,10H18V11H16V14H18V15H16A1,1 0 0,1 15,14V11A1,1 0 0,1 16,10M8,11V12H9V11", Ms = "M12,0C8.96,0 6.21,1.23 4.22,3.22L5.63,4.63C7.26,3 9.5,2 12,2C14.5,2 16.74,3 18.36,4.64L19.77,3.23C17.79,1.23 15.04,0 12,0M7.05,6.05L8.46,7.46C9.37,6.56 10.62,6 12,6C13.38,6 14.63,6.56 15.54,7.46L16.95,6.05C15.68,4.78 13.93,4 12,4C10.07,4 8.32,4.78 7.05,6.05M12,15A2,2 0 0,1 10,13A2,2 0 0,1 12,11A2,2 0 0,1 14,13A2,2 0 0,1 12,15M15,9H9A1,1 0 0,0 8,10V22A1,1 0 0,0 9,23H15A1,1 0 0,0 16,22V10A1,1 0 0,0 15,9Z", ws = "M2,5.27L3.28,4L21,21.72L19.73,23L16,19.27V22A1,1 0 0,1 15,23H9C8.46,23 8,22.55 8,22V11.27L2,5.27M12,0C15.05,0 17.8,1.23 19.77,3.23L18.36,4.64C16.75,3 14.5,2 12,2C9.72,2 7.64,2.85 6.06,4.24L4.64,2.82C6.59,1.07 9.17,0 12,0M12,4C13.94,4 15.69,4.78 16.95,6.05L15.55,7.46C14.64,6.56 13.39,6 12,6C10.83,6 9.76,6.4 8.9,7.08L7.5,5.66C8.7,4.62 10.28,4 12,4M15,9C15.56,9 16,9.45 16,10V14.18L13.5,11.69L13.31,11.5L10.82,9H15M10.03,13.3C10.16,14.16 10.84,14.85 11.71,15L10.03,13.3Z", Es = "M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21V20A2,2 0 0,1 19,22H5A2,2 0 0,1 3,20V19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A2.5,2.5 0 0,0 5,15.5A2.5,2.5 0 0,0 7.5,18A2.5,2.5 0 0,0 10,15.5A2.5,2.5 0 0,0 7.5,13M16.5,13A2.5,2.5 0 0,0 14,15.5A2.5,2.5 0 0,0 16.5,18A2.5,2.5 0 0,0 19,15.5A2.5,2.5 0 0,0 16.5,13Z", h1 = "M1 14V5H13C18.5 5 23 9.5 23 15V17H20.83C20.42 18.17 19.31 19 18 19C16.69 19 15.58 18.17 15.17 17H10C9.09 18.21 7.64 19 6 19C3.24 19 1 16.76 1 14M6 11C4.34 11 3 12.34 3 14C3 15.66 4.34 17 6 17C7.66 17 9 15.66 9 14C9 12.34 7.66 11 6 11M15 10V12H20.25C19.92 11.27 19.5 10.6 19 10H15Z", Ss = "M23 15V18C23 18.5 22.64 18.88 22.17 18.97L18.97 15.77C19 15.68 19 15.59 19 15.5C19 14.12 17.88 13 16.5 13C16.41 13 16.32 13 16.23 13.03L10.2 7H11V5.73C10.4 5.39 10 4.74 10 4C10 2.9 10.9 2 12 2S14 2.9 14 4C14 4.74 13.6 5.39 13 5.73V7H14C17.87 7 21 10.13 21 14H22C22.55 14 23 14.45 23 15M22.11 21.46L20.84 22.73L19.89 21.78C19.62 21.92 19.32 22 19 22H5C3.9 22 3 21.11 3 20V19H2C1.45 19 1 18.55 1 18V15C1 14.45 1.45 14 2 14H3C3 11.53 4.29 9.36 6.22 8.11L1.11 3L2.39 1.73L22.11 21.46M10 15.5C10 14.12 8.88 13 7.5 13S5 14.12 5 15.5 6.12 18 7.5 18 10 16.88 10 15.5M16.07 17.96L14.04 15.93C14.23 16.97 15.04 17.77 16.07 17.96Z", xs = "M12,2C14.65,2 17.19,3.06 19.07,4.93L17.65,6.35C16.15,4.85 14.12,4 12,4C9.88,4 7.84,4.84 6.35,6.35L4.93,4.93C6.81,3.06 9.35,2 12,2M3.66,6.5L5.11,7.94C4.39,9.17 4,10.57 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,10.57 19.61,9.17 18.88,7.94L20.34,6.5C21.42,8.12 22,10.04 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12C2,10.04 2.58,8.12 3.66,6.5M12,6A6,6 0 0,1 18,12C18,13.59 17.37,15.12 16.24,16.24L14.83,14.83C14.08,15.58 13.06,16 12,16C10.94,16 9.92,15.58 9.17,14.83L7.76,16.24C6.63,15.12 6,13.59 6,12A6,6 0 0,1 12,6M12,8A1,1 0 0,0 11,9A1,1 0 0,0 12,10A1,1 0 0,0 13,9A1,1 0 0,0 12,8Z", ks = "M20.8 22.7L18 19.9C16.3 21.2 14.2 22 12 22C6.5 22 2 17.5 2 12C2 10 2.6 8.1 3.7 6.5L5.2 7.9C4.4 9.2 4 10.6 4 12C4 16.4 7.6 20 12 20C13.7 20 15.3 19.4 16.6 18.5L13.7 15.6C13.2 15.9 12.6 16 12 16C10.9 16 9.9 15.6 9.2 14.8L7.8 16.2C6.6 15.1 6 13.6 6 12C6 10.8 6.3 9.7 6.9 8.8L1.1 3L2.4 1.7L22.1 21.4L20.8 22.7M20 12C20 13.4 19.6 14.7 19 15.8L20.5 17.3C21.5 15.8 22 14 22 12C22 10 21.4 8.1 20.3 6.5L18.8 7.9C19.6 9.2 20 10.6 20 12M12 4C14.1 4 16.2 4.8 17.7 6.3L19.1 4.9C17.2 3.1 14.7 2 12 2C10.1 2 8.3 2.5 6.7 3.5L8.2 5C9.3 4.3 10.7 4 12 4M17.5 14.3C17.8 13.6 18 12.8 18 12C18 8.7 15.3 6 12 6C11.2 6 10.4 6.2 9.7 6.5L11.4 8.2C11.6 8.1 11.8 8 12 8C12.6 8 13 8.4 13 9C13 9.2 12.9 9.4 12.8 9.6L17.5 14.3Z", Ts = "M20 19V3H4V19H2V21H22V19H20M6 19V13H11V14.8C10.6 15.1 10.2 15.6 10.2 16.2C10.2 17.2 11 18 12 18S13.8 17.2 13.8 16.2C13.8 15.6 13.5 15.1 13 14.8V13H18V19H6Z", zs = "M20 19V3H4V19H2V21H10.25C10.25 21.97 11.03 22.75 12 22.75S13.75 21.97 13.75 21H22V19H20M6 19V17H11V19H6M13 19V17H18V19H13Z", u1 = "M11.62,1L17.28,6.67L15.16,8.79L13.04,6.67L11.62,8.09L13.95,10.41L12.79,11.58L13.24,12.04C14.17,11.61 15.31,11.77 16.07,12.54L12.54,16.07C11.77,15.31 11.61,14.17 12.04,13.24L11.58,12.79L10.41,13.95L8.09,11.62L6.67,13.04L8.79,15.16L6.67,17.28L1,11.62L3.14,9.5L5.26,11.62L6.67,10.21L3.84,7.38C3.06,6.6 3.06,5.33 3.84,4.55L4.55,3.84C5.33,3.06 6.6,3.06 7.38,3.84L10.21,6.67L11.62,5.26L9.5,3.14L11.62,1M18,14A4,4 0 0,1 14,18V16A2,2 0 0,0 16,14H18M22,14A8,8 0 0,1 14,22V20A6,6 0 0,0 20,14H22Z", p1 = "M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2C20.7,2 22,3.3 22,5V6H20V5C20,4.4 19.6,4 19,4C18.4,4 18,4.4 18,5V18H17C16.4,18 16,17.6 16,17V16H5V5C5,3.3 6.3,2 8,2H19M8,6V8H15V6H8M8,10V12H14V10H8Z", Ds = "M4,18V21H7V18H17V21H20V15H4V18M19,10H22V13H19V10M2,10H5V13H2V10M17,13H7V5A2,2 0 0,1 9,3H15A2,2 0 0,1 17,5V13Z", Os = "M15,5V12H9V5H15M15,3H9A2,2 0 0,0 7,5V14H17V5A2,2 0 0,0 15,3M22,10H19V13H22V10M5,10H2V13H5V10M20,15H4V21H6V17H18V21H20V15Z", Is = "M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M11,7H13V13H11V7M11,15H13V17H11V15Z", Ps = "M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9", f1 = "M11,13H13V16H16V11H18L12,6L6,11H8V16H11V13M12,1L21,5V11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1Z", Gs = "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z", Zs = "M12 1L3 5V11C3 16.5 6.8 21.7 12 23C17.2 21.7 21 16.5 21 11V5L12 1M16 15.8C16 16.4 15.4 17 14.7 17H9.2C8.6 17 8 16.4 8 15.7V12.2C8 11.6 8.6 11 9.2 11V8.5C9.2 7.1 10.6 6 12 6S14.8 7.1 14.8 8.5V9H13.5V8.5C13.5 7.7 12.8 7.2 12 7.2S10.5 7.7 10.5 8.5V11H14.8C15.4 11 16 11.6 16 12.3V15.8Z", Bs = "M8.2 5L6.2 3H19C20.11 3 21 3.9 21 5V17.8L19 15.8V5H8.2M17.5 14.32C17.82 13.6 18 12.83 18 12C18 8.68 15.31 6 12 6C11.17 6 10.4 6.18 9.68 6.5L11.27 8.07C11.5 8.03 11.75 8 12 8C14.21 8 16 9.79 16 12C16 12.25 15.97 12.5 15.93 12.73L17.5 14.32M22.11 21.46L20.84 22.73L19.1 21C19.07 21 19.03 21 19 21H5C3.89 21 3 20.1 3 19V5C3 4.97 3 4.93 3 4.9L1.11 3L2.39 1.73L22.11 21.46M8 12C8 14.21 9.79 16 12 16C12.62 16 13.19 15.85 13.71 15.6L8.4 10.29C8.15 10.81 8 11.39 8 12M17.11 19L15.19 17.08C14.26 17.66 13.17 18 12 18C8.69 18 6 15.31 6 12C6 10.83 6.34 9.74 6.92 8.81L5 6.89V19H17.11Z", Fs = "M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.89 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V5H19V19M12 18C15.31 18 18 15.31 18 12C18 8.68 15.31 6 12 6C8.68 6 6 8.68 6 12C6 15.31 8.69 18 12 18M12 8C14.21 8 16 9.79 16 12S14.21 16 12 16 8 14.21 8 12 9.79 8 12 8Z", Rs = "M20.79,13.95L18.46,14.57L16.46,13.44V10.56L18.46,9.43L20.79,10.05L21.31,8.12L19.54,7.65L20,5.88L18.07,5.36L17.45,7.69L15.45,8.82L13,7.38V5.12L14.71,3.41L13.29,2L12,3.29L10.71,2L9.29,3.41L11,5.12V7.38L8.5,8.82L6.5,7.69L5.92,5.36L4,5.88L4.47,7.65L2.7,8.12L3.22,10.05L5.55,9.43L7.55,10.56V13.45L5.55,14.58L3.22,13.96L2.7,15.89L4.47,16.36L4,18.12L5.93,18.64L6.55,16.31L8.55,15.18L11,16.62V18.88L9.29,20.59L10.71,22L12,20.71L13.29,22L14.7,20.59L13,18.88V16.62L15.5,15.17L17.5,16.3L18.12,18.63L20,18.12L19.53,16.35L21.3,15.88L20.79,13.95M9.5,10.56L12,9.11L14.5,10.56V13.44L12,14.89L9.5,13.44V10.56Z", Ns = "M11 5.12L9.29 3.41L10.71 2L12 3.29L13.29 2L14.71 3.41L13 5.12V7.38L15.45 8.82L17.45 7.69L18.07 5.36L20 5.88L19.54 7.65L21.31 8.12L20.79 10.05L18.46 9.43L16.46 10.56V13.26L14.5 11.3V10.56L12.74 9.54L10.73 7.53L11 7.38V5.12M18.46 14.57L16.87 13.67L19.55 16.35L21.3 15.88L20.79 13.95L18.46 14.57M13 16.62V18.88L14.7 20.59L13.29 22L12 20.71L10.71 22L9.29 20.59L11 18.88V16.62L8.55 15.18L6.55 16.31L5.93 18.64L4 18.12L4.47 16.36L2.7 15.89L3.22 13.96L5.55 14.58L7.55 13.45V10.56L5.55 9.43L3.22 10.05L2.7 8.12L4.47 7.65L4 5.89L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73L14.1 16L13 16.62M12 14.89L12.63 14.5L9.5 11.39V13.44L12 14.89Z", js = "M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z", _1 = "M5.5,9A1.5,1.5 0 0,0 7,7.5A1.5,1.5 0 0,0 5.5,6A1.5,1.5 0 0,0 4,7.5A1.5,1.5 0 0,0 5.5,9M17.41,11.58C17.77,11.94 18,12.44 18,13C18,13.55 17.78,14.05 17.41,14.41L12.41,19.41C12.05,19.77 11.55,20 11,20C10.45,20 9.95,19.78 9.58,19.41L2.59,12.42C2.22,12.05 2,11.55 2,11V6C2,4.89 2.89,4 4,4H9C9.55,4 10.05,4.22 10.41,4.58L17.41,11.58M13.54,5.71L14.54,4.71L21.41,11.58C21.78,11.94 22,12.45 22,13C22,13.55 21.78,14.05 21.42,14.41L16.04,19.79L15.04,18.79L20.75,13L13.54,5.71Z", St = "M14,17H7V15H14M17,13H7V11H17M17,9H7V7H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z", m1 = "M10 19.11L12.11 17H7V15H14V15.12L16.12 13H7V11H17V12.12L18.24 10.89C18.72 10.41 19.35 10.14 20.04 10.14C20.37 10.14 20.7 10.21 21 10.33V5C21 3.89 20.1 3 19 3H5C3.89 3 3 3.89 3 5V19C3 20.11 3.9 21 5 21H10V19.11M7 7H17V9H7V7M21.7 14.35L20.7 15.35L18.65 13.3L19.65 12.3C19.86 12.09 20.21 12.09 20.42 12.3L21.7 13.58C21.91 13.79 21.91 14.14 21.7 14.35M12 19.94L18.06 13.88L20.11 15.93L14.06 22H12V19.94Z", Us = "M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z", Ws = "M22 12.66C21.07 12.24 20.07 12 19 12C19 10.43 18.5 9 17.6 7.81L15.43 10C15.79 10.57 16 11.26 16 12C16 12.24 16 12.5 15.94 12.7C13.61 13.84 12 16.23 12 19C12 20.07 12.24 21.07 12.66 22C12.44 22 12.22 22 12 22C10.69 22 9.39 21.74 8.17 21.24C6.96 20.74 5.86 20 4.93 19.07C3.05 17.2 2 14.65 2 12C2 9.35 3.05 6.8 4.93 4.93C5.86 4 6.96 3.26 8.17 2.76C9.39 2.26 10.69 2 12 2C17.5 2 22 6.47 22 12C22 12.22 22 12.44 22 12.66M12 5C10.14 5 8.36 5.74 7.05 7.05C5.74 8.36 5 10.14 5 12C5 13.93 5.78 15.68 7.05 16.95L9.17 14.83C8.45 14.1 8 13.1 8 12C8 10.94 8.42 9.92 9.17 9.17C9.92 8.42 10.94 8 12 8C12.74 8 13.43 8.21 14 8.56L16.19 6.4C15 5.5 13.57 5 12 5M23.83 20.64C23.89 20.53 23.87 20.39 23.77 20.32L22.72 19.5C22.74 19.33 22.75 19.16 22.75 19C22.75 18.84 22.74 18.67 22.72 18.5L23.77 17.68C23.87 17.61 23.89 17.5 23.83 17.36L22.83 15.64C22.77 15.53 22.64 15.5 22.53 15.53L21.28 16L21.14 15.91C20.91 15.77 20.7 15.64 20.44 15.54L20.25 14.21C20.23 14.09 20.13 14 20 14H18C17.88 14 17.77 14.09 17.75 14.21L17.57 15.54C17.3 15.64 17.09 15.78 16.86 15.92L16.72 16L15.5 15.53C15.37 15.5 15.23 15.53 15.17 15.64L14.17 17.36C14.11 17.5 14.14 17.61 14.23 17.68L15.29 18.5L15.29 18.53C15.27 18.69 15.25 18.84 15.25 19C15.25 19.16 15.27 19.31 15.29 19.47C15.29 19.5 15.29 19.5 15.29 19.5L14.23 20.32C14.14 20.39 14.11 20.53 14.17 20.64L15.17 22.37C15.23 22.5 15.37 22.5 15.5 22.5L16.72 21.97C17 22.17 17.25 22.34 17.57 22.47L17.75 23.79C17.77 23.91 17.88 24 18 24H20C20.13 24 20.23 23.91 20.25 23.79L20.44 22.47C20.75 22.34 21 22.17 21.28 21.97L22.53 22.5C22.64 22.5 22.77 22.5 22.83 22.37L23.83 20.64M19 17.25C19.97 17.25 20.75 18.03 20.75 19C20.75 19.97 19.96 20.75 19 20.75C18.04 20.75 17.25 19.97 17.25 19C17.25 18.03 18.03 17.25 19 17.25Z", qs = "M3 4L1.75 5.27L4.5 8.03C3.55 9.45 3 11.16 3 13C3 17.97 7.03 22 12 22C13.84 22 15.55 21.45 17 20.5L19.5 23L20.75 21.73L13.04 14L3 4M15 1H9V3H15M21 13C21 14.83 20.45 16.53 19.5 17.94L13 11.45V7H11V9.45L7.05 5.5C8.47 4.55 10.17 4 12 4C14.12 4 16.07 4.74 17.62 5.97L19.04 4.55L20.45 5.97L19.03 7.39C20.26 8.93 21 10.88 21 13Z", Ks = "M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z", te = "M17,7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7M17,15A3,3 0 0,1 14,12A3,3 0 0,1 17,9A3,3 0 0,1 20,12A3,3 0 0,1 17,15Z", ee = "M17,7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7M7,15A3,3 0 0,1 4,12A3,3 0 0,1 7,9A3,3 0 0,1 10,12A3,3 0 0,1 7,15Z", ie = "M17 6H7C3.69 6 1 8.69 1 12S3.69 18 7 18H17C20.31 18 23 15.31 23 12S20.31 6 17 6M17 16H7C4.79 16 3 14.21 3 12S4.79 8 7 8H17C19.21 8 21 9.79 21 12S19.21 16 17 16M17 9C15.34 9 14 10.34 14 12S15.34 15 17 15 20 13.66 20 12 18.66 9 17 9Z", Ys = "M4 22H2V2H4M22 2H20V22H22M17.24 5.34L13.24 9.34A3 3 0 0 0 9.24 13.34L5.24 17.34L6.66 18.76L10.66 14.76A3 3 0 0 0 14.66 10.76L18.66 6.76Z", g1 = "M22 2V22H20V13H14.82A3 3 0 0 1 9.18 13H4V22H2V2H4V11H9.18A3 3 0 0 1 14.82 11H20V2Z", Js = "M4 22H2V2H4M22 2H20V22H22M11 4V9.18A3 3 0 0 0 11 14.82V20H13V14.82A3 3 0 0 0 13 9.18V4Z", Xs = "M16,19H8V5H16M16.5,3H7.5A1.5,1.5 0 0,0 6,4.5V19.5A1.5,1.5 0 0,0 7.5,21H16.5A1.5,1.5 0 0,0 18,19.5V4.5A1.5,1.5 0 0,0 16.5,3M19,17H21V7H19M22,9V15H24V9M3,17H5V7H3M0,15H2V9H0V15Z", Qs = "M8.2,5L6.55,3.35C6.81,3.12 7.15,3 7.5,3H16.5A1.5,1.5 0 0,1 18,4.5V14.8L16,12.8V5H8.2M0,15H2V9H0V15M21,17V7H19V15.8L20.2,17H21M3,17H5V7H3V17M18,17.35L22.11,21.46L20.84,22.73L18,19.85C17.83,20.54 17.21,21 16.5,21H7.5A1.5,1.5 0 0,1 6,19.5V7.89L1.11,3L2.39,1.73L6.09,5.44L8,7.34L16,15.34L18,17.34V17.35M16,17.89L8,9.89V19H16V17.89M22,9V15H24V9H22Z", C1 = "M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z", v1 = "M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z", to = "M10 3.25C10 3.25 16 10 16 14C16 17.31 13.31 20 10 20S4 17.31 4 14C4 10 10 3.25 10 3.25M20 7V13H18V7H20M18 17H20V15H18V17Z", eo = "M8 2C6.89 2 6 2.89 6 4V16C6 17.11 6.89 18 8 18H9V20H6V22H9C10.11 22 11 21.11 11 20V18H13V20C13 21.11 13.89 22 15 22H18V20H15V18H16C17.11 18 18 17.11 18 16V4C18 2.89 17.11 2 16 2H8M12 4.97A2 2 0 0 1 14 6.97A2 2 0 0 1 12 8.97A2 2 0 0 1 10 6.97A2 2 0 0 1 12 4.97M10 14.5H14V16H10V14.5Z", io = "M20.84 22.73L16.29 18.18C15.2 19.3 13.69 20 12 20C8.69 20 6 17.31 6 14C6 12.67 6.67 11.03 7.55 9.44L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73M18 14C18 10 12 3.25 12 3.25S10.84 4.55 9.55 6.35L17.95 14.75C18 14.5 18 14.25 18 14Z", so = "M5.7 2.5A2 2 0 0 1 7 2H9A2 2 0 0 1 11 4V5H19A2 2 0 0 1 21 7V11A1 1 0 0 1 21 13H17A1 1 0 0 1 17 11V9H12.2M20.84 22.73L22.11 21.46L11 10.34L2.39 1.73L1.11 3L3.65 5.54A2 2 0 0 0 5 9V18H4A2 2 0 0 0 2 20V22H14V20A2 2 0 0 0 12 18H11V12.89Z", y1 = "M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z", oo = "M12.74,5.47C15.1,6.5 16.35,9.03 15.92,11.46C17.19,12.56 18,14.19 18,16V16.17C18.31,16.06 18.65,16 19,16A3,3 0 0,1 22,19A3,3 0 0,1 19,22H6A4,4 0 0,1 2,18A4,4 0 0,1 6,14H6.27C5,12.45 4.6,10.24 5.5,8.26C6.72,5.5 9.97,4.24 12.74,5.47M11.93,7.3C10.16,6.5 8.09,7.31 7.31,9.07C6.85,10.09 6.93,11.22 7.41,12.13C8.5,10.83 10.16,10 12,10C12.7,10 13.38,10.12 14,10.34C13.94,9.06 13.18,7.86 11.93,7.3M13.55,3.64C13,3.4 12.45,3.23 11.88,3.12L14.37,1.82L15.27,4.71C14.76,4.29 14.19,3.93 13.55,3.64M6.09,4.44C5.6,4.79 5.17,5.19 4.8,5.63L4.91,2.82L7.87,3.5C7.25,3.71 6.65,4.03 6.09,4.44M18,9.71C17.91,9.12 17.78,8.55 17.59,8L19.97,9.5L17.92,11.73C18.03,11.08 18.05,10.4 18,9.71M3.04,11.3C3.11,11.9 3.24,12.47 3.43,13L1.06,11.5L3.1,9.28C3,9.93 2.97,10.61 3.04,11.3M19,18H16V16A4,4 0 0,0 12,12A4,4 0 0,0 8,16H6A2,2 0 0,0 4,18A2,2 0 0,0 6,20H19A1,1 0 0,0 20,19A1,1 0 0,0 19,18Z", b1 = "M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z", no = "M22.11 21.46L2.39 1.73L1.11 3L4.97 6.86L3.34 7L5.11 10.79C5.25 10 5.5 9.24 5.94 8.5C6 8.36 6.13 8.24 6.22 8.11L7.66 9.55C7.25 10.27 7 11.11 7 12C7 14.76 9.24 17 12 17C12.9 17 13.73 16.75 14.45 16.34L20.84 22.73L22.11 21.46M12 15C10.34 15 9 13.66 9 12C9 11.67 9.07 11.36 9.17 11.06L12.94 14.83C12.64 14.93 12.33 15 12 15M18.05 8.5C17.63 7.78 17.1 7.15 16.5 6.64L20.65 7L18.88 10.79C18.74 10 18.47 9.23 18.05 8.5M12 7C14.76 7 17 9.24 17 12C17 12.54 16.89 13.05 16.74 13.54L15 11.78C14.87 10.3 13.7 9.13 12.22 9L10.47 7.27C10.95 7.11 11.46 7 12 7M12 5C11.16 5 10.35 5.15 9.61 5.42L12 2L14.39 5.42C13.65 5.15 12.84 5 12 5M18.87 13.21L20.64 17L20.24 17.04L18.25 15.05C18.54 14.45 18.76 13.84 18.87 13.21M12 19C12.82 19 13.63 18.83 14.37 18.56L12 22L9.59 18.56C10.33 18.83 11.14 19 12 19M5.95 15.5C6.37 16.24 6.91 16.86 7.5 17.37L3.36 17L5.12 13.23C5.26 14 5.53 14.78 5.95 15.5Z", L1 = "M6,11H10V9H14V11H18V4H6V11M18,13H6V20H18V13M6,2H18A2,2 0 0,1 20,4V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2Z", A1 = "M6,8H10V6H14V8H18V4H6V8M18,10H6V15H18V10M6,20H18V17H6V20M6,2H18A2,2 0 0,1 20,4V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2Z", ao = "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z", ro = "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9Z";
+var Oe = "M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z", Ie = "M12,4A4,4 0 0,1 16,8C16,9.95 14.6,11.58 12.75,11.93L8.07,7.25C8.42,5.4 10.05,4 12,4M12.28,14L18.28,20L20,21.72L18.73,23L15.73,20H4V18C4,16.16 6.5,14.61 9.87,14.14L2.78,7.05L4.05,5.78L12.28,14M20,18V19.18L15.14,14.32C18,14.93 20,16.35 20,18Z", Pe = "M19,18.31V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V16.3C4.54,16.12 3.95,16 3,16A1,1 0 0,1 2,15A1,1 0 0,1 3,14C3.82,14 4.47,14.08 5,14.21V12.3C4.54,12.12 3.95,12 3,12A1,1 0 0,1 2,11A1,1 0 0,1 3,10C3.82,10 4.47,10.08 5,10.21V8.3C4.54,8.12 3.95,8 3,8A1,1 0 0,1 2,7A1,1 0 0,1 3,6C3.82,6 4.47,6.08 5,6.21V4A2,2 0 0,1 7,2H17A2,2 0 0,1 19,4V6.16C20.78,6.47 21.54,7.13 21.71,7.29C22.1,7.68 22.1,8.32 21.71,8.71C21.32,9.1 20.8,9.09 20.29,8.71V8.71C20.29,8.71 19.25,8 17,8C15.74,8 14.91,8.41 13.95,8.9C12.91,9.41 11.74,10 10,10C9.64,10 9.31,10 9,9.96V7.95C9.3,8 9.63,8 10,8C11.26,8 12.09,7.59 13.05,7.11C14.09,6.59 15.27,6 17,6V4H7V20H17V18C18.5,18 18.97,18.29 19,18.31M17,10C15.27,10 14.09,10.59 13.05,11.11C12.09,11.59 11.26,12 10,12C9.63,12 9.3,12 9,11.95V13.96C9.31,14 9.64,14 10,14C11.74,14 12.91,13.41 13.95,12.9C14.91,12.42 15.74,12 17,12C19.25,12 20.29,12.71 20.29,12.71V12.71C20.8,13.1 21.32,13.1 21.71,12.71C22.1,12.32 22.1,11.69 21.71,11.29C21.5,11.08 20.25,10 17,10M17,14C15.27,14 14.09,14.59 13.05,15.11C12.09,15.59 11.26,16 10,16C9.63,16 9.3,16 9,15.95V17.96C9.31,18 9.64,18 10,18C11.74,18 12.91,17.41 13.95,16.9C14.91,16.42 15.74,16 17,16C19.25,16 20.29,16.71 20.29,16.71V16.71C20.8,17.1 21.32,17.1 21.71,16.71C22.1,16.32 22.1,15.69 21.71,15.29C21.5,15.08 20.25,14 17,14Z", Vi = "M11 9C8.79 9 7 10.79 7 13S8.79 17 11 17 15 15.21 15 13 13.21 9 11 9M11 15C9.9 15 9 14.11 9 13S9.9 11 11 11 13 11.9 13 13 12.11 15 11 15M7 4H14C16.21 4 18 5.79 18 8V9H16V8C16 6.9 15.11 6 14 6H7C5.9 6 5 6.9 5 8V20H16V18H18V22H3V8C3 5.79 4.79 4 7 4M19 10.5C19 10.5 21 12.67 21 14C21 15.1 20.1 16 19 16S17 15.1 17 14C17 12.67 19 10.5 19 10.5", $i = "M22.1 21.5L2.4 1.7L1.1 3L3.8 5.7C3.3 6.3 3 7.1 3 8V22H18V19.9L20.8 22.7L22.1 21.5M9.6 11.5L12.4 14.3C12.1 14.7 11.6 15 11 15C9.9 15 9 14.1 9 13C9 12.4 9.3 11.9 9.6 11.5M16 17.9V20H5V8C5 7.7 5.1 7.4 5.2 7.1L8.2 10.1C7.5 10.8 7 11.9 7 13C7 15.2 8.8 17 11 17C12.1 17 13.2 16.5 13.9 15.8L16 17.9M17 13.8C17.1 12.5 19 10.5 19 10.5S21 12.7 21 14C21 15 20.2 15.9 19.2 16L17 13.8M9.2 6L7.2 4H14C16.2 4 18 5.8 18 8V9H16V8C16 6.9 15.1 6 14 6H9.2Z", Mi = "M6,6.9L3.87,4.78L5.28,3.37L7.4,5.5L6,6.9M13,1V4H11V1H13M20.13,4.78L18,6.9L16.6,5.5L18.72,3.37L20.13,4.78M4.5,10.5V12.5H1.5V10.5H4.5M19.5,10.5H22.5V12.5H19.5V10.5M6,20H18A2,2 0 0,1 20,22H4A2,2 0 0,1 6,20M12,5A6,6 0 0,1 18,11V19H6V11A6,6 0 0,1 12,5Z", wi = "M18 14.8L9 5.8C9.9 5.3 10.9 5 12 5C15.3 5 18 7.7 18 11V14.8M20.1 4.8L18.7 3.4L16.6 5.5L18 6.9L20.1 4.8M19.5 10.5V12.5H22.5V10.5H19.5M4.5 10.5H1.5V12.5H4.5V10.5M1.1 3L6.6 8.5C6.2 9.2 6 10.1 6 11V19H17.1L18.1 20H6C4.9 20 4 20.9 4 22H20.1L20.8 22.7L22.1 21.4L2.4 1.7L1.1 3M13 1H11V4H13V1Z", Ei = "M18.75 22.16L16 19.16L17.16 18L18.75 19.59L22.34 16L23.5 17.41L18.75 22.16M11 15H13V17H11V15M11 7H13V13H11V7M12 2C17.5 2 22 6.5 22 12L21.92 13.31C21.31 13.11 20.67 13 19.94 13L20 12C20 7.58 16.42 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C12.71 20 13.39 19.91 14.05 19.74C14.13 20.42 14.33 21.06 14.62 21.65C13.78 21.88 12.9 22 12 22C6.47 22 2 17.5 2 12C2 6.5 6.47 2 12 2Z", Si = "M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z", Ge = "M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z", Ze = "M18 12C18 11 17.74 10.04 17.3 9.2L18.76 7.74C19.54 8.97 20 10.43 20 12C20 13.39 19.64 14.68 19 15.82L17.5 14.32C17.82 13.6 18 12.83 18 12M2.39 1.73L1.11 3L5.5 7.37C4.55 8.68 4 10.27 4 12C4 13.57 4.46 15.03 5.24 16.26L6.7 14.8C6.25 13.97 6 13 6 12C6 10.83 6.34 9.74 6.92 8.81L15.19 17.08C14.26 17.66 13.17 18 12 18V15L8 19L12 23V20C13.73 20 15.32 19.45 16.63 18.5L20.84 22.73L22.11 21.46L2.39 1.73M12 6V8.8L12.1 8.9L16 5L12 1V4C10.62 4 9.32 4.36 8.18 5L9.68 6.5C10.4 6.18 11.18 6 12 6Z", Be = "M5.06 7C4.63 7 4.22 7.14 3.84 7.42C3.46 7.7 3.24 8.06 3.14 8.5L2.11 12.91C1.86 14 2.06 14.92 2.69 15.73C2.81 15.85 2.93 15.97 3.04 16.07C3.63 16.64 4.28 17 5.22 17C6.16 17 6.91 16.59 7.47 16.05C8.1 16.67 8.86 17 9.8 17C10.64 17 11.44 16.63 12 16.07C12.68 16.7 13.45 17 14.3 17C15.17 17 15.91 16.67 16.54 16.05C17.11 16.62 17.86 17 18.81 17C19.76 17 20.43 16.65 21 16.06C21.09 15.97 21.18 15.87 21.28 15.77C21.94 14.95 22.14 14 21.89 12.91L20.86 8.5C20.73 8.06 20.5 7.7 20.13 7.42C19.77 7.14 19.38 7 18.94 7H5.06M18.89 8.97L19.97 13.38C20.06 13.81 19.97 14.2 19.69 14.55C19.44 14.86 19.13 15 18.75 15C18.44 15 18.17 14.9 17.95 14.66C17.73 14.43 17.61 14.16 17.58 13.84L16.97 9L18.89 8.97M5.06 9H7.03L6.42 13.84C6.3 14.63 5.91 15 5.25 15C4.84 15 4.53 14.86 4.31 14.55C4.03 14.2 3.94 13.81 4.03 13.38L5.06 9M9.05 9H11V13.7C11 14.05 10.89 14.35 10.64 14.62C10.39 14.88 10.08 15 9.7 15C9.36 15 9.07 14.88 8.84 14.59C8.61 14.3 8.5 14 8.5 13.66V13.5L9.05 9M13 9H14.95L15.5 13.5C15.58 13.92 15.5 14.27 15.21 14.57C14.95 14.87 14.61 15 14.2 15C13.89 15 13.61 14.88 13.36 14.62C13.11 14.35 13 14.05 13 13.7V9Z", xi = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.67C6,21.4 6.6,22 7.33,22H16.67A1.33,1.33 0 0,0 18,20.67V5.33C18,4.6 17.4,4 16.67,4Z", ki = "M13 14H11V8H13M13 18H11V16H13M16.7 4H15V2H9V4H7.3C6.6 4 6 4.6 6 5.3V20.6C6 21.4 6.6 22 7.3 22H16.6C17.3 22 17.9 21.4 17.9 20.7V5.3C18 4.6 17.4 4 16.7 4Z", Ti = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.66C6,21.4 6.6,22 7.33,22H16.66C17.4,22 18,21.4 18,20.67V5.33C18,4.6 17.4,4 16.67,4M11,20V14.5H9L13,7V12.5H15", zi = "M16.75 21.16L14 18.16L15.16 17L16.75 18.59L20.34 15L21.5 16.41L16.75 21.16M12 18C12 14.69 14.69 12 18 12V5.33C18 4.6 17.4 4 16.67 4H15V2H9V4H7.33C6.6 4 6 4.6 6 5.33V20.67C6 21.4 6.6 22 7.33 22H13.54C12.58 20.94 12 19.54 12 18Z", Di = "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21", Ne = "M20.84,22.73L18.11,20H3V19L5,17V11C5,9.86 5.29,8.73 5.83,7.72L1.11,3L2.39,1.73L22.11,21.46L20.84,22.73M19,15.8V11C19,7.9 16.97,5.17 14,4.29C14,4.19 14,4.1 14,4A2,2 0 0,0 12,2A2,2 0 0,0 10,4C10,4.1 10,4.19 10,4.29C9.39,4.47 8.8,4.74 8.26,5.09L19,15.8M12,23A2,2 0 0,0 14,21H10A2,2 0 0,0 12,23Z", Oi = "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21M19.75,3.19L18.33,4.61C20.04,6.3 21,8.6 21,11H23C23,8.07 21.84,5.25 19.75,3.19M1,11H3C3,8.6 3.96,6.3 5.67,4.61L4.25,3.19C2.16,5.25 1,8.07 1,11Z", Ii = "M3,2H21A1,1 0 0,1 22,3V5A1,1 0 0,1 21,6H20V13A1,1 0 0,1 19,14H13V16.17C14.17,16.58 15,17.69 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.69 9.83,16.58 11,16.17V14H5A1,1 0 0,1 4,13V6H3A1,1 0 0,1 2,5V3A1,1 0 0,1 3,2M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z", Pi = "M3 2H21C21.55 2 22 2.45 22 3V5C22 5.55 21.55 6 21 6H20V7C20 7.55 19.55 8 19 8H13V10.17C14.17 10.58 15 11.7 15 13C15 14.66 13.66 16 12 16C10.34 16 9 14.66 9 13C9 11.69 9.84 10.58 11 10.17V8H5C4.45 8 4 7.55 4 7V6H3C2.45 6 2 5.55 2 5V3C2 2.45 2.45 2 3 2M12 12C11.45 12 11 12.45 11 13C11 13.55 11.45 14 12 14C12.55 14 13 13.55 13 13C13 12.45 12.55 12 12 12Z", Fe = "M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z", Mt = "M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z", Re = "M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M9.31,17L11.75,14.56L14.19,17L15.25,15.94L12.81,13.5L15.25,11.06L14.19,10L11.75,12.44L9.31,10L8.25,11.06L10.69,13.5L8.25,15.94L9.31,17Z", je = "M19 19H5V8H19M16 1V3H8V1H6V3H5C3.9 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3H18V1M10.88 12H7.27L10.19 14.11L9.08 17.56L12 15.43L14.92 17.56L13.8 14.12L16.72 12H13.12L12 8.56L10.88 12Z", Gi = "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z", Zi = "M1.2,4.47L2.5,3.2L20,20.72L18.73,22L16.73,20H4A2,2 0 0,1 2,18V6C2,5.78 2.04,5.57 2.1,5.37L1.2,4.47M7,4L9,2H15L17,4H20A2,2 0 0,1 22,6V18C22,18.6 21.74,19.13 21.32,19.5L16.33,14.5C16.76,13.77 17,12.91 17,12A5,5 0 0,0 12,7C11.09,7 10.23,7.24 9.5,7.67L5.82,4H7M7,12A5,5 0 0,0 12,17C12.5,17 13.03,16.92 13.5,16.77L11.72,15C10.29,14.85 9.15,13.71 9,12.28L7.23,10.5C7.08,10.97 7,11.5 7,12M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9Z", Bi = "M5,11L6.5,6.5H17.5L19,11M17.5,16A1.5,1.5 0 0,1 16,14.5A1.5,1.5 0 0,1 17.5,13A1.5,1.5 0 0,1 19,14.5A1.5,1.5 0 0,1 17.5,16M6.5,16A1.5,1.5 0 0,1 5,14.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 6.5,16M18.92,6C18.72,5.42 18.16,5 17.5,5H6.5C5.84,5 5.28,5.42 5.08,6L3,12V20A1,1 0 0,0 4,21H5A1,1 0 0,0 6,20V19H18V20A1,1 0 0,0 19,21H20A1,1 0 0,0 21,20V12L18.92,6Z", Ni = "M20.5,19.85L6.41,5.76L2.41,1.76L1.11,3L4.57,6.46L3,11V19A1,1 0 0,0 4,20H5A1,1 0 0,0 6,19V18H16.11L20.84,22.73L22.11,21.46L20.5,19.85M6.5,15A1.5,1.5 0 0,1 5,13.5A1.5,1.5 0 0,1 6.5,12A1.5,1.5 0 0,1 8,13.5A1.5,1.5 0 0,1 6.5,15M5,10L5.78,7.67L8.11,10H5M17.5,5.5L19,10H13.2L16.12,12.92C16.5,12.17 17.37,11.86 18.12,12.21C18.87,12.57 19.18,13.47 18.83,14.21C18.68,14.5 18.43,14.77 18.12,14.92L21,17.8V11L18.92,5C18.71,4.4 18.14,4 17.5,4H7.2L8.7,5.5H17.5Z", Fi = "M1,10V12A9,9 0 0,1 10,21H12C12,14.92 7.07,10 1,10M1,14V16A5,5 0 0,1 6,21H8A7,7 0 0,0 1,14M1,18V21H4A3,3 0 0,0 1,18M21,3H3C1.89,3 1,3.89 1,5V8H3V5H21V19H14V21H21A2,2 0 0,0 23,19V5C23,3.89 22.1,3 21,3Z", Ri = "M1.6,1.27L0.25,2.75L1.41,3.8C1.16,4.13 1,4.55 1,5V8H3V5.23L18.2,19H14V21H20.41L22.31,22.72L23.65,21.24M6.5,3L8.7,5H21V16.14L23,17.95V5C23,3.89 22.1,3 21,3M1,10V12A9,9 0 0,1 10,21H12C12,14.92 7.08,10 1,10M1,14V16A5,5 0 0,1 6,21H8A7,7 0 0,0 1,14M1,18V21H4A3,3 0 0,0 1,18Z", ji = "M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z", Ui = "M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z", Wi = "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z", qi = "M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z", Ki = "M12 20C16.4 20 20 16.4 20 12S16.4 4 12 4 4 7.6 4 12 7.6 20 12 20M12 2C17.5 2 22 6.5 22 12S17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2M12.5 12.8L7.7 15.6L7 14.2L11 11.9V7H12.5V12.8Z", Ft = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z", Ue = "M12,23A1,1 0 0,1 11,22V19H7A2,2 0 0,1 5,17V7A2,2 0 0,1 7,5H21A2,2 0 0,1 23,7V17A2,2 0 0,1 21,19H16.9L13.2,22.71C13,22.89 12.76,23 12.5,23H12M3,15H1V3A2,2 0 0,1 3,1H19V3H3V15Z", We = "M21.4 7.5C22.2 8.3 22.2 9.6 21.4 10.3L18.6 13.1L10.8 5.3L13.6 2.5C14.4 1.7 15.7 1.7 16.4 2.5L18.2 4.3L21.2 1.3L22.6 2.7L19.6 5.7L21.4 7.5M15.6 13.3L14.2 11.9L11.4 14.7L9.3 12.6L12.1 9.8L10.7 8.4L7.9 11.2L6.4 9.8L3.6 12.6C2.8 13.4 2.8 14.7 3.6 15.4L5.4 17.2L1.4 21.2L2.8 22.6L6.8 18.6L8.6 20.4C9.4 21.2 10.7 21.2 11.4 20.4L14.2 17.6L12.8 16.2L15.6 13.3Z", qe = "M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H11V6H4M20,18V6H18.76C19,6.54 18.95,7.07 18.95,7.13C18.88,7.8 18.41,8.5 18.24,8.75L15.91,11.3L19.23,11.28L19.24,12.5L14.04,12.47L14,11.47C14,11.47 17.05,8.24 17.2,7.95C17.34,7.67 17.91,6 16.5,6C15.27,6.05 15.41,7.3 15.41,7.3L13.87,7.31C13.87,7.31 13.88,6.65 14.25,6H13V18H15.58L15.57,17.14L16.54,17.13C16.54,17.13 17.45,16.97 17.46,16.08C17.5,15.08 16.65,15.08 16.5,15.08C16.37,15.08 15.43,15.13 15.43,15.95H13.91C13.91,15.95 13.95,13.89 16.5,13.89C19.1,13.89 18.96,15.91 18.96,15.91C18.96,15.91 19,17.16 17.85,17.63L18.37,18H20M8.92,16H7.42V10.2L5.62,10.76V9.53L8.76,8.41H8.92V16Z", Yi = "M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z", Ji = "M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z", Ke = "M16,11H18V13H16V11M12,3H19C20.11,3 21,3.89 21,5V19H22V21H2V19H10V5C10,3.89 10.89,3 12,3M12,5V19H19V5H12Z", Ye = "M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z", Xi = "M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z", Je = "M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z", Xe = "M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z", Qi = "M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12.5,2C17,2 17.11,5.57 14.75,6.75C13.76,7.24 13.32,8.29 13.13,9.22C13.61,9.42 14.03,9.73 14.35,10.13C18.05,8.13 22.03,8.92 22.03,12.5C22.03,17 18.46,17.1 17.28,14.73C16.78,13.74 15.72,13.3 14.79,13.11C14.59,13.59 14.28,14 13.88,14.34C15.87,18.03 15.08,22 11.5,22C7,22 6.91,18.42 9.27,17.24C10.25,16.75 10.69,15.71 10.89,14.79C10.4,14.59 9.97,14.27 9.65,13.87C5.96,15.85 2,15.07 2,11.5C2,7 5.56,6.89 6.74,9.26C7.24,10.25 8.29,10.68 9.22,10.87C9.41,10.39 9.73,9.97 10.14,9.65C8.15,5.96 8.94,2 12.5,2Z", ts = "M12.5,2C9.64,2 8.57,4.55 9.29,7.47L15,13.16C15.87,13.37 16.81,13.81 17.28,14.73C18.46,17.1 22.03,17 22.03,12.5C22.03,8.92 18.05,8.13 14.35,10.13C14.03,9.73 13.61,9.42 13.13,9.22C13.32,8.29 13.76,7.24 14.75,6.75C17.11,5.57 17,2 12.5,2M3.28,4L2,5.27L4.47,7.73C3.22,7.74 2,8.87 2,11.5C2,15.07 5.96,15.85 9.65,13.87C9.97,14.27 10.4,14.59 10.89,14.79C10.69,15.71 10.25,16.75 9.27,17.24C6.91,18.42 7,22 11.5,22C13.8,22 14.94,20.36 14.94,18.21L18.73,22L20,20.72L3.28,4Z", wt = "M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z", Qe = "M5 5V19H7V21H3V3H7V5H5M20 7H7V9H20V7M20 11H7V13H20V11M20 15H7V17H20V15Z", es = "M17 14V17H14V19H17V22H19V19H22V17H19V14M20 11V12.3C19.4 12.1 18.7 12 18 12C16.8 12 15.6 12.4 14.7 13H7V11H20M12.1 17H7V15H12.8C12.5 15.6 12.2 16.3 12.1 17M7 7H20V9H7V7M5 19H7V21H3V3H7V5H5V19Z", Jt = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z", Xt = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z", is = "M1 4.27L2.28 3L6 6.72L21 21.72L19.73 23L17.72 21C16.56 20.85 15.65 19.94 15.5 18.78L14 17.27V21H4V7.27L1 4.27M19.77 7.23C20.22 7.68 20.5 8.31 20.5 9L20.5 18.67L19 17.18V11.29C18.69 11.42 18.36 11.5 18 11.5C16.62 11.5 15.5 10.38 15.5 9C15.5 7.93 16.17 7.03 17.11 6.67L15 4.56L16.06 3.5L19.78 7.22L19.77 7.23M11.82 10H12V5H6.82L5.06 3.24C5.34 3.09 5.66 3 6 3H12C13.1 3 14 3.9 14 5V12H15C16.1 12 17 12.9 17 14V15.18L11.82 10M6 10H6.73L6 9.27V10M6 12V19H12V15.27L8.73 12H6M18 10C18.55 10 19 9.55 19 9C19 8.45 18.55 8 18 8C17.45 8 17 8.45 17 9C17 9.55 17.45 10 18 10Z", ss = "M19.77,7.23L19.78,7.22L16.06,3.5L15,4.56L17.11,6.67C16.17,7.03 15.5,7.93 15.5,9A2.5,2.5 0 0,0 18,11.5C18.36,11.5 18.69,11.42 19,11.29V18.5A1,1 0 0,1 18,19.5A1,1 0 0,1 17,18.5V14A2,2 0 0,0 15,12H14V5A2,2 0 0,0 12,3H6A2,2 0 0,0 4,5V21H14V13.5H15.5V18.5A2.5,2.5 0 0,0 18,21A2.5,2.5 0 0,0 20.5,18.5V9C20.5,8.31 20.22,7.68 19.77,7.23M12,13.5V19H6V12H12V13.5M12,10H6V5H12V10M18,10A1,1 0 0,1 17,9A1,1 0 0,1 18,8A1,1 0 0,1 19,9A1,1 0 0,1 18,10Z", os = "M9 6V11H7V7H5V11H3V9H1V21H3V19H5V21H7V19H9V21H11V19H13V21H15V19H17V21H19V19H21V21H23V9H21V11H19V7H17V11H15V6H13V11H11V6H9M3 13H5V17H3V13M7 13H9V17H7V13M11 13H13V17H11V13M15 13H17V17H15V13M19 13H21V17H19V13Z", ns = "M7 21V7H5V11H3V9H1V21H3V19H5V21H7M3 17V13H5V17H3M21 9V11H19V7H17V21H19V19H21V21H23V9H21M21 17H19V13H21V17Z", t1 = "M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.4 19,16.5 17.3,18C15.9,16.7 14,16 12,16C10,16 8.2,16.7 6.7,18C5,16.5 4,14.4 4,12A8,8 0 0,1 12,4M14,5.89C13.62,5.9 13.26,6.15 13.1,6.54L11.81,9.77L11.71,10C11,10.13 10.41,10.6 10.14,11.26C9.73,12.29 10.23,13.45 11.26,13.86C12.29,14.27 13.45,13.77 13.86,12.74C14.12,12.08 14,11.32 13.57,10.76L13.67,10.5L14.96,7.29L14.97,7.26C15.17,6.75 14.92,6.17 14.41,5.96C14.28,5.91 14.15,5.89 14,5.89M10,6A1,1 0 0,0 9,7A1,1 0 0,0 10,8A1,1 0 0,0 11,7A1,1 0 0,0 10,6M7,9A1,1 0 0,0 6,10A1,1 0 0,0 7,11A1,1 0 0,0 8,10A1,1 0 0,0 7,9M17,9A1,1 0 0,0 16,10A1,1 0 0,0 17,11A1,1 0 0,0 18,10A1,1 0 0,0 17,9Z", e1 = "M13 5C15.21 5 17 6.79 17 9C17 10.5 16.2 11.77 15 12.46V11.24C15.61 10.69 16 9.89 16 9C16 7.34 14.66 6 13 6S10 7.34 10 9C10 9.89 10.39 10.69 11 11.24V12.46C9.8 11.77 9 10.5 9 9C9 6.79 10.79 5 13 5M20 20.5C19.97 21.32 19.32 21.97 18.5 22H13C12.62 22 12.26 21.85 12 21.57L8 17.37L8.74 16.6C8.93 16.39 9.2 16.28 9.5 16.28H9.7L12 18V9C12 8.45 12.45 8 13 8S14 8.45 14 9V13.47L15.21 13.6L19.15 15.79C19.68 16.03 20 16.56 20 17.14V20.5M20 2H4C2.9 2 2 2.9 2 4V12C2 13.11 2.9 14 4 14H8V12L4 12L4 4H20L20 12H18V14H20V13.96L20.04 14C21.13 14 22 13.09 22 12V4C22 2.9 21.11 2 20 2Z", i1 = "M15,12C13.89,12 13,12.89 13,14A2,2 0 0,0 15,16A2,2 0 0,0 17,14C17,12.89 16.1,12 15,12M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M14,9C14,7.89 13.1,7 12,7C10.89,7 10,7.89 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9M9,12A2,2 0 0,0 7,14A2,2 0 0,0 9,16A2,2 0 0,0 11,14C11,12.89 10.1,12 9,12Z", as = "M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z", rs = "M24 13L20 17V14H11V12H20V9L24 13M4 20V12H1L11 3L18 9.3V10H15.79L11 5.69L6 10.19V18H16V16H18V20H4Z", ls = "M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22", cs = "M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z", s1 = "M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M19,19H15V21H19A2,2 0 0,0 21,19V15H19M19,3H15V5H19V9H21V5A2,2 0 0,0 19,3M5,5H9V3H5A2,2 0 0,0 3,5V9H5M5,15H3V19A2,2 0 0,0 5,21H9V19H5V15Z", ds = "M21 17.2L6.8 3H19C20.1 3 21 3.9 21 5V17.2M20.7 22L19.7 21H5C3.9 21 3 20.1 3 19V4.3L2 3.3L3.3 2L22 20.7L20.7 22M16.8 18L12.9 14.1L11 16.5L8.5 13.5L5 18H16.8Z", hs = "M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M9,21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9V21Z", us = "M12,2C9.76,2 7.78,3.05 6.5,4.68L16.31,14.5C17.94,13.21 19,11.24 19,9A7,7 0 0,0 12,2M3.28,4L2,5.27L5.04,8.3C5,8.53 5,8.76 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H14.73L18.73,22L20,20.72L3.28,4M9,20V21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9Z", ps = "M12,2C9.76,2 7.78,3.05 6.5,4.68L7.93,6.11C8.84,4.84 10.32,4 12,4A5,5 0 0,1 17,9C17,10.68 16.16,12.16 14.89,13.06L16.31,14.5C17.94,13.21 19,11.24 19,9A7,7 0 0,0 12,2M3.28,4L2,5.27L5.04,8.3C5,8.53 5,8.76 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H14.73L18.73,22L20,20.72L3.28,4M7.23,10.5L12.73,16H10V13.58C8.68,13 7.66,11.88 7.23,10.5M9,20V21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9Z", fs = "M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M12,4A5,5 0 0,0 7,9C7,11.05 8.23,12.81 10,13.58V16H14V13.58C15.77,12.81 17,11.05 17,9A5,5 0 0,0 12,4Z", o1 = "M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z", n1 = "M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,0 14,15A2,2 0 0,0 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17Z", a1 = "M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z", r1 = "M16.37,16.1L11.75,11.47L11.64,11.36L3.27,3L2,4.27L5.18,7.45C5.06,7.95 5,8.46 5,9C5,14.25 12,22 12,22C12,22 13.67,20.15 15.37,17.65L18.73,21L20,19.72M12,6.5A2.5,2.5 0 0,1 14.5,9C14.5,9.73 14.17,10.39 13.67,10.85L17.3,14.5C18.28,12.62 19,10.68 19,9A7,7 0 0,0 12,2C10,2 8.24,2.82 6.96,4.14L10.15,7.33C10.61,6.82 11.26,6.5 12,6.5Z", _s = "M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z", ms = "M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z", l1 = "M8 7C6.9 7 6 7.9 6 9V15C6 16.11 6.9 17 8 17H11V15H8V9H11V7H8M14 7C12.9 7 12 7.9 12 9V15C12 16.11 12.9 17 14 17H16C17.11 17 18 16.11 18 15V9C18 7.9 17.11 7 16 7H14M14 9H16V15H14V9", gs = "M10,0.2C9,0.2 8.2,1 8.2,2C8.2,3 9,3.8 10,3.8C11,3.8 11.8,3 11.8,2C11.8,1 11,0.2 10,0.2M15.67,1A7.33,7.33 0 0,0 23,8.33V7A6,6 0 0,1 17,1H15.67M18.33,1C18.33,3.58 20.42,5.67 23,5.67V4.33C21.16,4.33 19.67,2.84 19.67,1H18.33M21,1A2,2 0 0,0 23,3V1H21M7.92,4.03C7.75,4.03 7.58,4.06 7.42,4.11L2,5.8V11H3.8V7.33L5.91,6.67L2,22H3.8L6.67,13.89L9,17V22H10.8V15.59L8.31,11.05L9.04,8.18L10.12,10H15V8.2H11.38L9.38,4.87C9.08,4.37 8.54,4.03 7.92,4.03Z", Cs = "M11.4 8.2H15V10H13.2L11.4 8.2M19.67 1H18.33C18.33 3.58 20.42 5.67 23 5.67V4.33C21.16 4.33 19.67 2.84 19.67 1M21 1C21 2.11 21.9 3 23 3V1H21M17 1H15.67C15.67 5.05 18.95 8.33 23 8.33V7C19.69 7 17 4.31 17 1M10 3.8C11 3.8 11.8 3 11.8 2S11 .2 10 .2 8.2 1 8.2 2 9 3.8 10 3.8M2.39 1.73L1.11 3L3.46 5.35L2 5.8V11H3.8V7.33L5.05 6.94L5.68 7.57L2 22H3.8L6.67 13.89L9 17V22H10.8V15.59L8.31 11.05L8.5 10.37L20.84 22.73L22.11 21.46L2.39 1.73M9.38 4.87C9.08 4.37 8.54 4.03 7.92 4.03C7.75 4.03 7.58 4.06 7.42 4.11L7.34 4.14L11.35 8.15L9.38 4.87Z", vs = "M18,4L20,8H17L15,4H13L15,8H12L10,4H8L10,8H7L5,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V4H18Z", ys = "M22.11 21.46L20.84 22.73L18.11 20H4C2.9 20 2 19.11 2 18V6C2 5.42 2.25 4.9 2.65 4.54L1.11 3L2.39 1.73L22.11 21.46M21.88 18.68C21.96 18.47 22 18.24 22 18V4H18L20 8H17L15 4H13L15 8H12L10 4H8L8.8 5.6L21.88 18.68Z", Et = "M4,17V9H2V7H6V17H4M22,15C22,16.11 21.1,17 20,17H16V15H20V13H18V11H20V9H16V7H20A2,2 0 0,1 22,9V10.5A1.5,1.5 0 0,1 20.5,12A1.5,1.5 0 0,1 22,13.5V15M14,15V17H8V13C8,11.89 8.9,11 10,11H12V9H8V7H12A2,2 0 0,1 14,9V11C14,12.11 13.1,13 12,13H10V15H14Z", bs = "M14,19H18V5H14M6,19H10V5H6V19Z", Ls = "M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z", As = "M8,5.14V19.14L19,12.14L8,5.14Z", Hs = "M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.36,6.88 4,9.28 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,9.28 18.64,6.88 16.56,5.44M13,3H11V13H13", Qt = "M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3M12,19A7,7 0 0,1 5,12A7,7 0 0,1 12,5A7,7 0 0,1 19,12A7,7 0 0,1 12,19Z", c1 = "M16,7V3H14V7H10V3H8V7H8C7,7 6,8 6,9V14.5L9.5,18V21H14.5V18L18,14.5V9C18,8 17,7 16,7Z", d1 = "M20.84 22.73L15.31 17.2L14.5 18V21H9.5V18L6 14.5V9C6 8.7 6.1 8.41 6.25 8.14L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73M18 14.5V9C18 8 17 7 16 7V3H14V7H10.2L17.85 14.65L18 14.5M10 3H8V4.8L10 6.8V3Z", Vs = "M19,12C19,15.86 15.86,19 12,19C8.14,19 5,15.86 5,12C5,8.14 8.14,5 12,5C15.86,5 19,8.14 19,12Z", $s = "M12.5,5A7.5,7.5 0 0,0 5,12.5A7.5,7.5 0 0,0 12.5,20A7.5,7.5 0 0,0 20,12.5A7.5,7.5 0 0,0 12.5,5M7,10H9A1,1 0 0,1 10,11V12C10,12.5 9.62,12.9 9.14,12.97L10.31,15H9.15L8,13V15H7M12,10H14V11H12V12H14V13H12V14H14V15H12A1,1 0 0,1 11,14V11A1,1 0 0,1 12,10M16,10H18V11H16V14H18V15H16A1,1 0 0,1 15,14V11A1,1 0 0,1 16,10M8,11V12H9V11", Ms = "M12,0C8.96,0 6.21,1.23 4.22,3.22L5.63,4.63C7.26,3 9.5,2 12,2C14.5,2 16.74,3 18.36,4.64L19.77,3.23C17.79,1.23 15.04,0 12,0M7.05,6.05L8.46,7.46C9.37,6.56 10.62,6 12,6C13.38,6 14.63,6.56 15.54,7.46L16.95,6.05C15.68,4.78 13.93,4 12,4C10.07,4 8.32,4.78 7.05,6.05M12,15A2,2 0 0,1 10,13A2,2 0 0,1 12,11A2,2 0 0,1 14,13A2,2 0 0,1 12,15M15,9H9A1,1 0 0,0 8,10V22A1,1 0 0,0 9,23H15A1,1 0 0,0 16,22V10A1,1 0 0,0 15,9Z", ws = "M2,5.27L3.28,4L21,21.72L19.73,23L16,19.27V22A1,1 0 0,1 15,23H9C8.46,23 8,22.55 8,22V11.27L2,5.27M12,0C15.05,0 17.8,1.23 19.77,3.23L18.36,4.64C16.75,3 14.5,2 12,2C9.72,2 7.64,2.85 6.06,4.24L4.64,2.82C6.59,1.07 9.17,0 12,0M12,4C13.94,4 15.69,4.78 16.95,6.05L15.55,7.46C14.64,6.56 13.39,6 12,6C10.83,6 9.76,6.4 8.9,7.08L7.5,5.66C8.7,4.62 10.28,4 12,4M15,9C15.56,9 16,9.45 16,10V14.18L13.5,11.69L13.31,11.5L10.82,9H15M10.03,13.3C10.16,14.16 10.84,14.85 11.71,15L10.03,13.3Z", Es = "M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21V20A2,2 0 0,1 19,22H5A2,2 0 0,1 3,20V19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A2.5,2.5 0 0,0 5,15.5A2.5,2.5 0 0,0 7.5,18A2.5,2.5 0 0,0 10,15.5A2.5,2.5 0 0,0 7.5,13M16.5,13A2.5,2.5 0 0,0 14,15.5A2.5,2.5 0 0,0 16.5,18A2.5,2.5 0 0,0 19,15.5A2.5,2.5 0 0,0 16.5,13Z", h1 = "M1 14V5H13C18.5 5 23 9.5 23 15V17H20.83C20.42 18.17 19.31 19 18 19C16.69 19 15.58 18.17 15.17 17H10C9.09 18.21 7.64 19 6 19C3.24 19 1 16.76 1 14M6 11C4.34 11 3 12.34 3 14C3 15.66 4.34 17 6 17C7.66 17 9 15.66 9 14C9 12.34 7.66 11 6 11M15 10V12H20.25C19.92 11.27 19.5 10.6 19 10H15Z", Ss = "M23 15V18C23 18.5 22.64 18.88 22.17 18.97L18.97 15.77C19 15.68 19 15.59 19 15.5C19 14.12 17.88 13 16.5 13C16.41 13 16.32 13 16.23 13.03L10.2 7H11V5.73C10.4 5.39 10 4.74 10 4C10 2.9 10.9 2 12 2S14 2.9 14 4C14 4.74 13.6 5.39 13 5.73V7H14C17.87 7 21 10.13 21 14H22C22.55 14 23 14.45 23 15M22.11 21.46L20.84 22.73L19.89 21.78C19.62 21.92 19.32 22 19 22H5C3.9 22 3 21.11 3 20V19H2C1.45 19 1 18.55 1 18V15C1 14.45 1.45 14 2 14H3C3 11.53 4.29 9.36 6.22 8.11L1.11 3L2.39 1.73L22.11 21.46M10 15.5C10 14.12 8.88 13 7.5 13S5 14.12 5 15.5 6.12 18 7.5 18 10 16.88 10 15.5M16.07 17.96L14.04 15.93C14.23 16.97 15.04 17.77 16.07 17.96Z", xs = "M12,2C14.65,2 17.19,3.06 19.07,4.93L17.65,6.35C16.15,4.85 14.12,4 12,4C9.88,4 7.84,4.84 6.35,6.35L4.93,4.93C6.81,3.06 9.35,2 12,2M3.66,6.5L5.11,7.94C4.39,9.17 4,10.57 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,10.57 19.61,9.17 18.88,7.94L20.34,6.5C21.42,8.12 22,10.04 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12C2,10.04 2.58,8.12 3.66,6.5M12,6A6,6 0 0,1 18,12C18,13.59 17.37,15.12 16.24,16.24L14.83,14.83C14.08,15.58 13.06,16 12,16C10.94,16 9.92,15.58 9.17,14.83L7.76,16.24C6.63,15.12 6,13.59 6,12A6,6 0 0,1 12,6M12,8A1,1 0 0,0 11,9A1,1 0 0,0 12,10A1,1 0 0,0 13,9A1,1 0 0,0 12,8Z", ks = "M20.8 22.7L18 19.9C16.3 21.2 14.2 22 12 22C6.5 22 2 17.5 2 12C2 10 2.6 8.1 3.7 6.5L5.2 7.9C4.4 9.2 4 10.6 4 12C4 16.4 7.6 20 12 20C13.7 20 15.3 19.4 16.6 18.5L13.7 15.6C13.2 15.9 12.6 16 12 16C10.9 16 9.9 15.6 9.2 14.8L7.8 16.2C6.6 15.1 6 13.6 6 12C6 10.8 6.3 9.7 6.9 8.8L1.1 3L2.4 1.7L22.1 21.4L20.8 22.7M20 12C20 13.4 19.6 14.7 19 15.8L20.5 17.3C21.5 15.8 22 14 22 12C22 10 21.4 8.1 20.3 6.5L18.8 7.9C19.6 9.2 20 10.6 20 12M12 4C14.1 4 16.2 4.8 17.7 6.3L19.1 4.9C17.2 3.1 14.7 2 12 2C10.1 2 8.3 2.5 6.7 3.5L8.2 5C9.3 4.3 10.7 4 12 4M17.5 14.3C17.8 13.6 18 12.8 18 12C18 8.7 15.3 6 12 6C11.2 6 10.4 6.2 9.7 6.5L11.4 8.2C11.6 8.1 11.8 8 12 8C12.6 8 13 8.4 13 9C13 9.2 12.9 9.4 12.8 9.6L17.5 14.3Z", Ts = "M20 19V3H4V19H2V21H22V19H20M6 19V13H11V14.8C10.6 15.1 10.2 15.6 10.2 16.2C10.2 17.2 11 18 12 18S13.8 17.2 13.8 16.2C13.8 15.6 13.5 15.1 13 14.8V13H18V19H6Z", zs = "M20 19V3H4V19H2V21H10.25C10.25 21.97 11.03 22.75 12 22.75S13.75 21.97 13.75 21H22V19H20M6 19V17H11V19H6M13 19V17H18V19H13Z", u1 = "M11.62,1L17.28,6.67L15.16,8.79L13.04,6.67L11.62,8.09L13.95,10.41L12.79,11.58L13.24,12.04C14.17,11.61 15.31,11.77 16.07,12.54L12.54,16.07C11.77,15.31 11.61,14.17 12.04,13.24L11.58,12.79L10.41,13.95L8.09,11.62L6.67,13.04L8.79,15.16L6.67,17.28L1,11.62L3.14,9.5L5.26,11.62L6.67,10.21L3.84,7.38C3.06,6.6 3.06,5.33 3.84,4.55L4.55,3.84C5.33,3.06 6.6,3.06 7.38,3.84L10.21,6.67L11.62,5.26L9.5,3.14L11.62,1M18,14A4,4 0 0,1 14,18V16A2,2 0 0,0 16,14H18M22,14A8,8 0 0,1 14,22V20A6,6 0 0,0 20,14H22Z", p1 = "M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2C20.7,2 22,3.3 22,5V6H20V5C20,4.4 19.6,4 19,4C18.4,4 18,4.4 18,5V18H17C16.4,18 16,17.6 16,17V16H5V5C5,3.3 6.3,2 8,2H19M8,6V8H15V6H8M8,10V12H14V10H8Z", Ds = "M4,18V21H7V18H17V21H20V15H4V18M19,10H22V13H19V10M2,10H5V13H2V10M17,13H7V5A2,2 0 0,1 9,3H15A2,2 0 0,1 17,5V13Z", Os = "M15,5V12H9V5H15M15,3H9A2,2 0 0,0 7,5V14H17V5A2,2 0 0,0 15,3M22,10H19V13H22V10M5,10H2V13H5V10M20,15H4V21H6V17H18V21H20V15Z", Is = "M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M11,7H13V13H11V7M11,15H13V17H11V15Z", Ps = "M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9", f1 = "M11,13H13V16H16V11H18L12,6L6,11H8V16H11V13M12,1L21,5V11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1Z", Gs = "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z", Zs = "M12 1L3 5V11C3 16.5 6.8 21.7 12 23C17.2 21.7 21 16.5 21 11V5L12 1M16 15.8C16 16.4 15.4 17 14.7 17H9.2C8.6 17 8 16.4 8 15.7V12.2C8 11.6 8.6 11 9.2 11V8.5C9.2 7.1 10.6 6 12 6S14.8 7.1 14.8 8.5V9H13.5V8.5C13.5 7.7 12.8 7.2 12 7.2S10.5 7.7 10.5 8.5V11H14.8C15.4 11 16 11.6 16 12.3V15.8Z", Bs = "M8.2 5L6.2 3H19C20.11 3 21 3.9 21 5V17.8L19 15.8V5H8.2M17.5 14.32C17.82 13.6 18 12.83 18 12C18 8.68 15.31 6 12 6C11.17 6 10.4 6.18 9.68 6.5L11.27 8.07C11.5 8.03 11.75 8 12 8C14.21 8 16 9.79 16 12C16 12.25 15.97 12.5 15.93 12.73L17.5 14.32M22.11 21.46L20.84 22.73L19.1 21C19.07 21 19.03 21 19 21H5C3.89 21 3 20.1 3 19V5C3 4.97 3 4.93 3 4.9L1.11 3L2.39 1.73L22.11 21.46M8 12C8 14.21 9.79 16 12 16C12.62 16 13.19 15.85 13.71 15.6L8.4 10.29C8.15 10.81 8 11.39 8 12M17.11 19L15.19 17.08C14.26 17.66 13.17 18 12 18C8.69 18 6 15.31 6 12C6 10.83 6.34 9.74 6.92 8.81L5 6.89V19H17.11Z", Ns = "M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.89 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V5H19V19M12 18C15.31 18 18 15.31 18 12C18 8.68 15.31 6 12 6C8.68 6 6 8.68 6 12C6 15.31 8.69 18 12 18M12 8C14.21 8 16 9.79 16 12S14.21 16 12 16 8 14.21 8 12 9.79 8 12 8Z", Fs = "M20.79,13.95L18.46,14.57L16.46,13.44V10.56L18.46,9.43L20.79,10.05L21.31,8.12L19.54,7.65L20,5.88L18.07,5.36L17.45,7.69L15.45,8.82L13,7.38V5.12L14.71,3.41L13.29,2L12,3.29L10.71,2L9.29,3.41L11,5.12V7.38L8.5,8.82L6.5,7.69L5.92,5.36L4,5.88L4.47,7.65L2.7,8.12L3.22,10.05L5.55,9.43L7.55,10.56V13.45L5.55,14.58L3.22,13.96L2.7,15.89L4.47,16.36L4,18.12L5.93,18.64L6.55,16.31L8.55,15.18L11,16.62V18.88L9.29,20.59L10.71,22L12,20.71L13.29,22L14.7,20.59L13,18.88V16.62L15.5,15.17L17.5,16.3L18.12,18.63L20,18.12L19.53,16.35L21.3,15.88L20.79,13.95M9.5,10.56L12,9.11L14.5,10.56V13.44L12,14.89L9.5,13.44V10.56Z", Rs = "M11 5.12L9.29 3.41L10.71 2L12 3.29L13.29 2L14.71 3.41L13 5.12V7.38L15.45 8.82L17.45 7.69L18.07 5.36L20 5.88L19.54 7.65L21.31 8.12L20.79 10.05L18.46 9.43L16.46 10.56V13.26L14.5 11.3V10.56L12.74 9.54L10.73 7.53L11 7.38V5.12M18.46 14.57L16.87 13.67L19.55 16.35L21.3 15.88L20.79 13.95L18.46 14.57M13 16.62V18.88L14.7 20.59L13.29 22L12 20.71L10.71 22L9.29 20.59L11 18.88V16.62L8.55 15.18L6.55 16.31L5.93 18.64L4 18.12L4.47 16.36L2.7 15.89L3.22 13.96L5.55 14.58L7.55 13.45V10.56L5.55 9.43L3.22 10.05L2.7 8.12L4.47 7.65L4 5.89L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73L14.1 16L13 16.62M12 14.89L12.63 14.5L9.5 11.39V13.44L12 14.89Z", js = "M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z", _1 = "M5.5,9A1.5,1.5 0 0,0 7,7.5A1.5,1.5 0 0,0 5.5,6A1.5,1.5 0 0,0 4,7.5A1.5,1.5 0 0,0 5.5,9M17.41,11.58C17.77,11.94 18,12.44 18,13C18,13.55 17.78,14.05 17.41,14.41L12.41,19.41C12.05,19.77 11.55,20 11,20C10.45,20 9.95,19.78 9.58,19.41L2.59,12.42C2.22,12.05 2,11.55 2,11V6C2,4.89 2.89,4 4,4H9C9.55,4 10.05,4.22 10.41,4.58L17.41,11.58M13.54,5.71L14.54,4.71L21.41,11.58C21.78,11.94 22,12.45 22,13C22,13.55 21.78,14.05 21.42,14.41L16.04,19.79L15.04,18.79L20.75,13L13.54,5.71Z", St = "M14,17H7V15H14M17,13H7V11H17M17,9H7V7H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z", m1 = "M10 19.11L12.11 17H7V15H14V15.12L16.12 13H7V11H17V12.12L18.24 10.89C18.72 10.41 19.35 10.14 20.04 10.14C20.37 10.14 20.7 10.21 21 10.33V5C21 3.89 20.1 3 19 3H5C3.89 3 3 3.89 3 5V19C3 20.11 3.9 21 5 21H10V19.11M7 7H17V9H7V7M21.7 14.35L20.7 15.35L18.65 13.3L19.65 12.3C19.86 12.09 20.21 12.09 20.42 12.3L21.7 13.58C21.91 13.79 21.91 14.14 21.7 14.35M12 19.94L18.06 13.88L20.11 15.93L14.06 22H12V19.94Z", Us = "M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z", Ws = "M22 12.66C21.07 12.24 20.07 12 19 12C19 10.43 18.5 9 17.6 7.81L15.43 10C15.79 10.57 16 11.26 16 12C16 12.24 16 12.5 15.94 12.7C13.61 13.84 12 16.23 12 19C12 20.07 12.24 21.07 12.66 22C12.44 22 12.22 22 12 22C10.69 22 9.39 21.74 8.17 21.24C6.96 20.74 5.86 20 4.93 19.07C3.05 17.2 2 14.65 2 12C2 9.35 3.05 6.8 4.93 4.93C5.86 4 6.96 3.26 8.17 2.76C9.39 2.26 10.69 2 12 2C17.5 2 22 6.47 22 12C22 12.22 22 12.44 22 12.66M12 5C10.14 5 8.36 5.74 7.05 7.05C5.74 8.36 5 10.14 5 12C5 13.93 5.78 15.68 7.05 16.95L9.17 14.83C8.45 14.1 8 13.1 8 12C8 10.94 8.42 9.92 9.17 9.17C9.92 8.42 10.94 8 12 8C12.74 8 13.43 8.21 14 8.56L16.19 6.4C15 5.5 13.57 5 12 5M23.83 20.64C23.89 20.53 23.87 20.39 23.77 20.32L22.72 19.5C22.74 19.33 22.75 19.16 22.75 19C22.75 18.84 22.74 18.67 22.72 18.5L23.77 17.68C23.87 17.61 23.89 17.5 23.83 17.36L22.83 15.64C22.77 15.53 22.64 15.5 22.53 15.53L21.28 16L21.14 15.91C20.91 15.77 20.7 15.64 20.44 15.54L20.25 14.21C20.23 14.09 20.13 14 20 14H18C17.88 14 17.77 14.09 17.75 14.21L17.57 15.54C17.3 15.64 17.09 15.78 16.86 15.92L16.72 16L15.5 15.53C15.37 15.5 15.23 15.53 15.17 15.64L14.17 17.36C14.11 17.5 14.14 17.61 14.23 17.68L15.29 18.5L15.29 18.53C15.27 18.69 15.25 18.84 15.25 19C15.25 19.16 15.27 19.31 15.29 19.47C15.29 19.5 15.29 19.5 15.29 19.5L14.23 20.32C14.14 20.39 14.11 20.53 14.17 20.64L15.17 22.37C15.23 22.5 15.37 22.5 15.5 22.5L16.72 21.97C17 22.17 17.25 22.34 17.57 22.47L17.75 23.79C17.77 23.91 17.88 24 18 24H20C20.13 24 20.23 23.91 20.25 23.79L20.44 22.47C20.75 22.34 21 22.17 21.28 21.97L22.53 22.5C22.64 22.5 22.77 22.5 22.83 22.37L23.83 20.64M19 17.25C19.97 17.25 20.75 18.03 20.75 19C20.75 19.97 19.96 20.75 19 20.75C18.04 20.75 17.25 19.97 17.25 19C17.25 18.03 18.03 17.25 19 17.25Z", qs = "M3 4L1.75 5.27L4.5 8.03C3.55 9.45 3 11.16 3 13C3 17.97 7.03 22 12 22C13.84 22 15.55 21.45 17 20.5L19.5 23L20.75 21.73L13.04 14L3 4M15 1H9V3H15M21 13C21 14.83 20.45 16.53 19.5 17.94L13 11.45V7H11V9.45L7.05 5.5C8.47 4.55 10.17 4 12 4C14.12 4 16.07 4.74 17.62 5.97L19.04 4.55L20.45 5.97L19.03 7.39C20.26 8.93 21 10.88 21 13Z", Ks = "M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z", te = "M17,7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7M17,15A3,3 0 0,1 14,12A3,3 0 0,1 17,9A3,3 0 0,1 20,12A3,3 0 0,1 17,15Z", ee = "M17,7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7M7,15A3,3 0 0,1 4,12A3,3 0 0,1 7,9A3,3 0 0,1 10,12A3,3 0 0,1 7,15Z", ie = "M17 6H7C3.69 6 1 8.69 1 12S3.69 18 7 18H17C20.31 18 23 15.31 23 12S20.31 6 17 6M17 16H7C4.79 16 3 14.21 3 12S4.79 8 7 8H17C19.21 8 21 9.79 21 12S19.21 16 17 16M17 9C15.34 9 14 10.34 14 12S15.34 15 17 15 20 13.66 20 12 18.66 9 17 9Z", Ys = "M4 22H2V2H4M22 2H20V22H22M17.24 5.34L13.24 9.34A3 3 0 0 0 9.24 13.34L5.24 17.34L6.66 18.76L10.66 14.76A3 3 0 0 0 14.66 10.76L18.66 6.76Z", g1 = "M22 2V22H20V13H14.82A3 3 0 0 1 9.18 13H4V22H2V2H4V11H9.18A3 3 0 0 1 14.82 11H20V2Z", Js = "M4 22H2V2H4M22 2H20V22H22M11 4V9.18A3 3 0 0 0 11 14.82V20H13V14.82A3 3 0 0 0 13 9.18V4Z", Xs = "M16,19H8V5H16M16.5,3H7.5A1.5,1.5 0 0,0 6,4.5V19.5A1.5,1.5 0 0,0 7.5,21H16.5A1.5,1.5 0 0,0 18,19.5V4.5A1.5,1.5 0 0,0 16.5,3M19,17H21V7H19M22,9V15H24V9M3,17H5V7H3M0,15H2V9H0V15Z", Qs = "M8.2,5L6.55,3.35C6.81,3.12 7.15,3 7.5,3H16.5A1.5,1.5 0 0,1 18,4.5V14.8L16,12.8V5H8.2M0,15H2V9H0V15M21,17V7H19V15.8L20.2,17H21M3,17H5V7H3V17M18,17.35L22.11,21.46L20.84,22.73L18,19.85C17.83,20.54 17.21,21 16.5,21H7.5A1.5,1.5 0 0,1 6,19.5V7.89L1.11,3L2.39,1.73L6.09,5.44L8,7.34L16,15.34L18,17.34V17.35M16,17.89L8,9.89V19H16V17.89M22,9V15H24V9H22Z", C1 = "M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z", v1 = "M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z", to = "M10 3.25C10 3.25 16 10 16 14C16 17.31 13.31 20 10 20S4 17.31 4 14C4 10 10 3.25 10 3.25M20 7V13H18V7H20M18 17H20V15H18V17Z", eo = "M8 2C6.89 2 6 2.89 6 4V16C6 17.11 6.89 18 8 18H9V20H6V22H9C10.11 22 11 21.11 11 20V18H13V20C13 21.11 13.89 22 15 22H18V20H15V18H16C17.11 18 18 17.11 18 16V4C18 2.89 17.11 2 16 2H8M12 4.97A2 2 0 0 1 14 6.97A2 2 0 0 1 12 8.97A2 2 0 0 1 10 6.97A2 2 0 0 1 12 4.97M10 14.5H14V16H10V14.5Z", io = "M20.84 22.73L16.29 18.18C15.2 19.3 13.69 20 12 20C8.69 20 6 17.31 6 14C6 12.67 6.67 11.03 7.55 9.44L1.11 3L2.39 1.73L22.11 21.46L20.84 22.73M18 14C18 10 12 3.25 12 3.25S10.84 4.55 9.55 6.35L17.95 14.75C18 14.5 18 14.25 18 14Z", so = "M5.7 2.5A2 2 0 0 1 7 2H9A2 2 0 0 1 11 4V5H19A2 2 0 0 1 21 7V11A1 1 0 0 1 21 13H17A1 1 0 0 1 17 11V9H12.2M20.84 22.73L22.11 21.46L11 10.34L2.39 1.73L1.11 3L3.65 5.54A2 2 0 0 0 5 9V18H4A2 2 0 0 0 2 20V22H14V20A2 2 0 0 0 12 18H11V12.89Z", y1 = "M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z", oo = "M12.74,5.47C15.1,6.5 16.35,9.03 15.92,11.46C17.19,12.56 18,14.19 18,16V16.17C18.31,16.06 18.65,16 19,16A3,3 0 0,1 22,19A3,3 0 0,1 19,22H6A4,4 0 0,1 2,18A4,4 0 0,1 6,14H6.27C5,12.45 4.6,10.24 5.5,8.26C6.72,5.5 9.97,4.24 12.74,5.47M11.93,7.3C10.16,6.5 8.09,7.31 7.31,9.07C6.85,10.09 6.93,11.22 7.41,12.13C8.5,10.83 10.16,10 12,10C12.7,10 13.38,10.12 14,10.34C13.94,9.06 13.18,7.86 11.93,7.3M13.55,3.64C13,3.4 12.45,3.23 11.88,3.12L14.37,1.82L15.27,4.71C14.76,4.29 14.19,3.93 13.55,3.64M6.09,4.44C5.6,4.79 5.17,5.19 4.8,5.63L4.91,2.82L7.87,3.5C7.25,3.71 6.65,4.03 6.09,4.44M18,9.71C17.91,9.12 17.78,8.55 17.59,8L19.97,9.5L17.92,11.73C18.03,11.08 18.05,10.4 18,9.71M3.04,11.3C3.11,11.9 3.24,12.47 3.43,13L1.06,11.5L3.1,9.28C3,9.93 2.97,10.61 3.04,11.3M19,18H16V16A4,4 0 0,0 12,12A4,4 0 0,0 8,16H6A2,2 0 0,0 4,18A2,2 0 0,0 6,20H19A1,1 0 0,0 20,19A1,1 0 0,0 19,18Z", b1 = "M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z", no = "M22.11 21.46L2.39 1.73L1.11 3L4.97 6.86L3.34 7L5.11 10.79C5.25 10 5.5 9.24 5.94 8.5C6 8.36 6.13 8.24 6.22 8.11L7.66 9.55C7.25 10.27 7 11.11 7 12C7 14.76 9.24 17 12 17C12.9 17 13.73 16.75 14.45 16.34L20.84 22.73L22.11 21.46M12 15C10.34 15 9 13.66 9 12C9 11.67 9.07 11.36 9.17 11.06L12.94 14.83C12.64 14.93 12.33 15 12 15M18.05 8.5C17.63 7.78 17.1 7.15 16.5 6.64L20.65 7L18.88 10.79C18.74 10 18.47 9.23 18.05 8.5M12 7C14.76 7 17 9.24 17 12C17 12.54 16.89 13.05 16.74 13.54L15 11.78C14.87 10.3 13.7 9.13 12.22 9L10.47 7.27C10.95 7.11 11.46 7 12 7M12 5C11.16 5 10.35 5.15 9.61 5.42L12 2L14.39 5.42C13.65 5.15 12.84 5 12 5M18.87 13.21L20.64 17L20.24 17.04L18.25 15.05C18.54 14.45 18.76 13.84 18.87 13.21M12 19C12.82 19 13.63 18.83 14.37 18.56L12 22L9.59 18.56C10.33 18.83 11.14 19 12 19M5.95 15.5C6.37 16.24 6.91 16.86 7.5 17.37L3.36 17L5.12 13.23C5.26 14 5.53 14.78 5.95 15.5Z", L1 = "M6,11H10V9H14V11H18V4H6V11M18,13H6V20H18V13M6,2H18A2,2 0 0,1 20,4V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2Z", A1 = "M6,8H10V6H14V8H18V4H6V8M18,10H6V15H18V10M6,20H18V17H6V20M6,2H18A2,2 0 0,1 20,4V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2Z", ao = "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z", ro = "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9Z";
 const ge = [
   "closed",
   "locked",
@@ -822,11 +822,11 @@ const ge = [
   "not_home",
   "disarmed",
   "0"
-], co = (e, t, i, s, o) => {
+], lo = (e, t, i, s, o) => {
   var h, u, p, m, b;
   const n = i || (t == null ? void 0 : t.theme), a = (t == null ? void 0 : t.darkMode) || !1;
   e.__themes || (e.__themes = { cacheKey: null, keys: /* @__PURE__ */ new Set() });
-  let c = n || "", r = {};
+  let l = n || "", r = {};
   if (n === "default" && ((h = e.__themes) == null ? void 0 : h.cacheKey) === "default")
     return;
   if (n && n !== "default" && ((u = t == null ? void 0 : t.themes) != null && u[n])) {
@@ -834,9 +834,9 @@ const ge = [
     r = { ...r, ...f }, g && (a && g.dark ? r = { ...r, ...g.dark } : !a && g.light && (r = { ...r, ...g.light }));
   } else if (!n && (!((p = e.__themes) != null && p.keys) || e.__themes.keys.size === 0))
     return;
-  const l = ((m = e.__themes) == null ? void 0 : m.keys) || /* @__PURE__ */ new Set(), d = new Set(Object.keys(r));
+  const c = ((m = e.__themes) == null ? void 0 : m.keys) || /* @__PURE__ */ new Set(), d = new Set(Object.keys(r));
   if (n === "default" && d.size === 0) {
-    for (const g of l)
+    for (const g of c)
       try {
         e.style.removeProperty(`--${g}`);
       } catch {
@@ -844,19 +844,19 @@ const ge = [
     e.__themes = { cacheKey: "default", keys: /* @__PURE__ */ new Set() };
     return;
   }
-  if (((b = e.__themes) == null ? void 0 : b.cacheKey) === c) {
+  if (((b = e.__themes) == null ? void 0 : b.cacheKey) === l) {
     let g = !0;
-    if (l.size !== d.size)
+    if (c.size !== d.size)
       g = !1;
     else
-      for (const f of l)
+      for (const f of c)
         if (!d.has(f)) {
           g = !1;
           break;
         }
     if (g) return;
   }
-  for (const g of l)
+  for (const g of c)
     if (!d.has(g))
       try {
         e.style.removeProperty(`--${g}`);
@@ -864,7 +864,7 @@ const ge = [
       }
   for (const [g, f] of Object.entries(r))
     e.style.setProperty(`--${g}`, String(f));
-  e.__themes.cacheKey = c || null, e.__themes.keys = d;
+  e.__themes.cacheKey = l || null, e.__themes.keys = d;
 }, G = (e, t, i, s) => {
   s = s || {}, i = i ?? {};
   const o = new Event(t, {
@@ -873,7 +873,7 @@ const ge = [
     composed: s.composed === void 0 ? !0 : s.composed
   });
   return o.detail = i, e.dispatchEvent(o), o;
-}, z = (e) => e.substr(0, e.indexOf(".")), lo = (e) => (t, i) => e.includes(t, i), Ce = "unavailable", ho = "unknown", uo = "off", po = [Ce, ho], fo = lo(po), _o = (e) => {
+}, z = (e) => e.substr(0, e.indexOf(".")), co = (e) => (t, i) => e.includes(t, i), Ce = "unavailable", ho = "unknown", uo = "off", po = [Ce, ho], fo = co(po), _o = (e) => {
   const t = e.attributes.entity_id || [], i = [
     ...new Set(t.map((s) => z(s)))
   ];
@@ -894,7 +894,7 @@ const go = (e, t = "_") => {
     я: "ia"
   };
   let a;
-  return e === "" ? a = "" : (a = e.toString().toLowerCase().replace(o, (c) => s.charAt(i.indexOf(c))).replace(/[а-я]/g, (c) => n[c] || "").replace(/(\d),(?=\d)/g, "$1").replace(/[^a-z0-9]+/g, t).replace(new RegExp(`(${t})\\1+`, "g"), "$1").replace(new RegExp(`^${t}+`), "").replace(new RegExp(`${t}+$`), ""), a === "" && (a = "unknown")), a;
+  return e === "" ? a = "" : (a = e.toString().toLowerCase().replace(o, (l) => s.charAt(i.indexOf(l))).replace(/[а-я]/g, (l) => n[l] || "").replace(/(\d),(?=\d)/g, "$1").replace(/[^a-z0-9]+/g, t).replace(new RegExp(`(${t})\\1+`, "g"), "$1").replace(new RegExp(`^${t}+`), "").replace(new RegExp(`${t}+$`), ""), a === "" && (a = "unknown")), a;
 }, Co = (e) => {
   const t = Number(e);
   if (!isNaN(t))
@@ -1143,9 +1143,9 @@ const Mo = () => {
   const i = Mo();
   i && i.bind(e, t);
 }, Eo = Bt(
-  class extends Ft {
+  class extends Nt {
     update(e, [t]) {
-      return wo(e.element, t), R;
+      return wo(e.element, t), F;
     }
     render(e) {
     }
@@ -1163,7 +1163,7 @@ function se(e, t, i) {
   }, {}));
 }
 function P1(e, t, i, s, o) {
-  const n = s.area && s.area.length > 0 ? Array.isArray(s.area) ? s.area : [s.area] : null, a = s.floor && s.floor.length > 0 ? Array.isArray(s.floor) ? s.floor : [s.floor] : null, c = s.label && s.label.length > 0 ? Array.isArray(s.label) ? s.label : [s.label] : null, r = s.hiddenAreas || [], l = s.hiddenLabels || [], d = s.hiddenEntities || [], h = new Set(r), u = new Set(l), p = new Set(d), m = new Set(o), b = new Map(Object.values(t).map((f) => [f.id, f])), g = new Map(
+  const n = s.area && s.area.length > 0 ? Array.isArray(s.area) ? s.area : [s.area] : null, a = s.floor && s.floor.length > 0 ? Array.isArray(s.floor) ? s.floor : [s.floor] : null, l = s.label && s.label.length > 0 ? Array.isArray(s.label) ? s.label : [s.label] : null, r = s.hiddenAreas || [], c = s.hiddenLabels || [], d = s.hiddenEntities || [], h = new Set(r), u = new Set(c), p = new Set(d), m = new Set(o), b = new Map(Object.values(t).map((f) => [f.id, f])), g = new Map(
     Object.values(i).map((f) => [
       f.area_id,
       f.floor_id
@@ -1176,7 +1176,7 @@ function P1(e, t, i, s, o) {
     if (C === "update")
       return !f.hidden;
     const v = f.device_id ? b.get(f.device_id) : void 0;
-    if (!(f.area_id != null || v && v.area_id != null) || c && !((((y = f.labels) == null ? void 0 : y.some((U) => c.includes(U))) ?? !1) || (((V = v == null ? void 0 : v.labels) == null ? void 0 : V.some((U) => c.includes(U))) ?? !1)) || n && !(f.area_id !== void 0 && f.area_id !== null && n.includes(f.area_id) || v && v.area_id !== void 0 && v.area_id !== null && n.includes(v.area_id)))
+    if (!(f.area_id != null || v && v.area_id != null) || l && !((((y = f.labels) == null ? void 0 : y.some((U) => l.includes(U))) ?? !1) || (((V = v == null ? void 0 : v.labels) == null ? void 0 : V.some((U) => l.includes(U))) ?? !1)) || n && !(f.area_id !== void 0 && f.area_id !== null && n.includes(f.area_id) || v && v.area_id !== void 0 && v.area_id !== null && n.includes(v.area_id)))
       return !1;
     if (a) {
       const O = f.area_id ? g.get(f.area_id) : void 0, U = v != null && v.area_id ? g.get(v.area_id) : void 0;
@@ -1236,15 +1236,15 @@ function zt(e, t, i, s = !1) {
   if (i ?? e.attributes.device_class, o === "climate") {
     const a = e.attributes.hvac_action;
     if (a !== void 0) {
-      const c = !["idle", "off"].includes(a);
-      return s ? !c : c;
+      const l = !["idle", "off"].includes(a);
+      return s ? !l : l;
     }
   }
   if (o === "humidifier") {
     const a = e.attributes.action;
     if (a !== void 0) {
-      const c = !["idle", "off"].includes(a);
-      return s ? !c : c;
+      const l = !["idle", "off"].includes(a);
+      return s ? !l : l;
     }
   }
   const n = !ge.includes(e.state);
@@ -1256,8 +1256,8 @@ function ko(e, t) {
   try {
     const o = t.type || "tile", a = typeof o == "string" && o.startsWith("custom:") ? o.slice(7) : `hui-${o}-card`;
     if (customElements.get(a)) {
-      const c = document.createElement(a);
-      return typeof c.setConfig == "function" && c.setConfig(t), c.hass = e, (i = c.setAttribute) == null || i.call(c, "data-hui-card", ""), c;
+      const l = document.createElement(a);
+      return typeof l.setConfig == "function" && l.setConfig(t), l.hass = e, (i = l.setAttribute) == null || i.call(l, "data-hui-card", ""), l;
     }
   } catch (o) {
     console.debug("status-card: Failed to create card element via customElements", o);
@@ -1277,23 +1277,23 @@ async function Z1(e, t, i = !1) {
     W || (W = await ((s = window.loadCardHelpers) == null ? void 0 : s.call(window)));
     const a = W;
     if (a != null && a.createCardElement) {
-      const c = a.createCardElement(t);
-      return c.hass = e, (o = c.setAttribute) == null || o.call(c, "data-hui-card", ""), c;
+      const l = a.createCardElement(t);
+      return l.hass = e, (o = l.setAttribute) == null || o.call(l, "data-hui-card", ""), l;
     }
   } catch (a) {
     console.debug("status-card: Failed to load card helpers", a);
   }
   try {
-    const a = t.type || "tile", c = typeof a == "string" && a.startsWith("custom:"), r = c ? a.slice(7) : `hui-${a}-card`;
-    c && !customElements.get(r) && await customElements.whenDefined(r).catch(() => {
+    const a = t.type || "tile", l = typeof a == "string" && a.startsWith("custom:"), r = l ? a.slice(7) : `hui-${a}-card`;
+    l && !customElements.get(r) && await customElements.whenDefined(r).catch(() => {
     });
-    const l = document.createElement(r);
-    return typeof l.setConfig == "function" && l.setConfig(t), l.hass = e, (n = l.setAttribute) == null || n.call(l, "data-hui-card", ""), l;
+    const c = document.createElement(r);
+    return typeof c.setConfig == "function" && c.setConfig(t), c.hass = e, (n = c.setAttribute) == null || n.call(c, "data-hui-card", ""), c;
   } catch (a) {
     if (console.debug("status-card: Failed to create card element for type:", t.type, a), !i)
       return Z1(e, xo(t), !0);
-    const c = document.createElement("div");
-    return c.setAttribute("data-hui-card", ""), c;
+    const l = document.createElement("div");
+    return l.setAttribute("data-hui-card", ""), l;
   }
 }
 async function To() {
@@ -1307,17 +1307,17 @@ async function To() {
 }
 const et = {
   alarm_control_panel: { on: Mi, off: wi },
-  siren: { on: Oi, off: Fe },
+  siren: { on: Oi, off: Ne },
   lock: { on: n1, off: o1 },
   light: { on: hs, off: us },
-  media_player: { on: Ri, off: Ni },
+  media_player: { on: Fi, off: Ri },
   climate: { on: Us, off: Ws },
   humidifier: { on: Vi, off: $i },
   switch: {
     on: te,
     off: ee,
     switch: { on: te, off: ee },
-    outlet: { on: l1, off: d1 }
+    outlet: { on: c1, off: d1 }
   },
   vacuum: { on: xs, off: ks },
   lawn_mower: { on: h1, off: h1 },
@@ -1344,7 +1344,7 @@ const et = {
     window: { on: A1, off: L1 },
     door: { on: Ye, off: Ke },
     lock: { on: n1, off: o1 },
-    presence: { on: cs, off: rs },
+    presence: { on: ls, off: rs },
     occupancy: { on: Ds, off: Os },
     vibration: { on: Xs, off: Qs },
     opening: { on: Zs, off: Gs },
@@ -1354,17 +1354,17 @@ const et = {
       off: Ei
     },
     smoke: {
-      on: Fs,
+      on: Ns,
       off: Bs
     },
     running: { on: As, off: bs },
-    plug: { on: l1, off: d1 },
+    plug: { on: c1, off: d1 },
     power: { on: Hs, off: Qt },
     battery: { on: ki, off: xi },
     battery_charging: { on: Ti, off: zi },
     gas: { on: ss, off: is },
-    carbon_monoxide: { on: c1, off: c1 },
-    cold: { on: Rs, off: Ns },
+    carbon_monoxide: { on: l1, off: l1 },
+    cold: { on: Fs, off: Rs },
     heat: { on: b1, off: no },
     connectivity: { on: We, off: We },
     safety: { on: Is, off: Ps },
@@ -1372,7 +1372,7 @@ const et = {
     update: { on: Ge, off: Ze },
     tamper: { on: f1, off: f1 },
     light: { on: fs, off: ps },
-    moving: { on: Bi, off: Fi }
+    moving: { on: Bi, off: Ni }
   },
   person: { on: Oe, off: Ie },
   device_tracker: { on: Oe, off: Ie },
@@ -1382,9 +1382,9 @@ const et = {
   update: { on: Ge, off: Ze },
   air_quality: { on: Pe, off: Pe },
   camera: { on: Gi, off: Zi },
-  calendar: { on: Re, off: Ne },
+  calendar: { on: Fe, off: Re },
   scene: { on: vs, off: ys },
-  notifications: { on: Di, off: Fe },
+  notifications: { on: Di, off: Ne },
   sensor: { on: t1, off: t1 },
   script: { on: p1, off: p1 },
   tags: { on: _1, off: _1 },
@@ -1403,7 +1403,7 @@ const et = {
     on: i1,
     off: i1
   },
-  image: { on: ls, off: ds },
+  image: { on: cs, off: ds },
   image_processing: {
     on: s1,
     off: s1
@@ -1419,7 +1419,7 @@ const et = {
   stt: { on: $s, off: Vs },
   sun: { on: b1, off: y1 },
   text: { on: St, off: St },
-  date: { on: Re, off: Ne },
+  date: { on: Fe, off: Re },
   datetime: { on: Mt, off: Mt },
   time: { on: qi, off: Ki },
   timer: { on: Ks, off: qs },
@@ -1662,7 +1662,7 @@ const et = {
     features: [{ type: "valve-open-close" }]
   }
 };
-function N(e, t, i) {
+function R(e, t, i) {
   return e.localize(
     `component.${i}.entity_component._.state.${t}`
   ) || t;
@@ -1807,21 +1807,21 @@ function At(e, t, i, s) {
 }
 const B = (e, t) => e ? typeof e == "object" ? Object.entries(e).reduce(
   (o, [n, a]) => {
-    const c = n.startsWith("--") ? n : n.replace(/-([a-z])/g, (r, l) => l.toUpperCase());
-    return o[c] = String(a), o;
+    const l = n.startsWith("--") ? n : n.replace(/-([a-z])/g, (r, c) => c.toUpperCase());
+    return o[l] = String(a), o;
   },
   {}
 ) : (e.trim(), e.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n/g, " ").split(";").map((o) => o.trim()).filter((o) => o && o.includes(":")).reduce(
   (o, n) => {
-    const a = n.split(":"), c = a[0], r = a.slice(1).join(":");
-    if (c && r !== void 0) {
-      const l = c.trim(), d = l.startsWith("--") ? l : l.replace(/-([a-z])/g, (h, u) => u.toUpperCase());
+    const a = n.split(":"), l = a[0], r = a.slice(1).join(":");
+    if (l && r !== void 0) {
+      const c = l.trim(), d = c.startsWith("--") ? c : c.replace(/-([a-z])/g, (h, u) => u.toUpperCase());
       o[d] = r.trim();
     }
     return o;
   },
   {}
-)) : {}, Bo = (e, t, i) => t && t._parsedCss ? t._parsedCss : e ? B(e) : {}, Fo = Lt`
+)) : {}, Bo = (e, t, i) => t && t._parsedCss ? t._parsedCss : e ? B(e) : {}, No = Lt`
   :host-context(hui-badge[preview]) {
     max-width: 500px;
     overflow: hidden;
@@ -2031,8 +2031,8 @@ const B = (e, t) => e ? typeof e == "object" ? Object.entries(e).reduce(
     if (i.type) {
       const a = { ...i };
       if ((s = a.styles) != null && s.card && (a._parsedCss = B(a.styles.card)), (o = a.styles) != null && o.button) {
-        const c = B(a.styles.button);
-        a._parsedCss = { ...a._parsedCss, ...c };
+        const l = B(a.styles.button);
+        a._parsedCss = { ...a._parsedCss, ...l };
       }
       (n = a.styles) != null && n.icon && (a._parsedIconCss = B(a.styles.icon)), t.set(a.type.toLowerCase(), a);
     }
@@ -2050,7 +2050,7 @@ function Vt(e, t, i, s, o) {
   if (n && n[t] !== void 0)
     return n[t];
 }
-function F1(e, t, i, s, o) {
+function N1(e, t, i, s, o) {
   const n = Ht(
     e,
     P(t, i),
@@ -2062,21 +2062,21 @@ function F1(e, t, i, s, o) {
     return n.icon;
   if (s && s.attributes && s.attributes.icon)
     return s.attributes.icon;
-  const c = (n == null ? void 0 : n.invert) === !0 ? "off" : "on";
+  const l = (n == null ? void 0 : n.invert) === !0 ? "off" : "on";
   let r = t;
   if (!i && t.includes(".") && (r = t.split(".")[0]), et && et[r]) {
-    const l = et[r];
-    if (i && typeof l == "object") {
-      const d = l[i];
+    const c = et[r];
+    if (i && typeof c == "object") {
+      const d = c[i];
       if (d) {
         if (typeof d == "string") return d;
         if (typeof d == "object" && "on" in d && "off" in d)
-          return d[c] || d.on || d.off;
+          return d[l] || d.on || d.off;
       }
     }
-    if (typeof l == "object" && "on" in l && "off" in l)
-      return l[c] || l.on || l.off;
-    if (typeof l == "string") return l;
+    if (typeof c == "object" && "on" in c && "off" in c)
+      return c[l] || c.on || c.off;
+    if (typeof c == "string") return c;
   }
   return "";
 }
@@ -2105,7 +2105,7 @@ function oe(e, t, i, s) {
     s
   ) || e.color;
 }
-function ce(e, t, i, s, o) {
+function le(e, t, i, s, o) {
   return Vt(
     e,
     "name",
@@ -2114,7 +2114,7 @@ function ce(e, t, i, s, o) {
     o
   ) || (s == null ? void 0 : s.attributes.friendly_name);
 }
-function Ro(e, t, i, s) {
+function Fo(e, t, i, s) {
   return Vt(
     e,
     "icon_css",
@@ -2123,35 +2123,35 @@ function Ro(e, t, i, s) {
     s
   );
 }
-function No(e, t) {
-  const i = N(e, "home", "device_tracker"), s = N(
+function Ro(e, t) {
+  const i = R(e, "home", "device_tracker"), s = R(
     e,
     "not_home",
     "device_tracker"
   );
   return t ? s : i;
 }
-function R1(e, t) {
-  const i = N(e, "open", "cover"), s = N(e, "closed", "cover");
+function F1(e, t) {
+  const i = R(e, "open", "cover"), s = R(e, "closed", "cover");
   return t ? s : i;
 }
 function jo(e, t) {
-  return t === "home" ? N(e, "home", "person") : t === "not_home" ? N(e, "not_home", "person") : t ?? "unknown";
+  return t === "home" ? R(e, "home", "person") : t === "not_home" ? R(e, "not_home", "person") : t ?? "unknown";
 }
 function Uo(e, t, i, s) {
   if (i && Do.includes(i))
-    return R1(e, t);
-  const o = N(e, s ?? "on", "light"), n = N(e, s ?? "off", "light");
+    return F1(e, t);
+  const o = R(e, s ?? "on", "light"), n = R(e, s ?? "off", "light");
   return t ? n : o;
 }
-function ne(e, t, i, s, o, n, a, c) {
-  const r = P(i, s), l = Ht(t, r, c), d = (l == null ? void 0 : l.invert) === !0;
+function ne(e, t, i, s, o, n, a, l) {
+  const r = P(i, s), c = Ht(t, r, l), d = (c == null ? void 0 : c.invert) === !0;
   switch (i) {
     case "device_tracker":
-      return No(e, d);
+      return Ro(e, d);
     case "lock":
     case "cover":
-      return R1(e, d);
+      return F1(e, d);
     case "person":
       return jo(e, o);
     default:
@@ -2166,7 +2166,7 @@ function Wo(e, t = {}) {
   };
   return e === "person" && n && (a.filter = "grayscale(100%)"), a;
 }
-function le(e, t, i, s) {
+function ce(e, t, i, s) {
   if (t.length === 0) {
     console.warn(`No active entities found for domain: ${i}`);
     return;
@@ -2202,19 +2202,19 @@ function xt(e, t, i, s) {
 }
 function E1(e, t, i, s, o, n, a) {
   n.stopPropagation();
-  const c = n.detail.action, r = xt(i, c, s, o), l = typeof r == "string" && r === "more-info" || typeof r == "object" && (r == null ? void 0 : r.action) === "more-info", d = typeof r == "string" && r === "toggle" || typeof r == "object" && (r == null ? void 0 : r.action) === "toggle";
+  const l = n.detail.action, r = xt(i, l, s, o), c = typeof r == "string" && r === "more-info" || typeof r == "object" && (r == null ? void 0 : r.action) === "more-info", d = typeof r == "string" && r === "toggle" || typeof r == "object" && (r == null ? void 0 : r.action) === "toggle";
   if (s.includes(".")) {
     const h = s, u = z(h);
     if (d) {
       t.callService(u, "toggle", { entity_id: h });
       return;
     }
-    if (l) {
+    if (c) {
       a.showMoreInfo(h);
       return;
     }
   }
-  if (l || r === void 0) {
+  if (c || r === void 0) {
     a.selectDomain(s, o);
     return;
   }
@@ -2235,7 +2235,7 @@ function E1(e, t, i, s, o, n, a) {
         o
       )
     },
-    c
+    l
   );
 }
 var qo = Object.defineProperty, D = (e, t, i, s) => {
@@ -2260,7 +2260,7 @@ const Ko = [
   "lawn_mower",
   "water_heater",
   "update"
-], ye = class ye extends F {
+], ye = class ye extends N {
   constructor() {
     super(...arguments), this.open = !1, this.title = "", this.content = "", this.entities = [], this._showAll = !1, this._cardEls = /* @__PURE__ */ new Map(), this._lastEntityIds = [], this._activeEntities = [], this._allEntities = [], this._currentEntitiesCache = [], this._opener = null, this._handleMoreInfo = (t) => {
       if (this._opener) {
@@ -2300,15 +2300,15 @@ const Ko = [
         const n = (o == null ? void 0 : o.states) ?? {}, a = t.slice();
         if (i === "state") {
           const r = Pt(n, s);
-          return a.sort((l, d) => {
-            const h = this._isActive(l) ? 0 : 1, u = this._isActive(d) ? 0 : 1;
+          return a.sort((c, d) => {
+            const h = this._isActive(c) ? 0 : 1, u = this._isActive(d) ? 0 : 1;
             if (h !== u) return h - u;
-            const p = z(l.entity_id), m = z(d.entity_id), b = o ? N(o, l.state, p) : l.state, g = o ? N(o, d.state, m) : d.state, f = (b || "").localeCompare(g || "");
-            return f !== 0 ? f : r(l.entity_id, d.entity_id);
+            const p = z(c.entity_id), m = z(d.entity_id), b = o ? R(o, c.state, p) : c.state, g = o ? R(o, d.state, m) : d.state, f = (b || "").localeCompare(g || "");
+            return f !== 0 ? f : r(c.entity_id, d.entity_id);
           });
         }
-        const c = Pt(n, s);
-        return a.sort((r, l) => c(r.entity_id, l.entity_id));
+        const l = Pt(n, s);
+        return a.sort((r, c) => l(r.entity_id, c.entity_id));
       }
     ), this._areaMapMemo = H(
       (t) => {
@@ -2330,16 +2330,16 @@ const Ko = [
       (t, i, s) => {
         const o = /* @__PURE__ */ new Map();
         for (const a of t) {
-          const c = this.getAreaForEntity(a);
-          o.has(c) || o.set(c, []), o.get(c).push(a);
+          const l = this.getAreaForEntity(a);
+          o.has(l) || o.set(l, []), o.get(l).push(a);
         }
         return Array.from(o.entries()).sort(
-          ([a], [c]) => {
+          ([a], [l]) => {
             var d, h;
-            const r = ((d = i.get(a)) == null ? void 0 : d.toLowerCase()) ?? (a === "unassigned" ? "unassigned" : a), l = ((h = i.get(c)) == null ? void 0 : h.toLowerCase()) ?? (c === "unassigned" ? "unassigned" : c);
-            return r.localeCompare(l);
+            const r = ((d = i.get(a)) == null ? void 0 : d.toLowerCase()) ?? (a === "unassigned" ? "unassigned" : a), c = ((h = i.get(l)) == null ? void 0 : h.toLowerCase()) ?? (l === "unassigned" ? "unassigned" : l);
+            return r.localeCompare(c);
           }
-        ).map(([a, c]) => [a, s(c)]);
+        ).map(([a, l]) => [a, s(l)]);
       }
     );
   }
@@ -2384,7 +2384,7 @@ const Ko = [
           entity: t.entity_id
         };
     }
-    const s = z(t.entity_id), o = this.selectedDomain || s, n = this.selectedDomain ? this.selectedDeviceClass : (v = (C = (f = (g = this.hass) == null ? void 0 : g.states) == null ? void 0 : f[t.entity_id]) == null ? void 0 : C.attributes) == null ? void 0 : v.device_class, a = P(o, n), c = typeof (i == null ? void 0 : i.getCustomizationForType) == "function" ? i.getCustomizationForType(a) : void 0, r = c == null ? void 0 : c.popup_card, l = r && typeof r.type == "string" && r.type || "tile", d = l === "tile" ? Io[s] ?? {} : {};
+    const s = z(t.entity_id), o = this.selectedDomain || s, n = this.selectedDomain ? this.selectedDeviceClass : (v = (C = (f = (g = this.hass) == null ? void 0 : g.states) == null ? void 0 : f[t.entity_id]) == null ? void 0 : C.attributes) == null ? void 0 : v.device_class, a = P(o, n), l = typeof (i == null ? void 0 : i.getCustomizationForType) == "function" ? i.getCustomizationForType(a) : void 0, r = l == null ? void 0 : l.popup_card, c = r && typeof r.type == "string" && r.type || "tile", d = c === "tile" ? Io[s] ?? {} : {};
     let h = {};
     if (r && typeof r == "object") {
       const { type: S, entity: y, ...V } = r;
@@ -2392,7 +2392,7 @@ const Ko = [
     } else
       h = {};
     const u = {
-      type: l,
+      type: c,
       entity: t.entity_id,
       ...d,
       ...h
@@ -2411,7 +2411,7 @@ const Ko = [
       if (!o || !s || s.themes !== o.themes || s.language !== o.language || s.localize !== o.localize || this._hasRelevantStateChanged(s, o)) {
         this._currentEntitiesCache = this._getCurrentEntities();
         const n = this._currentEntitiesCache.map((r) => r.entity_id).sort(), a = (this._lastEntityIds || []).slice().sort();
-        return !(n.length === a.length && n.every((r, l) => r === a[l]));
+        return !(n.length === a.length && n.every((r, c) => r === a[c]));
       }
       return !1;
     }
@@ -2440,14 +2440,14 @@ const Ko = [
     const a = ko(this.hass, s);
     if (a)
       return a.hass !== this.hass && (a.hass = this.hass), this._cardEls.set(i, a), this._cardElementCache.set(i, { hash: o, el: a }), a;
-    const c = document.createElement("div");
-    return c.classList.add("card-placeholder"), c.setAttribute("data-hui-card", ""), this._cardEls.set(i, c), this._createCardElement(this.hass, s).then((r) => {
+    const l = document.createElement("div");
+    return l.classList.add("card-placeholder"), l.setAttribute("data-hui-card", ""), this._cardEls.set(i, l), this._createCardElement(this.hass, s).then((r) => {
       try {
-        this._cardEls.get(i) === c && (c.replaceWith(r), this._cardEls.set(i, r), this._cardElementCache.set(i, { hash: o, el: r })), r.hass = this.hass;
-      } catch (l) {
-        console.debug("status-card: Failed to create popup card for entity:", i, l);
+        this._cardEls.get(i) === l && (l.replaceWith(r), this._cardEls.set(i, r), this._cardElementCache.set(i, { hash: o, el: r })), r.hass = this.hass;
+      } catch (c) {
+        console.debug("status-card: Failed to create popup card for entity:", i, c);
       }
-    }), this._cardElementCache.set(i, { hash: o, el: c }), c;
+    }), this._cardElementCache.set(i, { hash: o, el: l }), l;
   }
   willUpdate(t) {
     super.willUpdate(t), (t.has("open") || t.has("hass") || t.has("selectedDomain") || t.has("selectedGroup") || t.has("_showAll")) && (this._entities = this._currentEntitiesCache.length > 0 ? this._currentEntitiesCache : this._getCurrentEntities());
@@ -2457,8 +2457,8 @@ const Ko = [
     return ((i = this.hass) == null ? void 0 : i.states[t.entity_id]) || t;
   }
   _isEntityActive(t) {
-    var c;
-    const i = this.selectedDomain || z(t.entity_id), s = this.selectedDeviceClass || t.attributes.device_class, o = P(i, s), n = typeof ((c = this.card) == null ? void 0 : c.getCustomizationForType) == "function" ? this.card.getCustomizationForType(o) : void 0, a = (n == null ? void 0 : n.invert) === !0;
+    var l;
+    const i = this.selectedDomain || z(t.entity_id), s = this.selectedDeviceClass || t.attributes.device_class, o = P(i, s), n = typeof ((l = this.card) == null ? void 0 : l.getCustomizationForType) == "function" ? this.card.getCustomizationForType(o) : void 0, a = (n == null ? void 0 : n.invert) === !0;
     return zt(t, i, s, a);
   }
   _getCurrentEntities() {
@@ -2501,7 +2501,7 @@ const Ko = [
     const s = this._entities.filter(
       (o) => this.getAreaForEntity(o) === t
     );
-    s.length !== 0 && le(this.hass, s, i, this.selectedDeviceClass);
+    s.length !== 0 && ce(this.hass, s, i, this.selectedDeviceClass);
   }
   _stopPropagation(t) {
     t.stopPropagation();
@@ -2599,16 +2599,16 @@ const Ko = [
   render() {
     var y, V, x, O, U, jt;
     if (!this.hass) return _``;
-    const t = this._getGroupCustomization(), i = (t == null ? void 0 : t.list_mode) ?? this.card.list_mode, s = (t == null ? void 0 : t.columns) ?? this.card._config.columns ?? 4, o = i ? 1 : s, n = this.selectedDomain, a = this.selectedDeviceClass, c = this.selectedGroup, r = this.card, l = this._areaMapMemo((y = this.hass) == null ? void 0 : y.areas);
+    const t = this._getGroupCustomization(), i = (t == null ? void 0 : t.list_mode) ?? this.card.list_mode, s = (t == null ? void 0 : t.columns) ?? this.card._config.columns ?? 4, o = i ? 1 : s, n = this.selectedDomain, a = this.selectedDeviceClass, l = this.selectedGroup, r = this.card, c = this._areaMapMemo((y = this.hass) == null ? void 0 : y.areas);
     let d = this._entities, h = !1;
-    c === void 0 && n && (h = !0);
+    l === void 0 && n && (h = !0);
     const u = this.sortEntitiesForPopup(d), p = new Set(d.map((L) => L.entity_id));
     Array.from(this._cardEls.keys()).forEach((L) => {
       p.has(L) || this._cardEls.delete(L);
     }), this._lastEntityIds = d.map((L) => L.entity_id);
     const m = this.groupAndSortEntities(
       d,
-      l,
+      c,
       this.sortEntitiesForPopup
     ), b = (t == null ? void 0 : t.ungroup_areas) === !0 || ((V = r == null ? void 0 : r._config) == null ? void 0 : V.ungroupAreas) === !0 || ((x = r == null ? void 0 : r._config) == null ? void 0 : x.ungroup_areas) === !0 || ((O = r == null ? void 0 : r._config) == null ? void 0 : O.area_grouping) !== void 0 && ((U = r == null ? void 0 : r._config) == null ? void 0 : U.area_grouping) === !1, g = m.length ? Math.max(...m.map(([, L]) => L.length)) : 0, f = b ? Math.min(o, Math.max(1, d.length)) : Math.min(o, Math.max(1, g));
     this.style.setProperty("--columns", String(f));
@@ -2622,7 +2622,7 @@ const Ko = [
       >
         <ha-icon-button
           slot="headerNavigationIcon"
-          .path=${Rt}
+          .path=${Ft}
           @click=${this._close}
           .label=${this.hass.localize("ui.common.close")}
         ></ha-icon-button>
@@ -2702,7 +2702,7 @@ const Ko = [
       m,
       ([L]) => L,
       ([L, dt]) => {
-        const Y = l.get(L) ?? (L === "unassigned" ? "Unassigned" : L);
+        const Y = c.get(L) ?? (L === "unassigned" ? "Unassigned" : L);
         return _`
                           <li class="entity-item">
                             <div class="area-header">
@@ -2744,7 +2744,7 @@ const Ko = [
     )}
                 </div>
               ` : _`${m.map(([L, dt]) => {
-      const Y = l.get(L) ?? (L === "unassigned" ? "Unassigned" : L);
+      const Y = c.get(L) ?? (L === "unassigned" ? "Unassigned" : L);
       return _`
                   <div class="cards-wrapper">
                     <div class="area-header">
@@ -2973,7 +2973,7 @@ D([
   A()
 ], Z.prototype, "_entities");
 customElements.define("status-card-popup", Z);
-class ft extends F {
+class ft extends N {
   constructor() {
     super(...arguments), this.open = !1, this._onPopState = () => {
       var t;
@@ -3006,9 +3006,9 @@ class ft extends F {
     super.disconnectedCallback(), window.removeEventListener("popstate", this._onPopState);
   }
   render() {
-    var a, c;
+    var a, l;
     if (!this.hass || !this.card) return _``;
-    const t = this.selectedDomain || "", i = this.selectedDeviceClass, s = P(t, i), o = (c = (a = this.card) == null ? void 0 : a.getCustomizationForType) == null ? void 0 : c.call(a, s), n = (o == null ? void 0 : o.invert) === !0;
+    const t = this.selectedDomain || "", i = this.selectedDeviceClass, s = P(t, i), o = (l = (a = this.card) == null ? void 0 : a.getCustomizationForType) == null ? void 0 : l.call(a, s), n = (o == null ? void 0 : o.invert) === !0;
     return _`
       <ha-adaptive-dialog
         .hass=${this.hass}
@@ -3017,7 +3017,7 @@ class ft extends F {
       >
         <ha-icon-button
           slot="headerNavigationIcon"
-          .path=${Rt}
+          .path=${Ft}
           @click=${this._close}
           .label=${this.hass.localize("ui.common.close")}
         ></ha-icon-button>
@@ -3081,26 +3081,26 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
     if (!s.includes(n)) return o;
     const a = t[n];
     if (!a) return o;
-    const c = (b = e.customization) == null ? void 0 : b.find(
+    const l = (b = e.customization) == null ? void 0 : b.find(
       (g) => g.type === n
     );
-    if (c && c.state !== void 0 && c.invert_state !== void 0) {
-      const g = c.invert_state === "true", f = a.state === c.state;
+    if (l && l.state !== void 0 && l.invert_state !== void 0) {
+      const g = l.invert_state === "true", f = a.state === l.state;
       if (!g && !f || g && f) return o;
     }
-    const r = s.indexOf(n), l = r >= 0 ? r : 0, d = F1(
+    const r = s.indexOf(n), c = r >= 0 ? r : 0, d = N1(
       e,
       n,
       void 0,
       a,
       i
-    ), h = ce(e, n, void 0, a, i) ?? a.attributes.friendly_name ?? n, u = Vt(
+    ), h = le(e, n, void 0, a, i) ?? a.attributes.friendly_name ?? n, u = Vt(
       e,
       "icon_color",
       n,
       void 0,
       i
-    ) || ((c == null ? void 0 : c.activate_state_color) ?? e.activate_state_color ? Ao(a) : void 0) || e.color, p = Ro(
+    ) || ((l == null ? void 0 : l.activate_state_color) ?? e.activate_state_color ? Ao(a) : void 0) || e.color, p = Fo(
       e,
       n,
       void 0,
@@ -3115,7 +3115,7 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
       type: "extra",
       panel: n,
       entity: a,
-      order: l,
+      order: c,
       icon: d,
       name: h,
       color: u,
@@ -3161,20 +3161,20 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
   "hidden_by",
   "device_manufacturer",
   "device_model"
-], N1 = (e, t, i, s, o, n, a, c) => {
+], R1 = (e, t, i, s, o, n, a, l) => {
   let r = [];
   if (Array.isArray(e.filters))
-    r = e.filters.filter((l) => de.includes(l.key));
+    r = e.filters.filter((c) => de.includes(c.key));
   else {
-    const l = e;
+    const c = e;
     de.forEach((d) => {
-      l[d] !== void 0 && r.push({ key: d, value: l[d] });
+      c[d] !== void 0 && r.push({ key: d, value: c[d] });
     });
   }
-  return !r.length && !o.length ? t.map((l) => l.entity_id) : t.filter((l) => {
-    if (o.includes(l.entity_id)) return !1;
+  return !r.length && !o.length ? t.map((c) => c.entity_id) : t.filter((c) => {
+    if (o.includes(c.entity_id)) return !1;
     if (!r.length) return !0;
-    const d = { entity_id: l.entity_id };
+    const d = { entity_id: c.entity_id };
     return r.every(
       (h) => U1({}, d, h, {
         areas: s,
@@ -3182,14 +3182,14 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
         entities: t,
         entityMap: n,
         deviceMap: a,
-        areaMap: c
+        areaMap: l
       })
     );
-  }).map((l) => l.entity_id);
+  }).map((c) => c.entity_id);
 }, j1 = (e, t, i, s, o, n, a) => {
-  let c = [];
+  let l = [];
   if (Array.isArray(t.filters))
-    c = t.filters.filter((r) => !de.includes(r.key));
+    l = t.filters.filter((r) => !de.includes(r.key));
   else {
     const r = t;
     [
@@ -3201,12 +3201,12 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
       "last_triggered",
       "level",
       "group"
-    ].forEach((l) => {
-      r[l] !== void 0 && c.push({ key: l, value: r[l] });
+    ].forEach((c) => {
+      r[c] !== void 0 && l.push({ key: c, value: r[c] });
     });
   }
-  return c.length ? i.map((r) => s[r]).filter((r) => r ? c.every(
-    (l) => U1(e, r, l, {
+  return l.length ? i.map((r) => s[r]).filter((r) => r ? l.every(
+    (c) => U1(e, r, c, {
       entityMap: o,
       deviceMap: n,
       areaMap: a
@@ -3215,14 +3215,14 @@ const Yo = (e, t, i, s) => s ? [] : Object.values(e).filter(
 };
 function sn(e, t, i, s, o) {
   var u;
-  const n = e.__registryEntities || [], a = e.__registryDevices || [], c = e.__registryAreas || [], r = i || new Map(n.map((p) => [p.entity_id, p])), l = s || new Map(a.map((p) => [p.id, p])), d = o || new Map(c.map((p) => [p.area_id, p])), h = N1(
+  const n = e.__registryEntities || [], a = e.__registryDevices || [], l = e.__registryAreas || [], r = i || new Map(n.map((p) => [p.entity_id, p])), c = s || new Map(a.map((p) => [p.id, p])), d = o || new Map(l.map((p) => [p.area_id, p])), h = R1(
     t,
     n,
     a,
-    c,
+    l,
     e.hiddenEntities || [],
     r,
-    l,
+    c,
     d
   );
   return j1(
@@ -3231,7 +3231,7 @@ function sn(e, t, i, s, o) {
     h,
     ((u = e.hass) == null ? void 0 : u.states) || {},
     r,
-    l,
+    c,
     d
   );
 }
@@ -3239,7 +3239,7 @@ function ae(e, t) {
   if (!e) return !1;
   const i = t.match(/^([<>]=?)?\s*(\d+)$/);
   if (!i) return !1;
-  const [, s, o] = i, n = parseInt(o, 10), a = /* @__PURE__ */ new Date(), c = new Date(e), r = (a.getTime() - c.getTime()) / 6e4;
+  const [, s, o] = i, n = parseInt(o, 10), a = /* @__PURE__ */ new Date(), l = new Date(e), r = (a.getTime() - l.getTime()) / 6e4;
   switch (s) {
     case ">":
       return r > n;
@@ -3259,9 +3259,9 @@ function k(e, t) {
   if (typeof t == "string" && t.startsWith("!"))
     return !k(e, t.slice(1));
   if (typeof t == "string" && /^([<>]=?)\s*(-?\d+(\.\d+)?)([mhd])$/.test(t)) {
-    const [, i, s, , o] = t.match(/^([<>]=?)\s*(-?\d+(\.\d+)?)([mhd])$/) || [], n = parseFloat(s), a = Date.now(), c = new Date(e).getTime();
-    if (isNaN(c)) return !1;
-    let r = (a - c) / 6e4;
+    const [, i, s, , o] = t.match(/^([<>]=?)\s*(-?\d+(\.\d+)?)([mhd])$/) || [], n = parseFloat(s), a = Date.now(), l = new Date(e).getTime();
+    if (isNaN(l)) return !1;
+    let r = (a - l) / 6e4;
     switch (o === "h" && (r /= 60), o === "d" && (r /= 1440), i) {
       case ">":
         return r > n;
@@ -3324,19 +3324,19 @@ const on = {
   integration: (e, t, i, s) => !!s && (k(s.platform, t) || k(s.config_entry_id, t)),
   entity_category: (e, t, i, s) => k(s == null ? void 0 : s.entity_category, t),
   label: (e, t, { deviceMap: i, card: s }, o) => {
-    var c, r;
-    const n = s.labels, a = (l) => {
-      if (k(l, t)) return !0;
+    var l, r;
+    const n = s.labels, a = (c) => {
+      if (k(c, t)) return !0;
       if (n) {
-        const d = n.find((h) => h.label_id === l);
+        const d = n.find((h) => h.label_id === c);
         if (d && k(d.name, t)) return !0;
       }
       return !1;
     };
-    if ((c = o == null ? void 0 : o.labels) != null && c.some(a)) return !0;
+    if ((l = o == null ? void 0 : o.labels) != null && l.some(a)) return !0;
     if (o != null && o.device_id) {
-      const l = i == null ? void 0 : i.get(o.device_id);
-      if ((r = l == null ? void 0 : l.labels) != null && r.some(a)) return !0;
+      const c = i == null ? void 0 : i.get(o.device_id);
+      if ((r = c == null ? void 0 : c.labels) != null && r.some(a)) return !0;
     }
     return !1;
   },
@@ -3344,8 +3344,8 @@ const on = {
     var r;
     let a = n == null ? void 0 : n.area_id;
     if (!a && (n != null && n.device_id) && (a = (r = s == null ? void 0 : s.get(n.device_id)) == null ? void 0 : r.area_id), !a) return !1;
-    const c = o == null ? void 0 : o.get(a);
-    return k(c == null ? void 0 : c.floor_id, t);
+    const l = o == null ? void 0 : o.get(a);
+    return k(l == null ? void 0 : l.floor_id, t);
   },
   hidden_by: (e, t, i, s) => k(s == null ? void 0 : s.hidden_by, t),
   device_manufacturer: (e, t, { deviceMap: i }, s) => {
@@ -3368,8 +3368,8 @@ const on = {
   }
 };
 function U1(e, t, i, s) {
-  var a, c;
-  const o = ((a = s.entityMap) == null ? void 0 : a.get(t.entity_id)) || ((c = s.entities) == null ? void 0 : c.find((r) => r.entity_id === t.entity_id)), n = on[i.key];
+  var a, l;
+  const o = ((a = s.entityMap) == null ? void 0 : a.get(t.entity_id)) || ((l = s.entities) == null ? void 0 : l.find((r) => r.entity_id === t.entity_id)), n = on[i.key];
   return n ? n(t, i.value, { ...s, card: e }, o) : !0;
 }
 var nn = Object.defineProperty, an = Object.getOwnPropertyDescriptor, M = (e, t, i, s) => {
@@ -3377,10 +3377,10 @@ var nn = Object.defineProperty, an = Object.getOwnPropertyDescriptor, M = (e, t,
     (a = e[n]) && (o = (s ? a(t, i, o) : a(o)) || o);
   return s && o && nn(t, i, o), o;
 };
-let $ = class extends F {
+let $ = class extends N {
   constructor() {
     super(...arguments), this.entitiesByDomain = {}, this.selectedDomain = null, this.selectedDeviceClass = null, this.hiddenEntities = [], this.hiddenLabels = [], this.hiddenAreas = [], this.hide_person = !1, this.hide_content_name = !0, this.list_mode = !1, this.badge_mode = !1, this.no_background = !1, this.badge_color = "", this.badge_text_color = "", this.selectedGroup = null, this.selectedNativeGroup = null, this._shouldHideCard = !1, this.__registryEntities = [], this.__registryDevices = [], this.__registryAreas = [], this.__registryFetchInProgress = !1, this._parsedGlobalCss = {}, this._parsedGlobalIconCss = {}, this._parsedGlobalCardCss = {}, this._parsedGlobalNameCss = {}, this._parsedGlobalStateCss = {}, this._computeIncludedIdsMemo = H(
-      (e, t, i, s, o, n, a, c, r) => P1(
+      (e, t, i, s, o, n, a, l, r) => P1(
         e || {},
         t || {},
         i || {},
@@ -3389,7 +3389,7 @@ let $ = class extends F {
           floor: o,
           label: n,
           hiddenAreas: a,
-          hiddenLabels: c,
+          hiddenLabels: l,
           hiddenEntities: r
         },
         X
@@ -3415,12 +3415,12 @@ let $ = class extends F {
     ), this._computeExtraItemsMemo = H(
       Xo,
       (e, t) => {
-        const [i, s, o] = e, [n, a, c] = t;
-        if (i !== n || o !== c) return !1;
+        const [i, s, o] = e, [n, a, l] = t;
+        if (i !== n || o !== l) return !1;
         const r = i.extra_entities;
         if (!r) return !0;
-        for (const l of r)
-          if (s[l] !== a[l]) return !1;
+        for (const c of r)
+          if (s[c] !== a[c]) return !1;
         return !0;
       }
     ), this._computeGroupItemsMemo = H(Qo), this._computeNativeGroupItemsMemo = H(
@@ -3444,37 +3444,37 @@ let $ = class extends F {
       (e) => new Map(e.map((t) => [t.area_id, t]))
     ), this._computeGroupCandidatesMemo = H(
       (e, t, i, s, o) => {
-        const n = /* @__PURE__ */ new Map(), a = this._computeEntityMap(t), c = this._computeDeviceMap(i), r = this._computeAreaMap(s);
-        return e.forEach((l) => {
-          const d = N1(
-            l,
+        const n = /* @__PURE__ */ new Map(), a = this._computeEntityMap(t), l = this._computeDeviceMap(i), r = this._computeAreaMap(s);
+        return e.forEach((c) => {
+          const d = R1(
+            c,
             t,
             i,
             s,
             o,
             a,
-            c,
+            l,
             r
           );
-          n.set(l.group_id, d);
+          n.set(c.group_id, d);
         }), n;
       }
     ), this._computeGroupResultsMemo = H(
       (e, t, i, s, o, n) => {
-        const a = /* @__PURE__ */ new Map(), c = {
+        const a = /* @__PURE__ */ new Map(), l = {
           __registryEntities: s,
           __registryDevices: o,
           __registryAreas: n,
           hass: { states: t }
-        }, r = this._computeEntityMap(s), l = this._computeDeviceMap(o), d = this._computeAreaMap(n);
+        }, r = this._computeEntityMap(s), c = this._computeDeviceMap(o), d = this._computeAreaMap(n);
         return i.forEach((h) => {
           const u = e.get(h.group_id) || [], p = j1(
-            c,
+            l,
             h,
             u,
             t,
             r,
-            l,
+            c,
             d
           );
           a.set(h.group_id, p);
@@ -3553,16 +3553,16 @@ let $ = class extends F {
   }
   _entitiesByDomain() {
     var h, u, p, m;
-    const e = this.hass.entities || [], t = this.hass.devices || [], i = this.hass.areas || [], s = ((h = this.hass) == null ? void 0 : h.states) || {}, o = ((u = this._config) == null ? void 0 : u.area) || null, n = ((p = this._config) == null ? void 0 : p.floor) || null, a = ((m = this._config) == null ? void 0 : m.label) || null, c = this.hiddenAreas, r = this.hiddenLabels, l = this.hiddenEntities, d = this._computeIncludedIdsMemo(
+    const e = this.hass.entities || [], t = this.hass.devices || [], i = this.hass.areas || [], s = ((h = this.hass) == null ? void 0 : h.states) || {}, o = ((u = this._config) == null ? void 0 : u.area) || null, n = ((p = this._config) == null ? void 0 : p.floor) || null, a = ((m = this._config) == null ? void 0 : m.label) || null, l = this.hiddenAreas, r = this.hiddenLabels, c = this.hiddenEntities, d = this._computeIncludedIdsMemo(
       e,
       t,
       i,
       o,
       n,
       a,
-      c,
+      l,
       r,
-      l
+      c
     );
     return this._mapIdsToStatesMemo(d, s);
   }
@@ -3630,7 +3630,7 @@ let $ = class extends F {
   }
   _openNativeGroupPopup(e) {
     var a;
-    const t = this.getNativeGroupItems().find((c) => c.order === e);
+    const t = this.getNativeGroupItems().find((l) => l.order === e);
     if (!t) return;
     const i = this.getCustomizationForType(t.group_id), s = this._nativeGroupEntities(t.config), o = this._activeBadgeEntities(s), n = this._config.show_total_entities === !0 || t.config.show_total_entities === !0 || (i == null ? void 0 : i.show_total_entities) === !0;
     this._showPopup(this, "status-card-popup", {
@@ -3646,12 +3646,12 @@ let $ = class extends F {
     });
   }
   _openDomainPopup(e) {
-    var a, c, r, l;
+    var a, l, r, c;
     let t = "Details";
-    typeof e == "string" ? t = ce(this._config, e) || this.computeLabel({ name: e }) : typeof e == "number" && ((a = this._config.content) != null && a[e]) && (t = this._config.content[e]);
+    typeof e == "string" ? t = le(this._config, e) || this.computeLabel({ name: e }) : typeof e == "number" && ((a = this._config.content) != null && a[e]) && (t = this._config.content[e]);
     let i = [], s = [];
     if (typeof e == "number") {
-      const d = (c = this._config.content) == null ? void 0 : c[e], h = (r = this._config.rulesets) == null ? void 0 : r.find(
+      const d = (l = this._config.content) == null ? void 0 : l[e], h = (r = this._config.rulesets) == null ? void 0 : r.find(
         (u) => u.group_id === d
       );
       if (h) {
@@ -3683,7 +3683,7 @@ let $ = class extends F {
       selectedGroup: this.selectedGroup !== null ? this.selectedGroup : void 0,
       card: this,
       opener: this,
-      content: i.length ? void 0 : ((l = this.hass) == null ? void 0 : l.localize("ui.card.empty_state.no_entities")) ?? "No entities",
+      content: i.length ? void 0 : ((c = this.hass) == null ? void 0 : c.localize("ui.card.empty_state.no_entities")) ?? "No entities",
       initialShowAll: o
     });
   }
@@ -3720,7 +3720,7 @@ let $ = class extends F {
         this.selectedNativeGroup = null;
       }, 0);
     }
-    (e.has("hass") && (!t || t.themes !== this.hass.themes) || e.has("_config") && (!i || i.theme !== this._config.theme)) && co(
+    (e.has("hass") && (!t || t.themes !== this.hass.themes) || e.has("_config") && (!i || i.theme !== this._config.theme)) && lo(
       this,
       this.hass.themes,
       this._config.theme
@@ -3740,8 +3740,8 @@ let $ = class extends F {
     const e = this.getExtraItems();
     if (e.length > 0 && e.some((a) => {
       var r;
-      const c = (r = this.hass) == null ? void 0 : r.states[a.panel];
-      return c && c.state !== "unavailable" && c.state !== "unknown";
+      const l = (r = this.hass) == null ? void 0 : r.states[a.panel];
+      return l && l.state !== "unavailable" && l.state !== "unknown";
     }))
       return !0;
     const t = this._computeGroupCandidatesMemo(
@@ -3770,7 +3770,7 @@ let $ = class extends F {
         n.deviceClass
       );
       if (a.length === 0) continue;
-      const c = n.deviceClass ? `${n.domain} - ${n.deviceClass}` : n.domain, r = this.getCustomizationForType(c);
+      const l = n.deviceClass ? `${n.domain} - ${n.deviceClass}` : n.domain, r = this.getCustomizationForType(l);
       if (this._config.show_total_entities || (r == null ? void 0 : r.show_total_entities) === !0) return !0;
       const d = (r == null ? void 0 : r.invert) === !0;
       if (a.filter(
@@ -3825,11 +3825,46 @@ let $ = class extends F {
       "i"
     ).test(e) : e === t;
   }
+  _matchNativeGroupValue(e, t) {
+    if (Array.isArray(t))
+      return t.some((i) => this._matchNativeGroupValue(e, i));
+    if (typeof t == "string" && t.startsWith("!"))
+      return !this._matchNativeGroupValue(e, t.slice(1));
+    if (typeof t == "string" && /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/.test(t)) {
+      const [, i, s] = t.match(
+        /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/
+      ) || [void 0, void 0, void 0], o = Number(s), n = Number(e);
+      if (!Number.isFinite(o) || !Number.isFinite(n)) return !1;
+      if (i === ">") return n > o;
+      if (i === ">=") return n >= o;
+      if (i === "<") return n < o;
+      if (i === "<=") return n <= o;
+    }
+    return typeof t == "string" && t.includes("*") ? this._matchNativeGroupPattern(String(e), t) : e === t;
+  }
+  _nativeGroupMatchesFilter(e, t, i) {
+    return t === "state" ? this._matchNativeGroupValue(e.state, i) : t === "entity_id" ? this._matchNativeGroupValue(e.entity_id, i) : t === "attributes" && i && typeof i == "object" ? Object.entries(i).every(([s, o]) => {
+      const n = s.split(":").reduce(
+        (a, l) => a && typeof a == "object" ? a[l] : void 0,
+        e.attributes
+      );
+      return this._matchNativeGroupValue(n, o);
+    }) : !0;
+  }
   _nativeGroupEntities(e) {
-    const t = Array.isArray(e.domains) ? e.domains : [], i = Array.isArray(e.exclude_entities) ? e.exclude_entities : [], s = /* @__PURE__ */ new Set();
-    return t.flatMap((o) => this._totalEntities(String(o))).filter((o) => s.has(o.entity_id) ? !1 : (s.add(o.entity_id), !i.some(
-      (n) => this._matchNativeGroupPattern(o.entity_id, String(n))
-    )));
+    const t = Array.isArray(e.domains) ? e.domains : [], i = Array.isArray(e.exclude_entities) ? e.exclude_entities : [], s = Array.isArray(e.filters) ? e.filters : [
+      e.state !== void 0 ? { key: "state", value: e.state } : void 0,
+      e.attributes !== void 0 ? { key: "attributes", value: e.attributes } : void 0
+    ].filter(Boolean), o = /* @__PURE__ */ new Set();
+    return t.flatMap((n) => this._totalEntities(String(n))).filter((n) => o.has(n.entity_id) || (o.add(n.entity_id), i.some(
+      (a) => this._matchNativeGroupPattern(n.entity_id, String(a))
+    )) ? !1 : s.every(
+      (a) => this._nativeGroupMatchesFilter(
+        n,
+        String(a.key),
+        a.value
+      )
+    ));
   }
   getDomainItems() {
     return this._computeDomainItemsMemo(this._config.content || []);
@@ -3840,7 +3875,7 @@ let $ = class extends F {
   toggleDomain(e, t) {
     e = e ?? this.selectedDomain, t = t ?? this.selectedDeviceClass;
     const i = this._isOn(e, t);
-    le(this.hass, i, e);
+    ce(this.hass, i, e);
   }
   _handleGroupAction(e, t, i) {
     return (s) => {
@@ -3859,7 +3894,7 @@ let $ = class extends F {
           toggleDomain: () => {
             i.forEach((o) => {
               const n = z(o.entity_id);
-              le(this.hass, [o], n);
+              ce(this.hass, [o], n);
             });
           },
           selectDomain: () => {
@@ -3910,19 +3945,19 @@ let $ = class extends F {
     }, n = this._getIconStyles(t, {
       ...i,
       square: this._config.square
-    }), { badgeStyles: a } = this._computeBadgeStyles(e), c = this._computeButtonStyles(e), r = this._computeCustomIconStyles(e), l = (e == null ? void 0 : e.badge_mode) ?? this.badge_mode;
+    }), { badgeStyles: a } = this._computeBadgeStyles(e), l = this._computeButtonStyles(e), r = this._computeCustomIconStyles(e), c = (e == null ? void 0 : e.badge_mode) ?? this.badge_mode;
     return {
       ah: s,
       contentClasses: o,
       iconStyles: n,
       badgeStyles: a,
-      buttonStyles: c,
+      buttonStyles: l,
       customIconStyles: r,
-      showBadge: l
+      showBadge: c
     };
   }
   renderExtraTab(e) {
-    const { panel: t, icon: i, name: s, color: o, icon_css: n, background_color: a } = e, c = this.hass.states[t], r = this.getCustomizationForType(t), l = this._handleDomainAction(t), {
+    const { panel: t, icon: i, name: s, color: o, icon_css: n, background_color: a } = e, l = this.hass.states[t], r = this.getCustomizationForType(t), c = this._handleDomainAction(t), {
       ah: d,
       contentClasses: h,
       iconStyles: u,
@@ -3938,7 +3973,7 @@ let $ = class extends F {
       <ha-tab-group-tab
         slot="nav"
         panel=${t}
-        @action=${l}
+        @action=${c}
         .actionHandler=${d}
         class=${g ? "badge-mode" : ""}
         style=${E(p)}
@@ -3961,10 +3996,10 @@ let $ = class extends F {
                     style="${n || ""}"
                   ></ha-svg-icon>` : _`<ha-state-icon
                     .hass=${this.hass}
-                    .stateObj=${c}
+                    .stateObj=${l}
                     .icon=${i}
                     data-domain=${z(t)}
-                    data-state=${c.state}
+                    data-state=${l.state}
                     style="${n || ""}"
                   ></ha-state-icon>`}
           </div>
@@ -3981,7 +4016,7 @@ let $ = class extends F {
                   style=${E(this._parsedGlobalStateCss)}
                 >
                   <state-display
-                    .stateObj=${c}
+                    .stateObj=${l}
                     .hass=${this.hass}
                     .content=${f}
                     .name=${s}
@@ -4008,7 +4043,7 @@ let $ = class extends F {
       this.__registryAreas
     ).get(e.group_id) || [];
     if (!o.length) return _``;
-    const n = e.group_id || `${this.hass.localize("component.group.entity_component._.name")} ${t + 1}`, a = e.group_icon || Qe, c = oe(
+    const n = e.group_id || `${this.hass.localize("component.group.entity_component._.name")} ${t + 1}`, a = e.group_icon || Qe, l = oe(
       this._config,
       n,
       void 0,
@@ -4018,7 +4053,7 @@ let $ = class extends F {
       n,
       void 0,
       this._customizationIndexMemo(this._config.customization)
-    ), l = this.getCustomizationForType(n), d = this._handleGroupAction(n, t, o), {
+    ), c = this.getCustomizationForType(n), d = this._handleGroupAction(n, t, o), {
       ah: h,
       contentClasses: u,
       iconStyles: p,
@@ -4026,10 +4061,10 @@ let $ = class extends F {
       buttonStyles: b,
       customIconStyles: g,
       showBadge: f
-    } = this._computeTabStyles(l, "domain", {
-      color: c,
+    } = this._computeTabStyles(c, "domain", {
+      color: l,
       background_color: r
-    }), C = (l == null ? void 0 : l.badge_active_count) === !0 || this._config.badge_active_count === !0 ? this._activeBadgeEntities(o).length : o.length;
+    }), C = (c == null ? void 0 : c.badge_active_count) === !0 || this._config.badge_active_count === !0 ? this._activeBadgeEntities(o).length : o.length;
     return _`
       <ha-tab-group-tab
         slot="nav"
@@ -4073,16 +4108,16 @@ let $ = class extends F {
   }
   _handleNativeGroupAction(e) {
     return (t) => {
-      var a, c;
+      var a, l;
       t.stopPropagation();
-      const i = t.detail.action, s = (a = this._config.content) == null ? void 0 : a[e], o = s ? this.getCustomizationForType(s) : void 0, n = (o == null ? void 0 : o[`${i}_action`]) ?? ((c = this._config) == null ? void 0 : c[`${i}_action`]);
+      const i = t.detail.action, s = (a = this._config.content) == null ? void 0 : a[e], o = s ? this.getCustomizationForType(s) : void 0, n = (o == null ? void 0 : o[`${i}_action`]) ?? ((l = this._config) == null ? void 0 : l[`${i}_action`]);
       (n === void 0 || n === "more-info" || (n == null ? void 0 : n.action) === "more-info") && (this.selectedNativeGroup = e);
     };
   }
   renderNativeGroupTab(e) {
     const t = this._nativeGroupEntities(e.config), i = this.getCustomizationForType(e.group_id), s = this._config.show_total_entities === !0 || e.config.show_total_entities === !0 || (i == null ? void 0 : i.show_total_entities) === !0, o = this._activeBadgeEntities(t), n = s ? t : o;
     if (!n.length) return _``;
-    const a = (i == null ? void 0 : i.icon) || e.config.group_icon || e.config.icon || Qe, c = oe(
+    const a = (i == null ? void 0 : i.icon) || e.config.group_icon || e.config.icon || Qe, l = oe(
       this._config,
       e.group_id,
       void 0,
@@ -4092,7 +4127,7 @@ let $ = class extends F {
       e.group_id,
       void 0,
       this._customizationIndexMemo(this._config.customization)
-    ), l = this._handleNativeGroupAction(e.order), {
+    ), c = this._handleNativeGroupAction(e.order), {
       ah: d,
       contentClasses: h,
       iconStyles: u,
@@ -4101,14 +4136,14 @@ let $ = class extends F {
       customIconStyles: b,
       showBadge: g
     } = this._computeTabStyles(i, "domain", {
-      color: c,
+      color: l,
       background_color: r
     }), f = (i == null ? void 0 : i.badge_active_count) === !0 || e.config.badge_active_count === !0 || this._config.badge_active_count === !0 ? o.length : n.length;
     return _`
       <ha-tab-group-tab
         slot="nav"
         panel=${"native-group-" + e.order}
-        @action=${l}
+        @action=${c}
         .actionHandler=${d}
         class=${g ? "badge-mode" : ""}
         style=${E(p)}
@@ -4147,14 +4182,14 @@ let $ = class extends F {
   renderItemTab(e) {
     const t = e.domain, i = e.deviceClass, s = this._isOn(t, i), o = this._totalEntities(t, i), a = this._shouldShowTotalEntities(t, i) ? o : s;
     if (!a.length) return _``;
-    const c = oe(
+    const l = oe(
       this._config,
       t,
       i,
       this._customizationIndexMemo(this._config.customization)
     ), r = this.getCustomizationForType(
       P(t, i)
-    ), l = this._handleDomainAction(t, i), {
+    ), c = this._handleDomainAction(t, i), {
       ah: d,
       contentClasses: h,
       iconStyles: u,
@@ -4163,14 +4198,14 @@ let $ = class extends F {
       customIconStyles: b,
       showBadge: g
     } = this._computeTabStyles(r, "domain", {
-      color: c,
+      color: l,
       background_color: Dt(
         this._config,
         t,
         i,
         this._customizationIndexMemo(this._config.customization)
       )
-    }), f = ce(this._config, t, i) || this.computeLabel({ name: i || t }), C = this._shouldUseActiveBadgeCount(t, i) ? s.length : a.length;
+    }), f = le(this._config, t, i) || this.computeLabel({ name: i || t }), C = this._shouldUseActiveBadgeCount(t, i) ? s.length : a.length;
     let v;
     return this._shouldShowTotalNumbers(t, i) ? v = `${s.length}/${o.length} ${ne(
       this.hass,
@@ -4186,7 +4221,7 @@ let $ = class extends F {
       <ha-tab-group-tab
         slot="nav"
         panel=${i || t}
-        @action=${l}
+        @action=${c}
         .actionHandler=${d}
         class=${g ? "badge-mode" : ""}
         style=${E(p)}
@@ -4203,7 +4238,7 @@ let $ = class extends F {
             style=${E({ ...u, ...b })}
           >
             ${(() => {
-      const S = F1(this._config, t, i);
+      const S = N1(this._config, t, i);
       return S.startsWith("M") ? _`<ha-svg-icon .path=${S}></ha-svg-icon>` : _`<ha-icon icon=${S}></ha-icon>`;
     })()}
           </div>
@@ -4248,24 +4283,24 @@ let $ = class extends F {
     ), a = this.getPersonItems();
     if (this._shouldHideCard)
       return _``;
-    const c = {
+    const l = {
       "no-scroll": !!this._config.no_scroll,
       "badge-mode": this.badge_mode,
       "no-background": this.no_background
     };
     return _`
       <ha-card
-        class=${at(c)}
+        class=${at(l)}
         style=${E(this._parsedGlobalCardCss)}
       >
-        <ha-tab-group without-scroll-controls class=${at(c)}>
+        <ha-tab-group without-scroll-controls class=${at(l)}>
           <ha-tab-group-tab style="display:none" active></ha-tab-group-tab>
           ${tt(
       a,
       (r) => r.entity_id,
       (r) => {
         var v, S, y;
-        const l = this.hass.states[r.entity_id], d = (l == null ? void 0 : l.state) !== "home", h = {
+        const c = this.hass.states[r.entity_id], d = (c == null ? void 0 : c.state) !== "home", h = {
           horizontal: this._config.content_layout === "horizontal"
         }, u = {
           "border-radius": (v = this._config) != null && v.square ? "20%" : "50%",
@@ -4315,7 +4350,7 @@ let $ = class extends F {
           this._config,
           "person",
           void 0,
-          l == null ? void 0 : l.state
+          c == null ? void 0 : c.state
         )}
                           </div>
                         </div>`}
@@ -4334,7 +4369,7 @@ let $ = class extends F {
     `;
   }
   static get styles() {
-    return [Fo];
+    return [No];
   }
   static getConfigElement() {
     return document.createElement("status-card-editor");
@@ -4428,7 +4463,7 @@ $ = M([
   Zt("status-card")
 ], $);
 function rn(e, t, i, s, o) {
-  const n = (d, h, u) => At(e, d, h, u), a = n({ name: "area" }), c = n({ name: "floor" }), r = n({ name: "name" }), l = n({ name: "state" });
+  const n = (d, h, u) => At(e, d, h, u), a = n({ name: "area" }), l = n({ name: "floor" }), r = n({ name: "name" }), c = n({ name: "state" });
   return [
     {
       name: "person",
@@ -4477,7 +4512,7 @@ function rn(e, t, i, s, o) {
                 select: {
                   options: [
                     { value: "area", label: a },
-                    { value: "floor", label: c }
+                    { value: "floor", label: l }
                   ]
                 }
               }
@@ -4530,7 +4565,7 @@ function rn(e, t, i, s, o) {
             select: {
               options: [
                 { value: "name", label: r },
-                { value: "state", label: l }
+                { value: "state", label: c }
               ]
             }
           }
@@ -4544,7 +4579,7 @@ function rn(e, t, i, s, o) {
     }
   ];
 }
-function cn(e, t) {
+function ln(e, t) {
   return [
     {
       name: "",
@@ -4635,7 +4670,7 @@ function cn(e, t) {
     }
   ];
 }
-function ln(e) {
+function cn(e) {
   const t = [
     "more-info",
     "toggle",
@@ -4782,7 +4817,7 @@ var fn = Object.defineProperty, _n = Object.getOwnPropertyDescriptor, K = (e, t,
     (a = e[n]) && (o = (s ? a(t, i, o) : a(o)) || o);
   return s && o && fn(t, i, o), o;
 };
-let j = class extends F {
+let j = class extends N {
   constructor() {
     super(...arguments), this.isGroup = !1, this._activeTab = "appearance";
   }
@@ -5046,12 +5081,12 @@ K([
 j = K([
   Zt("status-card-item-editor")
 ], j);
-var mn = Object.defineProperty, gn = Object.getOwnPropertyDescriptor, Nt = (e, t, i, s) => {
+var mn = Object.defineProperty, gn = Object.getOwnPropertyDescriptor, Rt = (e, t, i, s) => {
   for (var o = s > 1 ? void 0 : s ? gn(t, i) : t, n = e.length - 1, a; n >= 0; n--)
     (a = e[n]) && (o = (s ? a(t, i, o) : a(o)) || o);
   return s && o && mn(t, i, o), o;
 };
-class ve extends F {
+class ve extends N {
   constructor() {
     super(...arguments), this.SelectOptions = [], this._entityKeys = /* @__PURE__ */ new WeakMap();
   }
@@ -5092,7 +5127,7 @@ class ve extends F {
               ></ha-selector>
               <ha-icon-button
                 .label=${this.hass.localize("ui.common.remove")}
-                .path=${Rt}
+                .path=${Ft}
                 class="remove-icon"
                 .index=${o}
                 @click=${this._removeRow}
@@ -5200,10 +5235,10 @@ class ve extends F {
     `;
   }
 }
-Nt([
+Rt([
   w({ attribute: !1 })
 ], ve.prototype, "hass", 2);
-Nt([
+Rt([
   w({ type: Array })
 ], ve.prototype, "SelectOptions", 2);
 let he = class extends ve {
@@ -5211,10 +5246,10 @@ let he = class extends ve {
     return this.customization;
   }
 };
-Nt([
+Rt([
   w({ attribute: !1 })
 ], he.prototype, "customization", 2);
-he = Nt([
+he = Rt([
   Zt("status-items-editor")
 ], he);
 var Cn = Object.defineProperty, vn = Object.getOwnPropertyDescriptor, st = (e, t, i, s) => {
@@ -5226,7 +5261,7 @@ function re(e, t) {
   const { [t]: i, ...s } = e;
   return s;
 }
-let q = class extends F {
+let q = class extends N {
   constructor() {
     super(...arguments), this._subElementEditorDomain = void 0, this._subElementEditorEntity = void 0, this.rulesets = [
       {
@@ -5245,9 +5280,9 @@ let q = class extends F {
       (e, t, i, s, o, n) => {
         switch (e) {
           case "appearance":
-            return cn(this.hass, n);
+            return ln(this.hass, n);
           case "actions":
-            return ln(this.hass);
+            return cn(this.hass);
           case "style":
             return pn();
           case "config":
@@ -5388,13 +5423,13 @@ let q = class extends F {
         ])).get(this._config.hide_filter);
         C && (this._config = { ...this._config, hide_filter: C }, t = !0);
       }
-      const i = e.get("_config"), s = (i == null ? void 0 : i.extra_entities) ?? [], o = this._config.extra_entities ?? [], n = (i == null ? void 0 : i.content) ?? [], a = this._config.content ?? [], c = Array.isArray(this._config.area) ? [...this._config.area] : this._config.area ? [this._config.area] : [], r = Array.isArray(this._config.floor) ? [...this._config.floor] : this._config.floor ? [this._config.floor] : [], l = Array.isArray(this._config.label) ? [...this._config.label] : [];
+      const i = e.get("_config"), s = (i == null ? void 0 : i.extra_entities) ?? [], o = this._config.extra_entities ?? [], n = (i == null ? void 0 : i.content) ?? [], a = this._config.content ?? [], l = Array.isArray(this._config.area) ? [...this._config.area] : this._config.area ? [this._config.area] : [], r = Array.isArray(this._config.floor) ? [...this._config.floor] : this._config.floor ? [this._config.floor] : [], c = Array.isArray(this._config.label) ? [...this._config.label] : [];
       this._filterInitialized || (this._lastFilter = {
-        area: c,
+        area: l,
         floor: r,
-        label: l
+        label: c
       }, this._filterInitialized = !0);
-      const d = this._lastFilter.area, h = this._lastFilter.floor, u = this._lastFilter.label, p = !J(u, l), m = !J(h, r), b = !J(d, c), g = this._config.content === void 0;
+      const d = this._lastFilter.area, h = this._lastFilter.floor, u = this._lastFilter.label, p = !J(u, c), m = !J(h, r), b = !J(d, l), g = this._config.content === void 0;
       if (b || m || p || g) {
         const f = this._dynamicOrder, v = this.possibleToggleDomains.map((S) => this._normalizeContentEntry(S)).sort((S, y) => {
           const V = f.indexOf(S), x = f.indexOf(y);
@@ -5404,9 +5439,9 @@ let q = class extends F {
           ...this._config,
           content: [...v]
         }, this._lastFilter = {
-          area: [...c],
+          area: [...l],
           floor: [...r],
-          label: [...l]
+          label: [...c]
         }, t = !0;
       }
       if (this._config.rulesets && Array.isArray(this._config.rulesets)) {
@@ -5549,38 +5584,38 @@ let q = class extends F {
     if (t) {
       const { domain: n, deviceClass: a } = t;
       if (n === "switch" && a === "switch") {
-        const l = this.hass.localize(
+        const c = this.hass.localize(
           "component.switch.entity_component._.name"
         );
-        return `${l} - ${l}`;
+        return `${c} - ${c}`;
       }
-      const c = this.hass.localize(`component.${n}.entity_component._.name`) || n, r = this.hass.localize(
+      const l = this.hass.localize(`component.${n}.entity_component._.name`) || n, r = this.hass.localize(
         `ui.dialogs.entity_registry.editor.device_classes.${n}.${a}`
       ) || a;
-      return `${c} - ${r}`;
+      return `${l} - ${r}`;
     }
     return e === "scene" ? "Scene" : this.hass.localize(`component.${e}.entity_component._.name`) || e;
   }
   _classesForArea(e, t, i, s, o, n) {
     var u;
-    const a = ((u = this._config) == null ? void 0 : u.extra_entities) || [], c = M1(
+    const a = ((u = this._config) == null ? void 0 : u.extra_entities) || [], l = M1(
       s,
       o,
       n,
       this.hass.states,
       { area: e, floor: t, label: i },
       X
-    ), r = /* @__PURE__ */ new Set(), l = /* @__PURE__ */ new Set();
-    for (const p in c) {
-      if (!Object.prototype.hasOwnProperty.call(c, p))
+    ), r = /* @__PURE__ */ new Set(), c = /* @__PURE__ */ new Set();
+    for (const p in l) {
+      if (!Object.prototype.hasOwnProperty.call(l, p))
         continue;
-      const m = c[p];
+      const m = l[p];
       ["binary_sensor", "cover", "switch"].includes(p) ? m.forEach((b) => {
         const g = b.attributes.device_class;
-        g && l.add(`${p} - ${g}`);
+        g && c.add(`${p} - ${g}`);
       }) : r.add(p);
     }
-    const d = this._dynamicOrder, h = [...l];
+    const d = this._dynamicOrder, h = [...c];
     return [...r, ...h, ...a].sort(
       (p, m) => {
         const b = d.indexOf(p), g = d.indexOf(m);
@@ -5589,19 +5624,19 @@ let q = class extends F {
     );
   }
   _buildOptions(e, t, i) {
-    var c;
-    const s = [.../* @__PURE__ */ new Set([...t, ...i])], o = ((c = this.hass) == null ? void 0 : c.states) || {}, n = /* @__PURE__ */ new Map(), a = s.map((r) => {
+    var l;
+    const s = [.../* @__PURE__ */ new Set([...t, ...i])], o = ((l = this.hass) == null ? void 0 : l.states) || {}, n = /* @__PURE__ */ new Map(), a = s.map((r) => {
       var d, h;
       if (n.has(r))
         return { value: r, label: n.get(r) };
-      let l;
-      return r.includes(".") ? l = ((h = (d = o[r]) == null ? void 0 : d.attributes) == null ? void 0 : h.friendly_name) || r : r === "scene" ? l = "Scene" : l = this._labelForTypePair(r), n.set(r, l), { value: r, label: l };
+      let c;
+      return r.includes(".") ? c = ((h = (d = o[r]) == null ? void 0 : d.attributes) == null ? void 0 : h.friendly_name) || r : r === "scene" ? c = "Scene" : c = this._labelForTypePair(r), n.set(r, c), { value: r, label: c };
     });
-    return a.sort((r, l) => {
-      const d = r.value.includes("."), h = l.value.includes(".");
+    return a.sort((r, c) => {
+      const d = r.value.includes("."), h = c.value.includes(".");
       return d && !h ? -1 : !d && h ? 1 : I1(
         r.label,
-        l.label,
+        c.label,
         this.hass.locale.language
       );
     }), a;
@@ -5655,8 +5690,8 @@ let q = class extends F {
     this._subElementEditorEntity = void 0;
   }
   _renderSubElementEditor(e, t, i) {
-    var r, l, d, h, u, p, m;
-    const s = `_subElementEditor${e.charAt(0).toUpperCase() + e.slice(1)}`, o = this[s], n = ((d = (l = (r = this._config) == null ? void 0 : r.customization) == null ? void 0 : l[(o == null ? void 0 : o.index) ?? 0]) == null ? void 0 : d.type) ?? "unknown", a = this._labelForTypePair(n), c = ((u = (h = this._config) == null ? void 0 : h.rulesets) == null ? void 0 : u.some((b) => b.group_id === n)) ?? !1;
+    var r, c, d, h, u, p, m;
+    const s = `_subElementEditor${e.charAt(0).toUpperCase() + e.slice(1)}`, o = this[s], n = ((d = (c = (r = this._config) == null ? void 0 : r.customization) == null ? void 0 : c[(o == null ? void 0 : o.index) ?? 0]) == null ? void 0 : d.type) ?? "unknown", a = this._labelForTypePair(n), l = ((u = (h = this._config) == null ? void 0 : h.rulesets) == null ? void 0 : u.some((b) => b.group_id === n)) ?? !1;
     return _`
       <div class="header">
         <div class="back-title">
@@ -5675,7 +5710,7 @@ let q = class extends F {
         .config=${((m = (p = this._config) == null ? void 0 : p.customization) == null ? void 0 : m[(o == null ? void 0 : o.index) ?? 0]) ?? {}}
         .getSchema=${e}
         .index=${(o == null ? void 0 : o.index) ?? 0}
-        .isGroup=${c}
+        .isGroup=${l}
         @config-changed=${i}
       >
       </status-card-item-editor>
@@ -5714,32 +5749,32 @@ let q = class extends F {
   _commitRulesets() {
     var n;
     const e = this.rulesets.map((a) => {
-      const c = a.rules.reduce(
-        (r, l) => (l.key && l.key !== "" && (r[l.key] = l.value ?? ""), r),
+      const l = a.rules.reduce(
+        (r, c) => (c.key && c.key !== "" && (r[c.key] = c.value ?? ""), r),
         {}
       );
       return {
         group_id: a.group_id ?? "",
         group_icon: a.group_icon ?? "",
         group_status: a.group_status ?? "",
-        ...c
+        ...l
       };
     }), t = Array.isArray((n = this._config) == null ? void 0 : n.content) ? [...this._config.content] : [], i = /* @__PURE__ */ new Map();
-    e.forEach((a, c) => {
-      const r = a.group_id ?? "", l = this._groupPreviousIds.get(c) ?? "";
-      l && l !== r && i.set(l, r);
+    e.forEach((a, l) => {
+      const r = a.group_id ?? "", c = this._groupPreviousIds.get(l) ?? "";
+      c && c !== r && i.set(c, r);
     });
     const s = /* @__PURE__ */ new Set(), o = [];
     for (const a of t) {
-      const c = i.get(a) ?? a;
-      s.has(c) || (s.add(c), o.push(c));
+      const l = i.get(a) ?? a;
+      s.has(l) || (s.add(l), o.push(l));
     }
     this._config = {
       ...this._config,
       rulesets: e,
       content: o
     }, this._groupPreviousIds.clear(), e.forEach(
-      (a, c) => this._groupPreviousIds.set(c, a.group_id ?? "")
+      (a, l) => this._groupPreviousIds.set(l, a.group_id ?? "")
     ), G(this, "config-changed", {
       config: this._config
     });
@@ -5819,7 +5854,7 @@ let q = class extends F {
     }), t;
   }
   _groupValueChanged(e, t) {
-    var l;
+    var c;
     const { value: i } = e.detail, s = this.rulesets[t] ?? {
       group_id: "",
       group_icon: "",
@@ -5835,15 +5870,15 @@ let q = class extends F {
         value: n[`value_${h}`] ?? ""
       };
     });
-    (a.length === 0 || ((l = a[a.length - 1]) == null ? void 0 : l.key) !== "") && a.push({ key: "", value: "" });
-    const c = {
+    (a.length === 0 || ((c = a[a.length - 1]) == null ? void 0 : c.key) !== "") && a.push({ key: "", value: "" });
+    const l = {
       group_id: n.group_id ?? "",
       group_icon: n.group_icon ?? "",
       group_status: n.group_status ?? "",
       rules: a
     };
     if (this.rulesets = this.rulesets.map(
-      (d, h) => h === t ? c : d
+      (d, h) => h === t ? l : d
     ), !Object.keys(n).some((d) => d === "group_id" ? !1 : n[d] !== o[d])) {
       this._groupDrafts.add(t);
       return;
@@ -5883,16 +5918,16 @@ let q = class extends F {
         y,
         V.map((x) => x.entity_id)
       ])
-    ), c = this._hiddenEntitiesByDomain(), r = ((S = this.hass) == null ? void 0 : S.states) || {}, l = Array.from(
-      /* @__PURE__ */ new Set([...Object.keys(a), ...Object.keys(c)])
+    ), l = this._hiddenEntitiesByDomain(), r = ((S = this.hass) == null ? void 0 : S.states) || {}, c = Array.from(
+      /* @__PURE__ */ new Set([...Object.keys(a), ...Object.keys(l)])
     ).filter((y) => [...X, "person"].includes(y)), d = Pt(
       r,
       this.hass.locale.language
     );
-    return l.sort((y, V) => y.localeCompare(V)).map((y) => {
+    return c.sort((y, V) => y.localeCompare(V)).map((y) => {
       const V = /* @__PURE__ */ new Set([
         ...a[y] || [],
-        ...c[y] || []
+        ...l[y] || []
       ]);
       return { domain: y, entities: Array.from(V).sort(d) };
     });
@@ -5913,37 +5948,37 @@ let q = class extends F {
     return this.hass.localize(i) || t;
   }
   _groupByDeviceClass(e, t) {
-    var a, c, r;
+    var a, l, r;
     const i = ((a = this.hass) == null ? void 0 : a.states) || {}, s = {};
-    for (const l of t) {
-      const d = ((r = (c = i[l]) == null ? void 0 : c.attributes) == null ? void 0 : r.device_class) || "";
-      d && (s[d] || (s[d] = []), s[d].push(l));
+    for (const c of t) {
+      const d = ((r = (l = i[c]) == null ? void 0 : l.attributes) == null ? void 0 : r.device_class) || "";
+      d && (s[d] || (s[d] = []), s[d].push(c));
     }
     const o = Pt(
       i,
       this.hass.locale.language
     );
-    return Object.keys(s).sort((l, d) => l.localeCompare(d)).map((l) => ({
-      deviceClass: l,
-      label: this._getDeviceClassLabel(e, l),
-      entities: s[l].slice().sort(o)
+    return Object.keys(s).sort((c, d) => c.localeCompare(d)).map((c) => ({
+      deviceClass: c,
+      label: this._getDeviceClassLabel(e, c),
+      entities: s[c].slice().sort(o)
     }));
   }
   _hiddenEntitiesByDomain() {
     var h, u, p, m, b;
     const e = {}, t = Array.isArray((h = this._config) == null ? void 0 : h.hidden_entities) ? this._config.hidden_entities : [];
     if (t.length === 0) return e;
-    const i = this.hass.entities || {}, s = this.hass.devices || {}, o = (u = this.hass) != null && u.areas ? Object.values(this.hass.areas) : [], n = (p = this._config) == null ? void 0 : p.area, a = (m = this._config) == null ? void 0 : m.floor, c = (b = this._config) == null ? void 0 : b.label, r = n ? Array.isArray(n) ? n : [n] : [], l = a ? Array.isArray(a) ? a : [a] : [], d = c ? Array.isArray(c) ? c : [c] : [];
+    const i = this.hass.entities || {}, s = this.hass.devices || {}, o = (u = this.hass) != null && u.areas ? Object.values(this.hass.areas) : [], n = (p = this._config) == null ? void 0 : p.area, a = (m = this._config) == null ? void 0 : m.floor, l = (b = this._config) == null ? void 0 : b.label, r = n ? Array.isArray(n) ? n : [n] : [], c = a ? Array.isArray(a) ? a : [a] : [], d = l ? Array.isArray(l) ? l : [l] : [];
     for (const g of t) {
       const f = z(g);
       if (![...X, "person"].includes(f)) continue;
       const C = i[g], v = C != null && C.device_id ? s[C.device_id] : void 0;
       if (((C == null ? void 0 : C.area_id) != null || (v == null ? void 0 : v.area_id) != null) && !(d.length && !(Array.isArray(C == null ? void 0 : C.labels) && C.labels.some((V) => d.includes(V)) || Array.isArray(v == null ? void 0 : v.labels) && v.labels.some((V) => d.includes(V)))) && !(r.length && !(C != null && C.area_id && r.includes(C.area_id) || v != null && v.area_id && r.includes(v.area_id)))) {
-        if (l.length) {
+        if (c.length) {
           const y = (C == null ? void 0 : C.area_id) && o.some(
-            (x) => x.area_id === C.area_id && x.floor_id && l.includes(x.floor_id)
+            (x) => x.area_id === C.area_id && x.floor_id && c.includes(x.floor_id)
           ), V = (v == null ? void 0 : v.area_id) && o.some(
-            (x) => x.area_id === v.area_id && x.floor_id && l.includes(x.floor_id)
+            (x) => x.area_id === v.area_id && x.floor_id && c.includes(x.floor_id)
           );
           if (!y && !V) continue;
         }
@@ -6120,26 +6155,26 @@ name:
                                         </div>
                                         <div class="content">
                                           ${a.entities.map(
-          (c) => {
-            var r, l;
+          (l) => {
+            var r, c;
             return _`
                                               <div class="entity-row">
                                                 <span class="entity-name">
-                                                  ${((l = (r = this.hass.states[c]) == null ? void 0 : r.attributes) == null ? void 0 : l.friendly_name) || c}
+                                                  ${((c = (r = this.hass.states[l]) == null ? void 0 : r.attributes) == null ? void 0 : c.friendly_name) || l}
                                                 </span>
                                                 <ha-icon-button
                                                   .path=${this._isHiddenEntity(
-              c
+              l
             ) ? Xe : Je}
                                                   .label=${this._isHiddenEntity(
-              c
+              l
             ) ? this.hass.localize(
               "ui.common.show"
             ) ?? "Show" : this.hass.localize(
               "ui.common.hide"
             ) ?? "Hide"}
                                                   @click=${() => this._toggleEntityHidden(
-              c
+              l
             )}
                                                 ></ha-icon-button>
                                               </div>
@@ -6151,11 +6186,11 @@ name:
                                     `
       ) : n.entities.map(
         (a) => {
-          var c, r;
+          var l, r;
           return _`
                                       <div class="entity-row">
                                         <span class="entity-name">
-                                          ${((r = (c = this.hass.states[a]) == null ? void 0 : c.attributes) == null ? void 0 : r.friendly_name) || a}
+                                          ${((r = (l = this.hass.states[a]) == null ? void 0 : l.attributes) == null ? void 0 : r.friendly_name) || a}
                                         </span>
                                         <ha-icon-button
                                           .path=${this._isHiddenEntity(a) ? Xe : Je}
@@ -6198,7 +6233,7 @@ name:
                           <ha-icon-button
                             slot="trigger"
                             .label=${this.hass.localize("ui.common.remove")}
-                            .path=${Rt}
+                            .path=${Ft}
                             @click=${() => this._removeRuleset(a)}
                           ></ha-icon-button>
                         </span>
@@ -6209,7 +6244,7 @@ name:
                           .data=${this._groupFormData(n)}
                           .schema=${this.getGroupSchema(n)}
                           .computeLabel=${this.computeLabel}
-                          @value-changed=${(c) => this._groupValueChanged(c, a)}
+                          @value-changed=${(l) => this._groupValueChanged(l, a)}
                           @focusout=${() => this._groupFormBlur(a)}
                         ></ha-form>
                       </div>

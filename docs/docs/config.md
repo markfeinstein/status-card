@@ -115,6 +115,16 @@ native_groups: # groups rendered from native domain entity lists without registr
     badge_active_count: true
     exclude_entities:
       - climate.car_*
+  - group_id: Low Batteries
+    group_icon: mdi:battery-charging-low
+    domains:
+      - sensor
+    filters:
+      - key: attributes
+        value:
+          device_class: battery
+      - key: state
+        value: <20
 content: # lists all domains/device_classes to show
   - light
   - Comfort
