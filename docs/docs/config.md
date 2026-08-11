@@ -105,7 +105,7 @@ rulesets: # one or multiple rules for smart groups
     attributes:
       device_class: battery
     state: <10
-native_groups: # groups rendered from native domain entity lists without registry rules
+native_groups: # groups rendered from native domain entity lists without registry rules; domains such as sensor are supported
   - group_id: Comfort
     group_icon: mdi:thermostat
     domains:

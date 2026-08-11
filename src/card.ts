@@ -947,7 +947,14 @@ export class StatusCard extends LitElement {
         ].filter(Boolean) as Array<{ key: string; value: unknown }>);
     const seen = new Set<string>();
     return domains
-      .flatMap((domain) => this._totalEntities(String(domain)))
+      .flatMap((domain) => {
+        const domainText = String(domain);
+        const indexed = this.entitiesByDomain[domainText];
+        if (indexed) return indexed;
+        return Object.values(this.hass?.states || {}).filter(
+          (entity) => computeDomain(entity.entity_id) === domainText,
+        );
+      })
       .filter((entity) => {
         if (seen.has(entity.entity_id)) return false;
         seen.add(entity.entity_id);

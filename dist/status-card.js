@@ -3856,7 +3856,13 @@ let $ = class extends N {
       e.state !== void 0 ? { key: "state", value: e.state } : void 0,
       e.attributes !== void 0 ? { key: "attributes", value: e.attributes } : void 0
     ].filter(Boolean), o = /* @__PURE__ */ new Set();
-    return t.flatMap((n) => this._totalEntities(String(n))).filter((n) => o.has(n.entity_id) || (o.add(n.entity_id), i.some(
+    return t.flatMap((n) => {
+      var r;
+      const a = String(n), l = this.entitiesByDomain[a];
+      return l || Object.values(((r = this.hass) == null ? void 0 : r.states) || {}).filter(
+        (c) => z(c.entity_id) === a
+      );
+    }).filter((n) => o.has(n.entity_id) || (o.add(n.entity_id), i.some(
       (a) => this._matchNativeGroupPattern(n.entity_id, String(a))
     )) ? !1 : s.every(
       (a) => this._nativeGroupMatchesFilter(
