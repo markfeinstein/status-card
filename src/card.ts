@@ -85,6 +85,7 @@ export class StatusCard extends LitElement {
   @state() public badge_color: string = "";
   @state() public badge_text_color: string = "";
   @state() public selectedGroup: number | null = null;
+  @state() public selectedNativeGroup: number | null = null;
 
   @property({ attribute: false }) public hass!: HomeAssistant;
 
@@ -100,6 +101,7 @@ export class StatusCard extends LitElement {
   @state() private _parsedGlobalStateCss: Record<string, string> = {};
   private _resetDomainTimeout?: ReturnType<typeof setTimeout>;
   private _resetGroupTimeout?: ReturnType<typeof setTimeout>;
+  private _resetNativeGroupTimeout?: ReturnType<typeof setTimeout>;
 
   private _ensureRegistryData(): void {
     if (
@@ -147,6 +149,7 @@ export class StatusCard extends LitElement {
     if (changedProps.has("selectedDomain")) return true;
     if (changedProps.has("selectedDeviceClass")) return true;
     if (changedProps.has("selectedGroup")) return true;
+    if (changedProps.has("selectedNativeGroup")) return true;
     if (changedProps.has("list_mode")) return true;
     if (changedProps.has("badge_mode")) return true;
     if (changedProps.has("_shouldHideCard")) return true;
@@ -258,6 +261,28 @@ export class StatusCard extends LitElement {
   );
 
   private _computeGroupItemsMemo = memoizeOne(computeGroupItems);
+  private _computeNativeGroupItemsMemo = memoizeOne(
+    (content: string[], nativeGroups?: LovelaceCardConfig[]) =>
+      content
+        .map((id, idx) => {
+          const config = nativeGroups?.find(
+            (group) => (group.group_id || group.id || group.name) === id,
+          );
+          if (!config || !Array.isArray(config.domains)) return undefined;
+          return {
+            type: "nativeGroup" as const,
+            group_id: id,
+            order: idx,
+            config,
+          };
+        })
+        .filter((item): item is {
+          type: "nativeGroup";
+          group_id: string;
+          order: number;
+          config: LovelaceCardConfig;
+        } => !!item),
+  );
   private _computeDomainItemsMemo = memoizeOne(computeDomainItems);
   private _computeDeviceClassItemsMemo = memoizeOne(computeDeviceClassItems);
 
@@ -506,6 +531,33 @@ export class StatusCard extends LitElement {
     },
   );
 
+  private _openNativeGroupPopup(index: number) {
+    const item = this.getNativeGroupItems().find((entry) => entry.order === index);
+    if (!item) return;
+    const customization = this.getCustomizationForType(item.group_id);
+    const allEntities = this._nativeGroupEntities(item.config);
+    const activeEntities = this._activeBadgeEntities(allEntities);
+    const showAll =
+      this._config.show_total_entities === true ||
+      item.config.show_total_entities === true ||
+      customization?.show_total_entities === true;
+
+    this._showPopup(this, "status-card-popup", {
+      title: customization?.name || item.config.name || item.group_id,
+      hass: this.hass,
+      entities: showAll ? allEntities : activeEntities,
+      allEntities,
+      selectedGroup: index,
+      card: this,
+      opener: this,
+      content: allEntities.length
+        ? undefined
+        : (this.hass?.localize("ui.card.empty_state.no_entities") ??
+          "No entities"),
+      initialShowAll: showAll,
+    });
+  }
+
   private _openDomainPopup(domain: string | number) {
     let title = "Details";
     if (typeof domain === "string") {
@@ -580,6 +632,7 @@ export class StatusCard extends LitElement {
     super.disconnectedCallback();
     clearTimeout(this._resetDomainTimeout);
     clearTimeout(this._resetGroupTimeout);
+    clearTimeout(this._resetNativeGroupTimeout);
   }
 
   protected willUpdate(changedProps: PropertyValues): void {
@@ -634,6 +687,18 @@ export class StatusCard extends LitElement {
       clearTimeout(this._resetGroupTimeout);
       this._resetGroupTimeout = setTimeout(() => {
         this.selectedGroup = null;
+      }, 0);
+    }
+
+    if (
+      changedProps.has("selectedNativeGroup") &&
+      this.selectedNativeGroup !== null
+    ) {
+      const group = this.selectedNativeGroup;
+      this._openNativeGroupPopup(group);
+      clearTimeout(this._resetNativeGroupTimeout);
+      this._resetNativeGroupTimeout = setTimeout(() => {
+        this.selectedNativeGroup = null;
       }, 0);
     }
 
@@ -788,6 +853,46 @@ export class StatusCard extends LitElement {
       this._config.content || [],
       this._config.rulesets || [],
     );
+  }
+
+  private getNativeGroupItems() {
+    return this._computeNativeGroupItemsMemo(
+      this._config.content || [],
+      this._config.native_groups || [],
+    );
+  }
+
+  private _matchNativeGroupPattern(entityId: string, pattern: string): boolean {
+    if (pattern.includes("*")) {
+      const regex = new RegExp(
+        "^" +
+          pattern
+            .split("*")
+            .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+            .join(".*") +
+          "$",
+        "i",
+      );
+      return regex.test(entityId);
+    }
+    return entityId === pattern;
+  }
+
+  private _nativeGroupEntities(config: LovelaceCardConfig): HassEntity[] {
+    const domains = Array.isArray(config.domains) ? config.domains : [];
+    const excludes = Array.isArray(config.exclude_entities)
+      ? config.exclude_entities
+      : [];
+    const seen = new Set<string>();
+    return domains
+      .flatMap((domain) => this._totalEntities(String(domain)))
+      .filter((entity) => {
+        if (seen.has(entity.entity_id)) return false;
+        seen.add(entity.entity_id);
+        return !excludes.some((pattern: string) =>
+          this._matchNativeGroupPattern(entity.entity_id, String(pattern)),
+        );
+      });
   }
 
   private getDomainItems(): DomainItem[] {
@@ -1155,6 +1260,125 @@ export class StatusCard extends LitElement {
     `;
   }
 
+  private _handleNativeGroupAction(
+    index: number,
+  ): (ev: ActionHandlerEvent) => void {
+    return (ev: ActionHandlerEvent) => {
+      ev.stopPropagation();
+      const action = ev.detail.action;
+      const groupId = this._config.content?.[index];
+      const customization = groupId
+        ? this.getCustomizationForType(groupId)
+        : undefined;
+      const actionConfig = customization?.[`${action}_action`] ?? this._config?.[`${action}_action`];
+      if (
+        actionConfig === undefined ||
+        actionConfig === "more-info" ||
+        actionConfig?.action === "more-info"
+      ) {
+        this.selectedNativeGroup = index;
+      }
+    };
+  }
+
+  private renderNativeGroupTab(item: {
+    type: "nativeGroup";
+    group_id: string;
+    order: number;
+    config: LovelaceCardConfig;
+  }): TemplateResult {
+    const entities = this._nativeGroupEntities(item.config);
+    const customization = this.getCustomizationForType(item.group_id);
+    const showAll =
+      this._config.show_total_entities === true ||
+      item.config.show_total_entities === true ||
+      customization?.show_total_entities === true;
+    const active = this._activeBadgeEntities(entities);
+    const visibleEntities = showAll ? entities : active;
+    if (!visibleEntities.length) return html``;
+
+    const groupIcon = customization?.icon || item.config.group_icon || item.config.icon || mdiFormatListGroup;
+    const color = getCustomColor(
+      this._config,
+      item.group_id,
+      undefined,
+      this._customizationIndexMemo(this._config.customization),
+    );
+    const background_color = getBackgroundColor(
+      this._config,
+      item.group_id,
+      undefined,
+      this._customizationIndexMemo(this._config.customization),
+    );
+    const handler = this._handleNativeGroupAction(item.order);
+    const {
+      ah,
+      contentClasses,
+      iconStyles,
+      badgeStyles,
+      buttonStyles,
+      customIconStyles,
+      showBadge,
+    } = this._computeTabStyles(customization, "domain", {
+      color,
+      background_color,
+    });
+    const badgeCount =
+      customization?.badge_active_count === true ||
+      item.config.badge_active_count === true ||
+      this._config.badge_active_count === true
+        ? active.length
+        : visibleEntities.length;
+
+    return html`
+      <ha-tab-group-tab
+        slot="nav"
+        panel=${"native-group-" + item.order}
+        @action=${handler}
+        .actionHandler=${ah}
+        class=${showBadge ? "badge-mode" : ""}
+        style=${styleMap(badgeStyles)}
+        data-badge=${ifDefined(
+          showBadge && visibleEntities.length > 0
+            ? String(badgeCount)
+            : undefined,
+        )}
+      >
+        <div
+          class="entity ${classMap(contentClasses)}"
+          style=${styleMap(buttonStyles)}
+        >
+          <div
+            class="entity-icon"
+            style=${styleMap({ ...iconStyles, ...customIconStyles })}
+          >
+            ${String(groupIcon).startsWith("M")
+              ? html`<ha-svg-icon .path=${groupIcon}></ha-svg-icon>`
+              : html`<ha-icon icon=${groupIcon}></ha-icon>`}
+          </div>
+          ${!showBadge
+            ? html`<div class="entity-info">
+                ${!this.hide_content_name
+                  ? html`<div
+                      class="entity-name"
+                      style=${styleMap(this._parsedGlobalNameCss)}
+                    >
+                      ${customization?.name || item.config.name || item.group_id}
+                    </div>`
+                  : ""}
+                <div
+                  class="entity-state"
+                  style=${styleMap(this._parsedGlobalStateCss)}
+                >
+                  ${visibleEntities.length}
+                </div>
+              </div>`
+            : ""}
+        </div>
+      </ha-tab-group-tab>
+    `;
+  }
+
   private renderItemTab(item: DomainItem | DeviceClassItem): TemplateResult {
     const domain = item.domain;
     const deviceClass = (item as DeviceClassItem).deviceClass;
@@ -1276,21 +1500,39 @@ export class StatusCard extends LitElement {
     (
       extra: ExtraItem[],
       group: GroupItem[],
+      nativeGroup: Array<{
+        type: "nativeGroup";
+        group_id: string;
+        order: number;
+        config: LovelaceCardConfig;
+      }>,
       domain: DomainItem[],
       deviceClass: DeviceClassItem[],
-    ): AnyItem[] =>
-      [...extra, ...group, ...domain, ...deviceClass].sort(
+    ): Array<AnyItem | {
+      type: "nativeGroup";
+      group_id: string;
+      order: number;
+      config: LovelaceCardConfig;
+    }> =>
+      [...extra, ...group, ...nativeGroup, ...domain, ...deviceClass].sort(
         (a, b) => a.order - b.order,
       ),
   );
 
-  protected renderTab(item: AnyItem): TemplateResult {
+  protected renderTab(item: AnyItem | {
+    type: "nativeGroup";
+    group_id: string;
+    order: number;
+    config: LovelaceCardConfig;
+  }): TemplateResult {
     switch (item.type) {
       case "extra":
         return this.renderExtraTab(item);
 
       case "group":
         return this.renderGroupTab(item.ruleset, item.order);
+      case "nativeGroup":
+        return this.renderNativeGroupTab(item);
       case "domain":
       case "deviceClass":
         return this.renderItemTab(item);
@@ -1300,12 +1542,14 @@ export class StatusCard extends LitElement {
   protected render() {
     const extra = this.getExtraItems();
     const group = this.getGroupItems();
+    const nativeGroup = this.getNativeGroupItems();
     const domain = this.getDomainItems();
     const deviceClass = this.getDeviceClassItems();
 
     const sorted = this._computeSortedEntities(
       extra,
       group,
+      nativeGroup,
       domain,
       deviceClass,
     );
@@ -1437,7 +1681,9 @@ export class StatusCard extends LitElement {
                     ? `${i.domain}-${i.deviceClass}`
                     : i.type === "group"
                       ? `group-${i.group_id}`
-                      : "",
+                      : i.type === "nativeGroup"
+                        ? `native-group-${i.group_id}`
+                        : "",
             (i) => this.renderTab(i),
           )}
         </ha-tab-group>

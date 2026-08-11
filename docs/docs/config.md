@@ -105,8 +105,19 @@ rulesets: # one or multiple rules for smart groups
     attributes:
       device_class: battery
     state: <10
+native_groups: # groups rendered from native domain entity lists without registry rules
+  - group_id: Comfort
+    group_icon: mdi:thermostat
+    domains:
+      - climate
+      - fan
+    show_total_entities: true
+    badge_active_count: true
+    exclude_entities:
+      - climate.car_*
 content: # lists all domains/device_classes to show
   - light
+  - Comfort
   - switch
   - Binary Sensor - window
 
