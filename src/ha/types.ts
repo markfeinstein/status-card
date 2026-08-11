@@ -14,8 +14,9 @@ import type {
   TranslationCategory,
 } from "./data/translation";
 import type { Themes } from "./data/ws-themes";
-import type { LovelaceCardConfig, EntityRegistryEntry } from "../ha";
-import { TemplateResult } from "lit";
+import type { LovelaceCardConfig } from "./data/lovelace";
+import type { EntityRegistryEntry } from "./data/entity_registry";
+import type { TemplateResult } from "lit";
 
 export interface ConfigChangedEvent {
   config: LovelaceCardConfig;

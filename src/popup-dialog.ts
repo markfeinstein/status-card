@@ -15,7 +15,6 @@ import {
   HomeAssistant,
   computeDomain,
   Schema,
-  STATES_OFF,
 } from "./ha";
 import {
   compareByFriendlyName,
@@ -63,6 +62,7 @@ export class StatusCardPopup extends LitElement {
   private _lastEntityIds: string[] = [];
   private _activeEntities: HassEntity[] = [];
   private _allEntities: HassEntity[] = [];
+  private _allEntitiesAreExplicit = false;
   private _currentEntitiesCache: HassEntity[] = [];
   private _opener: HTMLElement | null = null;
 
@@ -83,10 +83,11 @@ export class StatusCardPopup extends LitElement {
     this.hass = params.hass;
     this._opener = params.opener ?? null;
     this._activeEntities = params.entities ?? [];
-    this._allEntities = params.allEntities ?? [];
-    if (!params.allEntities || params.allEntities.length === 0) {
-      this._allEntities = this._activeEntities;
-    }
+    this._allEntitiesAreExplicit =
+      Array.isArray(params.allEntities) && params.allEntities.length > 0;
+    this._allEntities = this._allEntitiesAreExplicit
+      ? params.allEntities!
+      : this._activeEntities;
 
     this.entities = params.entities ?? [];
     if (params.content !== undefined) this.content = params.content;
@@ -96,6 +97,8 @@ export class StatusCardPopup extends LitElement {
     this.card = params.card as StatusCard;
     this._cardEls.clear();
     this._showAll = params.initialShowAll ?? false;
+    this._currentEntitiesCache = this._getCurrentEntities();
+    this._entities = this._currentEntitiesCache;
     this.open = true;
     window.history.pushState({ statusCardPopup: true }, "");
     await ensureHelpersLoaded();
@@ -150,6 +153,7 @@ export class StatusCardPopup extends LitElement {
     this._cardEls.clear();
     this._popupCardConfigCache.clear();
     this._cardElementCache.clear();
+    this._allEntitiesAreExplicit = false;
     this.dispatchEvent(
       new CustomEvent("dialog-closed", {
         bubbles: true,
@@ -177,6 +181,7 @@ export class StatusCardPopup extends LitElement {
     this._cardEls.clear();
     this._popupCardConfigCache.clear();
     this._cardElementCache.clear();
+    this._allEntitiesAreExplicit = false;
   }
 
   private _onPopState = (ev: PopStateEvent) => {
@@ -271,18 +276,15 @@ export class StatusCardPopup extends LitElement {
         !oldHass ||
         oldHass.themes !== newHass.themes ||
         oldHass.language !== newHass.language ||
+        oldHass.locale !== newHass.locale ||
         oldHass.localize !== newHass.localize ||
+        oldHass.entities !== newHass.entities ||
+        oldHass.devices !== newHass.devices ||
+        oldHass.areas !== newHass.areas ||
         this._hasRelevantStateChanged(oldHass, newHass)
       ) {
         this._currentEntitiesCache = this._getCurrentEntities();
-        const currentIds = this._currentEntitiesCache
-          .map((e) => e.entity_id)
-          .sort();
-        const lastIds = (this._lastEntityIds || []).slice().sort();
-        const same =
-          currentIds.length === lastIds.length &&
-          currentIds.every((id, i) => id === lastIds[i]);
-        return !same;
+        return true;
       }
       return false;
     }
@@ -369,9 +371,18 @@ export class StatusCardPopup extends LitElement {
       changedProps.has("open") ||
       changedProps.has("hass") ||
       changedProps.has("selectedDomain") ||
+      changedProps.has("selectedDeviceClass") ||
       changedProps.has("selectedGroup") ||
+      changedProps.has("entities") ||
       changedProps.has("_showAll")
     ) {
+      if (changedProps.has("entities")) {
+        this._activeEntities = this.entities ?? [];
+        if (!this._allEntitiesAreExplicit) {
+          this._allEntities = this._activeEntities;
+        }
+      }
+      this._currentEntitiesCache = this._getCurrentEntities();
       this._entities = this._currentEntitiesCache.length > 0
         ? this._currentEntitiesCache
         : this._getCurrentEntities();
@@ -398,20 +409,50 @@ export class StatusCardPopup extends LitElement {
     return isEntityActive(entity, domain, deviceClass, isInverted);
   }
 
+  private _matchesSelectedType(entity: HassEntity): boolean {
+    if (!this.selectedDomain) return true;
+    if (computeDomain(entity.entity_id) !== this.selectedDomain) return false;
+    if (!this.selectedDeviceClass) return true;
+    const deviceClass = entity.attributes.device_class;
+    if (
+      this.selectedDomain === "switch" &&
+      this.selectedDeviceClass === "switch"
+    ) {
+      return deviceClass === "switch" || deviceClass === undefined;
+    }
+    return deviceClass === this.selectedDeviceClass;
+  }
+
   private _getCurrentEntities(): HassEntity[] {
-    if (!this.hass)
-      return this._showAll ? this._allEntities : this._activeEntities;
+    if (!this.hass) {
+      const base = this._showAll ? this._allEntities : this._activeEntities;
+      return base.filter((entity) => this._matchesSelectedType(entity));
+    }
+
+    const updatedAll = this._allEntities
+      .map((e) => this._getUpdatedEntity(e))
+      .filter((entity) => this._matchesSelectedType(entity));
 
     if (this._showAll) {
-      return this._allEntities.map((e) => this._getUpdatedEntity(e));
+      return updatedAll;
     }
 
-    if (this.selectedGroup !== undefined) {
-      return this._activeEntities.map((e) => this._getUpdatedEntity(e));
+    if (this.selectedGroup !== undefined && !this._selectedGroupIsNativeGroup()) {
+      return this._activeEntities
+        .map((e) => this._getUpdatedEntity(e))
+        .filter((entity) => this._matchesSelectedType(entity));
     }
 
-    const updatedAll = this._allEntities.map((e) => this._getUpdatedEntity(e));
     return updatedAll.filter((e) => this._isEntityActive(e));
+  }
+
+  private _selectedGroupIsNativeGroup(): boolean {
+    if (this.selectedGroup === undefined || !this.card?._config) return false;
+    const groupId = this.card._config.content?.[this.selectedGroup];
+    if (!groupId) return false;
+    return (this.card._config.native_groups || []).some(
+      (group) => (group.group_id || group.id || group.name) === groupId,
+    );
   }
 
   private toggleAllOrOn(): void {
@@ -568,7 +609,7 @@ export class StatusCardPopup extends LitElement {
   }
 
   private _isActive(e: HassEntity): boolean {
-    return !STATES_OFF.includes(e.state);
+    return this._isEntityActive(e);
   }
 
   private _popupCardConfigCache = new Map<string, PopupCardConfigCache>();

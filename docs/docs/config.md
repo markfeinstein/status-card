@@ -105,7 +105,9 @@ rulesets: # one or multiple rules for smart groups
     attributes:
       device_class: battery
     state: <10
-native_groups: # groups rendered from native domain entity lists without registry rules; domains such as sensor are supported
+# Native groups discover registry-backed entities by domain; domains such as sensor are supported.
+# State-only entities absent from the Home Assistant entity registry are not auto-discovered.
+native_groups:
   - group_id: Comfort
     group_icon: mdi:thermostat
     domains:

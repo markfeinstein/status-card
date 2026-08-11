@@ -53,6 +53,13 @@ import {
   filterDynamicEntities,
 } from "./smart_groups";
 import {
+  matchNativeGroupPattern,
+  nativeGroupDomains,
+  nativeGroupExcludePatterns,
+  nativeGroupFilters,
+  nativeGroupMatchesFilter,
+} from "./native-groups";
+import {
   getBackgroundColor,
   getCustomColor,
   getCustomIcon,
@@ -102,6 +109,18 @@ export class StatusCard extends LitElement {
   private _resetDomainTimeout?: ReturnType<typeof setTimeout>;
   private _resetGroupTimeout?: ReturnType<typeof setTimeout>;
   private _resetNativeGroupTimeout?: ReturnType<typeof setTimeout>;
+  private _nativeGroupDomainIndexCache: {
+    domainsKey: string;
+    entities: HomeAssistant["entities"] | undefined;
+    index: Map<string, string[]>;
+  } = { domainsKey: "", entities: undefined, index: new Map() };
+
+  private _invalidateRegistryData(): void {
+    this.__registryEntities = [];
+    this.__registryDevices = [];
+    this.__registryAreas = [];
+    this.__registryFetchInProgress = false;
+  }
 
   private _ensureRegistryData(): void {
     if (
@@ -161,10 +180,225 @@ export class StatusCard extends LitElement {
     if (!oldHass || !this.hass) return true;
 
     if (oldHass.themes !== this.hass.themes) return true;
-    if (oldHass.states !== this.hass.states) return true;
     if (oldHass.localize !== this.hass.localize) return true;
     if (oldHass.language !== this.hass.language) return true;
+    if (
+      oldHass.entities !== this.hass.entities ||
+      oldHass.devices !== this.hass.devices ||
+      oldHass.areas !== this.hass.areas
+    ) {
+      this._invalidateNativeGroupDomainIndex();
+      this._invalidateRegistryData();
+      return true;
+    }
 
+    if (oldHass.states !== this.hass.states) {
+      return this._hasRelevantHassStateChange(oldHass, this.hass);
+    }
+
+    return false;
+  }
+
+  private _hasRelevantHassStateChange(
+    oldHass: HomeAssistant,
+    newHass: HomeAssistant,
+  ): boolean {
+    if (this._hasTimeRelativeRules()) return true;
+
+    const oldStates = oldHass.states || {};
+    const newStates = newHass.states || {};
+    const nativeGroups = this.getNativeGroupItems();
+    if (nativeGroups.length > 0) {
+      const domainsKey = this._nativeGroupDomainsKey(
+        nativeGroups.flatMap((item) => nativeGroupDomains(item.config)),
+      );
+      const cached = this._nativeGroupDomainIndexCache;
+      if (cached.domainsKey !== domainsKey || cached.entities !== this.hass.entities) {
+        return true;
+      }
+      for (const item of nativeGroups) {
+        if (this._nativeGroupRelevantStateChanged(item.config, oldStates, newStates)) {
+          return true;
+        }
+      }
+    }
+
+    const relevantIds = this._stableRelevantEntityIds();
+    if (!relevantIds) return true;
+
+    for (const entityId of relevantIds) {
+      if (oldStates[entityId] !== newStates[entityId]) return true;
+    }
+    return false;
+  }
+
+  private _hasTimeRelativeRules(): boolean {
+    const timeKeys = new Set(["last_changed", "last_updated", "last_triggered"]);
+    const hasRelativeFilter = (filter: unknown): boolean => {
+      if (!filter || typeof filter !== "object") return false;
+      const { key, value } = filter as { key?: unknown; value?: unknown };
+      return (
+        typeof key === "string" &&
+        timeKeys.has(key) &&
+        typeof value === "string" &&
+        /^([<>]=?)?\s*-?\d+(?:\.\d+)?(?:[mhd])?$/.test(value)
+      );
+    };
+
+    return (this._config.rulesets || []).some((ruleset) => {
+      if (Array.isArray(ruleset.filters)) {
+        return ruleset.filters.some(hasRelativeFilter);
+      }
+      return [...timeKeys].some(
+        (key) => (ruleset as Record<string, unknown>)[key] !== undefined,
+      );
+    });
+  }
+
+  private _stableRelevantEntityIds(): Set<string> | null {
+    if (!this.hass) return null;
+    const ids = new Set<string>();
+
+    const extraEntities = this._config.extra_entities as string[] | undefined;
+    extraEntities?.forEach((id) => ids.add(id));
+
+    this.getPersonItems().forEach((entity) => ids.add(entity.entity_id));
+
+    const domainItems = [...this.getDomainItems(), ...this.getDeviceClassItems()];
+    if (domainItems.length) {
+      const includedIds = this._computeIncludedIdsMemo(
+        this.hass.entities || {},
+        this.hass.devices || {},
+        this.hass.areas || {},
+        this._config?.area || null,
+        this._config?.floor || null,
+        this._config?.label || null,
+        this.hiddenAreas,
+        this.hiddenLabels,
+        this.hiddenEntities,
+      );
+      includedIds.forEach((id) => ids.add(id));
+    }
+
+    const rulesets = this._config.rulesets || [];
+    if (rulesets.length) {
+      if (!this.__registryEntities.length) return null;
+      const candidatesMap = this._computeGroupCandidatesMemo(
+        rulesets,
+        this.__registryEntities,
+        this.__registryDevices,
+        this.__registryAreas,
+        this.hiddenEntities,
+      );
+      candidatesMap.forEach((candidates) => candidates.forEach((id) => ids.add(id)));
+    }
+
+    return ids;
+  }
+
+  private _nativeGroupDomainsKey(domains: Iterable<string>): string {
+    return [...new Set(Array.from(domains))].sort().join("\u0000");
+  }
+
+  private _invalidateNativeGroupDomainIndex(): void {
+    this._nativeGroupDomainIndexCache = {
+      domainsKey: "",
+      entities: undefined,
+      index: new Map(),
+    };
+  }
+
+  private _nativeGroupDomainIndex(domains: Iterable<string>): Map<string, string[]> {
+    const domainSet = new Set(Array.from(domains));
+    const domainsKey = this._nativeGroupDomainsKey(domainSet);
+    const entities = this.hass?.entities;
+    const cached = this._nativeGroupDomainIndexCache;
+    if (cached.domainsKey === domainsKey && cached.entities === entities) {
+      return cached.index;
+    }
+
+    const index = new Map<string, string[]>();
+    const seen = new Set<string>();
+    domainSet.forEach((domain) => index.set(domain, []));
+
+    // Native groups discover registry-backed entity IDs from hass.entities.
+    // Direct explicit state entities remain supported elsewhere, but native
+    // groups intentionally do not scan hass.states for state-only additions;
+    // new native-group IDs are picked up when hass.entities identity changes.
+    const addId = (entityId: string) => {
+      if (seen.has(entityId)) return;
+      const domain = computeDomain(entityId);
+      if (!domainSet.has(domain)) return;
+      seen.add(entityId);
+      index.get(domain)?.push(entityId);
+    };
+
+    Object.keys(entities || {}).forEach(addId);
+
+    this._nativeGroupDomainIndexCache = { domainsKey, entities, index };
+    return index;
+  }
+
+  private _configuredNativeGroupDomains(): string[] {
+    return this.getNativeGroupItems().flatMap((item) =>
+      nativeGroupDomains(item.config),
+    );
+  }
+
+  private _nativeGroupCandidateIds(config: LovelaceCardConfig): string[] {
+    const domains = nativeGroupDomains(config);
+    const excludes = nativeGroupExcludePatterns(config);
+    const index = this._nativeGroupDomainIndex(
+      this._configuredNativeGroupDomains(),
+    );
+    const seen = new Set<string>();
+    const ids: string[] = [];
+    domains.forEach((domain) => {
+      (index.get(domain) || []).forEach((entityId) => {
+        if (seen.has(entityId)) return;
+        seen.add(entityId);
+        if (excludes.some((pattern) => matchNativeGroupPattern(entityId, pattern))) {
+          return;
+        }
+        ids.push(entityId);
+      });
+    });
+    return ids;
+  }
+
+  private _nativeGroupStateCanAffect(
+    config: LovelaceCardConfig,
+    entity: HassEntity | undefined,
+  ): boolean {
+    if (!entity) return false;
+    const domains = new Set(nativeGroupDomains(config));
+    if (!domains.has(computeDomain(entity.entity_id))) return false;
+    if (
+      nativeGroupExcludePatterns(config).some((pattern) =>
+        matchNativeGroupPattern(entity.entity_id, pattern),
+      )
+    ) {
+      return false;
+    }
+    return nativeGroupFilters(config).every((filter) =>
+      nativeGroupMatchesFilter(entity, filter),
+    );
+  }
+
+  private _nativeGroupRelevantStateChanged(
+    config: LovelaceCardConfig,
+    oldStates: HomeAssistant["states"],
+    newStates: HomeAssistant["states"],
+  ): boolean {
+    for (const entityId of this._nativeGroupCandidateIds(config)) {
+      if (oldStates[entityId] === newStates[entityId]) continue;
+      if (
+        this._nativeGroupStateCanAffect(config, oldStates[entityId]) ||
+        this._nativeGroupStateCanAffect(config, newStates[entityId])
+      ) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -862,115 +1096,13 @@ export class StatusCard extends LitElement {
     );
   }
 
-  private _matchNativeGroupPattern(entityId: string, pattern: string): boolean {
-    if (pattern.includes("*")) {
-      const regex = new RegExp(
-        "^" +
-          pattern
-            .split("*")
-            .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-            .join(".*") +
-          "$",
-        "i",
-      );
-      return regex.test(entityId);
-    }
-    return entityId === pattern;
-  }
-
-  private _matchNativeGroupValue(actual: unknown, expected: unknown): boolean {
-    if (Array.isArray(expected)) {
-      return expected.some((value) => this._matchNativeGroupValue(actual, value));
-    }
-    if (typeof expected === "string" && expected.startsWith("!")) {
-      return !this._matchNativeGroupValue(actual, expected.slice(1));
-    }
-    if (
-      typeof expected === "string" &&
-      /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/.test(expected)
-    ) {
-      const [, op, numberText] = expected.match(
-        /^([<>]=?)\s*(-?\d+(?:\.\d+)?)$/,
-      ) || [undefined, undefined, undefined];
-      const wanted = Number(numberText);
-      const received = Number(actual);
-      if (!Number.isFinite(wanted) || !Number.isFinite(received)) return false;
-      if (op === ">") return received > wanted;
-      if (op === ">=") return received >= wanted;
-      if (op === "<") return received < wanted;
-      if (op === "<=") return received <= wanted;
-    }
-    if (typeof expected === "string" && expected.includes("*")) {
-      return this._matchNativeGroupPattern(String(actual), expected);
-    }
-    return actual === expected;
-  }
-
-  private _nativeGroupMatchesFilter(
-    entity: HassEntity,
-    key: string,
-    expected: unknown,
-  ): boolean {
-    if (key === "state") return this._matchNativeGroupValue(entity.state, expected);
-    if (key === "entity_id") {
-      return this._matchNativeGroupValue(entity.entity_id, expected);
-    }
-    if (key === "attributes" && expected && typeof expected === "object") {
-      return Object.entries(expected).every(([attrKey, attrExpected]) => {
-        const value = attrKey.split(":").reduce<unknown>(
-          (current, part) =>
-            current && typeof current === "object"
-              ? (current as Record<string, unknown>)[part]
-              : undefined,
-          entity.attributes,
-        );
-        return this._matchNativeGroupValue(value, attrExpected);
-      });
-    }
-    return true;
-  }
-
   private _nativeGroupEntities(config: LovelaceCardConfig): HassEntity[] {
-    const domains = Array.isArray(config.domains) ? config.domains : [];
-    const excludes = Array.isArray(config.exclude_entities)
-      ? config.exclude_entities
-      : [];
-    const filters = Array.isArray(config.filters)
-      ? config.filters
-      : ([
-          config.state !== undefined
-            ? { key: "state", value: config.state }
-            : undefined,
-          config.attributes !== undefined
-            ? { key: "attributes", value: config.attributes }
-            : undefined,
-        ].filter(Boolean) as Array<{ key: string; value: unknown }>);
-    const seen = new Set<string>();
-    return domains
-      .flatMap((domain) => {
-        const domainText = String(domain);
-        const indexed = this.entitiesByDomain[domainText];
-        if (indexed) return indexed;
-        return Object.values(this.hass?.states || {}).filter(
-          (entity) => computeDomain(entity.entity_id) === domainText,
-        );
-      })
-      .filter((entity) => {
-        if (seen.has(entity.entity_id)) return false;
-        seen.add(entity.entity_id);
-        if (
-          excludes.some((pattern: string) =>
-            this._matchNativeGroupPattern(entity.entity_id, String(pattern)),
-          )
-        ) {
-          return false;
-        }
-        return filters.every((filter) =>
-          this._nativeGroupMatchesFilter(
-            entity,
-            String(filter.key),
-            filter.value,
-          ),
+    return this._nativeGroupCandidateIds(config)
+      .map((entityId) => this.hass?.states?.[entityId])
+      .filter((entity): entity is HassEntity => {
+        if (!entity) return false;
+        return nativeGroupFilters(config).every((filter) =>
+          nativeGroupMatchesFilter(entity, filter),
         );
       });
   }
