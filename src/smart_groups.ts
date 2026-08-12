@@ -1,7 +1,7 @@
 import type { HassEntity } from "home-assistant-js-websocket";
 import {
   AreaRegistryEntry,
-  EntityRegistryEntry,
+  EntityRegistryEntryLike,
   DeviceRegistryEntry,
   computeDomain,
 } from "./ha";
@@ -23,11 +23,11 @@ const STATIC_KEYS = [
 
 export const filterStaticEntities = (
   ruleset: Ruleset,
-  entities: EntityRegistryEntry[],
+  entities: EntityRegistryEntryLike[],
   devices: DeviceRegistryEntry[],
   areas: AreaRegistryEntry[],
   hiddenEntities: string[],
-  entityMap: Map<string, EntityRegistryEntry>,
+  entityMap: Map<string, EntityRegistryEntryLike>,
   deviceMap: Map<string, DeviceRegistryEntry>,
   areaMap: Map<string, AreaRegistryEntry>
 ): string[] => {
@@ -73,7 +73,7 @@ export const filterDynamicEntities = (
   ruleset: Ruleset,
   candidateIds: string[],
   states: { [entity_id: string]: HassEntity },
-  entityMap: Map<string, EntityRegistryEntry>,
+  entityMap: Map<string, EntityRegistryEntryLike>,
   deviceMap: Map<string, DeviceRegistryEntry>,
   areaMap: Map<string, AreaRegistryEntry>
 ): HassEntity[] => {
@@ -121,7 +121,7 @@ export const filterDynamicEntities = (
 export function filterEntitiesByRuleset(
   card: StatusCardLike,
   ruleset: Ruleset,
-  entityMap?: Map<string, EntityRegistryEntry>,
+  entityMap?: Map<string, EntityRegistryEntryLike>,
   deviceMap?: Map<string, DeviceRegistryEntry>,
   areaMap?: Map<string, AreaRegistryEntry>
 ): HassEntity[] {
@@ -259,8 +259,8 @@ function match(actual: unknown, expected: unknown): boolean {
 interface MatcherHelpers {
   areas?: AreaRegistryEntry[];
   devices?: DeviceRegistryEntry[];
-  entities?: EntityRegistryEntry[];
-  entityMap?: Map<string, EntityRegistryEntry>;
+  entities?: EntityRegistryEntryLike[];
+  entityMap?: Map<string, EntityRegistryEntryLike>;
   deviceMap?: Map<string, DeviceRegistryEntry>;
   areaMap?: Map<string, AreaRegistryEntry>;
   card: StatusCardLike;
@@ -271,7 +271,7 @@ const matchers: {
     entity: HassEntity,
     value: unknown,
     helpers: MatcherHelpers,
-    entry?: EntityRegistryEntry
+    entry?: EntityRegistryEntryLike
   ) => boolean;
 } = {
   area: (entity, value, { entityMap, deviceMap }, entry) => {
@@ -375,8 +375,8 @@ function matchesRule(
   helpers: {
     areas?: AreaRegistryEntry[];
     devices?: DeviceRegistryEntry[];
-    entities?: EntityRegistryEntry[];
-    entityMap?: Map<string, EntityRegistryEntry>;
+    entities?: EntityRegistryEntryLike[];
+    entityMap?: Map<string, EntityRegistryEntryLike>;
     deviceMap?: Map<string, DeviceRegistryEntry>;
     areaMap?: Map<string, AreaRegistryEntry>;
   }

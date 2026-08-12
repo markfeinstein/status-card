@@ -1,15 +1,17 @@
-type entityCategory = "config" | "diagnostic";
+export type EntityCategory = "config" | "diagnostic";
 
 export interface EntityRegistryDisplayEntry {
   entity_id: string;
-  name?: string;
-  device_id?: string;
-  area_id?: string;
+  name?: string | null;
+  icon?: string | null;
+  device_id?: string | null;
+  area_id?: string | null;
   hidden?: boolean;
-  entity_category?: entityCategory;
+  entity_category?: EntityCategory | null;
   translation_key?: string;
   platform?: string;
-  display_precision?: number;
+  display_precision?: number | null;
+  labels?: string[];
 }
 
 export type LightColor =
@@ -30,7 +32,7 @@ export interface EntityRegistryEntry {
   area_id: string | null;
   disabled_by: "user" | "device" | "integration" | "config_entry" | null;
   hidden_by: Exclude<EntityRegistryEntry["disabled_by"], "config_entry">;
-  entity_category: entityCategory | null;
+  entity_category: EntityCategory | null;
   has_entity_name: boolean;
   original_name?: string;
   unique_id: string;
@@ -38,6 +40,20 @@ export interface EntityRegistryEntry {
   options: EntityRegistryOptions | null;
   labels: string[];
 }
+
+export type EntityRegistryEntryLike = EntityRegistryDisplayEntry &
+  Partial<
+    Pick<
+      EntityRegistryEntry,
+      | "config_entry_id"
+      | "disabled_by"
+      | "hidden_by"
+      | "has_entity_name"
+      | "original_name"
+      | "unique_id"
+      | "options"
+    >
+  >;
 
 export interface SensorEntityOptions {
   display_precision?: number | null;

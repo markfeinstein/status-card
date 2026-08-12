@@ -26,6 +26,7 @@ import {
   LovelaceCardConfig,
   Schema,
   EntityRegistryEntry,
+  EntityRegistryEntryLike,
   DeviceRegistryEntry,
   AreaRegistryEntry,
 } from "./ha";
@@ -97,10 +98,11 @@ export class StatusCard extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
   @state() public _shouldHideCard: boolean = false;
-  @state() public __registryEntities: EntityRegistryEntry[] = [];
+  @state() public __registryEntities: EntityRegistryEntryLike[] = [];
   @state() public __registryDevices: DeviceRegistryEntry[] = [];
   @state() public __registryAreas: AreaRegistryEntry[] = [];
   @state() private __registryFetchInProgress: boolean = false;
+  private __registryFetchToken = 0;
   @state() private _parsedGlobalCss: Record<string, string> = {};
   @state() private _parsedGlobalIconCss: Record<string, string> = {};
   @state() private _parsedGlobalCardCss: Record<string, string> = {};
@@ -114,39 +116,105 @@ export class StatusCard extends LitElement {
     entities: HomeAssistant["entities"] | undefined;
     index: Map<string, string[]>;
   } = { domainsKey: "", entities: undefined, index: new Map() };
+  private __fullRegistryEntitiesFor: HomeAssistant["entities"] | undefined;
 
-  private _invalidateRegistryData(): void {
-    this.__registryEntities = [];
+  private _registryEntityValuesMemo = memoizeOne(
+    (entities: HomeAssistant["entities"]): EntityRegistryEntryLike[] =>
+      Object.values(entities),
+  );
+  private _registryDeviceValuesMemo = memoizeOne(
+    (devices: HomeAssistant["devices"]): DeviceRegistryEntry[] =>
+      Object.values(devices),
+  );
+  private _registryAreaValuesMemo = memoizeOne(
+    (areas: HomeAssistant["areas"]): AreaRegistryEntry[] =>
+      Object.values(areas),
+  );
+
+  private _rulesetsNeedFullEntityRegistry(rulesets: Ruleset[]): boolean {
+    return rulesets.some((ruleset) => {
+      if (Array.isArray(ruleset.filters)) {
+        return ruleset.filters.some(
+          (filter) => filter.key === "hidden_by" || filter.key === "integration",
+        );
+      }
+      return ruleset.hidden_by !== undefined || ruleset.integration !== undefined;
+    });
+  }
+
+  private _registryDataReadyForRulesets(rulesets: Ruleset[]): boolean {
+    if (!rulesets.length) return true;
+    if (!this._rulesetsNeedFullEntityRegistry(rulesets)) return true;
+    return this.__fullRegistryEntitiesFor === this.hass?.entities;
+  }
+
+  private _syncFrontendRegistryData(): void {
+    if (!this.hass) return;
+
+    this.__registryDevices = this._registryDeviceValuesMemo(this.hass.devices || {});
+    this.__registryAreas = this._registryAreaValuesMemo(this.hass.areas || {});
+
+    const rulesets = this._config?.rulesets || [];
+    if (!this._rulesetsNeedFullEntityRegistry(rulesets)) {
+      this.__registryEntities = this._registryEntityValuesMemo(
+        this.hass.entities || {},
+      );
+      this.__fullRegistryEntitiesFor = undefined;
+      return;
+    }
+
+    if (this.__fullRegistryEntitiesFor !== this.hass.entities) {
+      this.__registryEntities = [];
+    }
+  }
+
+  private _invalidateRegistryData(entityRegistryChanged = true): void {
+    if (entityRegistryChanged) {
+      this.__registryEntities = [];
+      this.__fullRegistryEntitiesFor = undefined;
+    }
     this.__registryDevices = [];
     this.__registryAreas = [];
+    this.__registryFetchToken++;
     this.__registryFetchInProgress = false;
   }
 
   private _ensureRegistryData(): void {
+    if (!this.hass) return;
+
+    this._syncFrontendRegistryData();
+
+    const rulesets = this._config?.rulesets || [];
+    if (!this._rulesetsNeedFullEntityRegistry(rulesets)) return;
+
+    const registryIdentity = this.hass.entities;
     if (
-      this.__registryEntities.length ||
-      !this.hass ||
+      this.__fullRegistryEntitiesFor === registryIdentity ||
       typeof this.hass.callWS !== "function" ||
       this.__registryFetchInProgress
     ) {
       return;
     }
 
+    const fetchToken = ++this.__registryFetchToken;
     this.__registryFetchInProgress = true;
-    Promise.all([
-      cacheByProperty<EntityRegistryEntry>(this.hass, "entity", "entity_id"),
-      cacheByProperty<DeviceRegistryEntry>(this.hass, "device", "id"),
-      cacheByProperty<AreaRegistryEntry>(this.hass, "area", "area_id"),
-    ])
-      .then(([entityMap, deviceMap, areaMap]) => {
+    cacheByProperty<EntityRegistryEntry>(this.hass, "entity", "entity_id")
+      .then((entityMap) => {
+        if (
+          this.__registryFetchToken !== fetchToken ||
+          this.hass?.entities !== registryIdentity ||
+          !this._rulesetsNeedFullEntityRegistry(this._config?.rulesets || [])
+        ) {
+          return;
+        }
         this.__registryEntities = Object.values(entityMap);
-        this.__registryDevices = Object.values(deviceMap);
-        this.__registryAreas = Object.values(areaMap);
+        this.__fullRegistryEntitiesFor = registryIdentity;
       })
       .catch((e) => {
         console.error("Error fetching registry data", e);
       })
       .finally(() => {
+        if (this.__registryFetchToken !== fetchToken) return;
         this.__registryFetchInProgress = false;
         this.requestUpdate();
       });
@@ -188,7 +256,7 @@ export class StatusCard extends LitElement {
       oldHass.areas !== this.hass.areas
     ) {
       this._invalidateNativeGroupDomainIndex();
-      this._invalidateRegistryData();
+      this._invalidateRegistryData(oldHass.entities !== this.hass.entities);
       return true;
     }
 
@@ -282,7 +350,7 @@ export class StatusCard extends LitElement {
 
     const rulesets = this._config.rulesets || [];
     if (rulesets.length) {
-      if (!this.__registryEntities.length) return null;
+      if (!this._registryDataReadyForRulesets(rulesets)) return null;
       const candidatesMap = this._computeGroupCandidatesMemo(
         rulesets,
         this.__registryEntities,
@@ -521,7 +589,7 @@ export class StatusCard extends LitElement {
   private _computeDeviceClassItemsMemo = memoizeOne(computeDeviceClassItems);
 
   public _computeEntityMap = memoizeOne(
-    (entities: EntityRegistryEntry[]) =>
+    (entities: EntityRegistryEntryLike[]) =>
       new Map(entities.map((e) => [e.entity_id, e])),
   );
   public _computeDeviceMap = memoizeOne(
@@ -534,7 +602,7 @@ export class StatusCard extends LitElement {
   private _computeGroupCandidatesMemo = memoizeOne(
     (
       rulesets: Ruleset[],
-      entities: EntityRegistryEntry[],
+      entities: EntityRegistryEntryLike[],
       devices: DeviceRegistryEntry[],
       areas: AreaRegistryEntry[],
       hiddenEntities: string[],
@@ -566,7 +634,7 @@ export class StatusCard extends LitElement {
       candidatesMap: Map<string, string[]>,
       states: HomeAssistant["states"],
       rulesets: Ruleset[],
-      entities: EntityRegistryEntry[],
+      entities: EntityRegistryEntryLike[],
       devices: DeviceRegistryEntry[],
       areas: AreaRegistryEntry[],
     ): Map<string, HassEntity[]> => {
@@ -874,12 +942,19 @@ export class StatusCard extends LitElement {
 
     if (!this._config || !this.hass) return;
 
+    if (changedProps.has("hass") || changedProps.has("_config")) {
+      this._syncFrontendRegistryData();
+    }
+
     if (
       changedProps.has("hass") ||
       changedProps.has("_config") ||
       changedProps.has("hiddenEntities") ||
       changedProps.has("hiddenLabels") ||
-      changedProps.has("hiddenAreas")
+      changedProps.has("hiddenAreas") ||
+      changedProps.has("__registryEntities") ||
+      changedProps.has("__registryDevices") ||
+      changedProps.has("__registryAreas")
     ) {
       this._processEntities();
       this._updateShouldHideCard();

@@ -23,6 +23,18 @@ const state = (
 const registryEntries = (ids: string[]): HomeAssistant["entities"] =>
   Object.fromEntries(ids.map((entity_id) => [entity_id, { entity_id }]));
 
+const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+const deferred = <T>() => {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+};
+
 const hass = (
   states: Record<string, HassEntity>,
   overrides: Partial<HomeAssistant> = {},
@@ -603,5 +615,469 @@ describe("native groups", () => {
 
     expect((el as any)._hasRelevantHassStateChange(hass(oldStates), hass(unavailableStates))).toBe(true);
     expect((el as any)._hasRelevantHassStateChange(hass(oldStates), hass(noiseStates))).toBe(false);
+  });
+});
+
+describe("smart group registry reuse", () => {
+  const smartConfig = (ruleset: Record<string, unknown>): LovelaceCardConfig => ({
+    type: "custom:status-card",
+    content: ["synthetic-smart"],
+    rulesets: [
+      {
+        group_id: "synthetic-smart",
+        ...ruleset,
+      },
+    ],
+  });
+
+  const callsFor = (items: Record<string, unknown>[]) => {
+    const calls: string[] = [];
+    return {
+      calls,
+      callWS: async (msg: { type: string }) => {
+        calls.push(msg.type);
+        return items;
+      },
+    };
+  };
+
+  const groupResults = (el: StatusCard): string[] => {
+    const rulesets = (el as any)._config.rulesets;
+    const candidates = (el as any)._computeGroupCandidatesMemo(
+      rulesets,
+      (el as any).__registryEntities,
+      (el as any).__registryDevices,
+      (el as any).__registryAreas,
+      (el as any).hiddenEntities,
+    );
+    return ((el as any)._computeGroupResultsMemo(
+      candidates,
+      el.hass.states,
+      rulesets,
+      (el as any).__registryEntities,
+      (el as any).__registryDevices,
+      (el as any).__registryAreas,
+    ).get("synthetic-smart") || []).map((entity: HassEntity) => entity.entity_id);
+  };
+
+  it("uses frontend entity, device, and area registries without registry calls for domain, state, and attribute rulesets", async () => {
+    const ws = callsFor([]);
+    const entities = registryEntries([
+      "sensor.synthetic_battery",
+      "sensor.synthetic_temperature",
+    ]);
+    const devices = {
+      device_1: { id: "device_1", area_id: "area_1", labels: [] },
+    } as unknown as HomeAssistant["devices"];
+    const areas = {
+      area_1: { area_id: "area_1", floor_id: null, labels: [], name: "Area 1" },
+    } as unknown as HomeAssistant["areas"];
+    const el = card(
+      smartConfig({
+        domain: "sensor",
+        state: "< 25",
+        attributes: { device_class: "battery" },
+      }),
+      {
+        "sensor.synthetic_battery": state("sensor.synthetic_battery", "10", {
+          device_class: "battery",
+        }),
+        "sensor.synthetic_temperature": state("sensor.synthetic_temperature", "18", {
+          device_class: "temperature",
+        }),
+      },
+      { entities, devices, areas, callWS: ws.callWS } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual([]);
+    expect((el as any).__registryEntities).toEqual(Object.values(entities));
+    expect((el as any).__registryDevices).toEqual(Object.values(devices));
+    expect((el as any).__registryAreas).toEqual(Object.values(areas));
+    expect(groupResults(el)).toEqual(["sensor.synthetic_battery"]);
+  });
+
+  it("fetches the full entity registry exactly once for hidden_by rulesets without device or area registry calls", async () => {
+    const ws = callsFor([
+      {
+        entity_id: "sensor.synthetic_hidden",
+        platform: "demo",
+        config_entry_id: null,
+        hidden_by: "user",
+      },
+    ]);
+    const el = card(
+      smartConfig({ hidden_by: "user" }),
+      { "sensor.synthetic_hidden": state("sensor.synthetic_hidden", "on") },
+      {
+        entities: registryEntries(["sensor.synthetic_hidden"]),
+        callWS: ws.callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual(["config/entity_registry/list"]);
+    expect(groupResults(el)).toEqual(["sensor.synthetic_hidden"]);
+  });
+
+  it("fetches the full entity registry exactly once for integration rulesets so config_entry_id still matches", async () => {
+    const ws = callsFor([
+      {
+        entity_id: "sensor.synthetic_integration",
+        platform: "demo_platform",
+        config_entry_id: "config-entry-1",
+        hidden_by: null,
+      },
+    ]);
+    const el = card(
+      smartConfig({ integration: "config-entry-1" }),
+      { "sensor.synthetic_integration": state("sensor.synthetic_integration", "on") },
+      {
+        entities: {
+          "sensor.synthetic_integration": {
+            entity_id: "sensor.synthetic_integration",
+            platform: "other_platform",
+          },
+        },
+        callWS: ws.callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual(["config/entity_registry/list"]);
+    expect(groupResults(el)).toEqual(["sensor.synthetic_integration"]);
+  });
+
+  it("preserves display-entry labels for smart-group label filters without fallback", async () => {
+    const ws = callsFor([]);
+    const el = card(
+      smartConfig({ label: "critical" }),
+      { "sensor.synthetic_labeled": state("sensor.synthetic_labeled", "on") },
+      {
+        entities: {
+          "sensor.synthetic_labeled": {
+            entity_id: "sensor.synthetic_labeled",
+            labels: ["critical"],
+          },
+        },
+        callWS: ws.callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual([]);
+    expect(groupResults(el)).toEqual(["sensor.synthetic_labeled"]);
+  });
+
+  it("does not retry forever after a legitimate empty full registry fallback", async () => {
+    const ws = callsFor([]);
+    const el = card(
+      smartConfig({ hidden_by: "user" }),
+      {},
+      { entities: {}, callWS: ws.callWS } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual(["config/entity_registry/list"]);
+    expect(groupResults(el)).toEqual([]);
+  });
+
+  it("recomputes hide_card_if_empty after hidden_by fallback registry data resolves", async () => {
+    const ws = callsFor([
+      {
+        entity_id: "sensor.synthetic_hidden",
+        platform: "demo",
+        config_entry_id: null,
+        hidden_by: "user",
+      },
+    ]);
+    const el = card(
+      {
+        ...smartConfig({ hidden_by: "user" }),
+        hide_card_if_empty: true,
+      },
+      { "sensor.synthetic_hidden": state("sensor.synthetic_hidden", "on") },
+      {
+        entities: registryEntries(["sensor.synthetic_hidden"]),
+        callWS: ws.callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    (el as any)._updateShouldHideCard();
+    expect((el as any)._shouldHideCard).toBe(true);
+    expect(el.hidden).toBe(true);
+
+    await tick();
+    (el as any).willUpdate(new Map([["__registryEntities", []]]) as PropertyValues);
+
+    expect(ws.calls).toEqual(["config/entity_registry/list"]);
+    expect(groupResults(el)).toEqual(["sensor.synthetic_hidden"]);
+    expect((el as any)._shouldHideCard).toBe(false);
+    expect(el.hidden).toBe(false);
+  });
+
+  it("uses full fallback for filters-array hidden_by and integration rules", async () => {
+    const ws = callsFor([
+      {
+        entity_id: "sensor.synthetic_filters_array",
+        platform: "other_platform",
+        config_entry_id: "config-entry-1",
+        hidden_by: "user",
+      },
+    ]);
+    const el = card(
+      smartConfig({
+        filters: [
+          { key: "hidden_by", value: "user" },
+          { key: "integration", value: "config-entry-1" },
+        ],
+      }),
+      {
+        "sensor.synthetic_filters_array": state(
+          "sensor.synthetic_filters_array",
+          "on",
+        ),
+      },
+      {
+        entities: {
+          "sensor.synthetic_filters_array": {
+            entity_id: "sensor.synthetic_filters_array",
+            platform: "frontend_stub",
+          },
+        },
+        callWS: ws.callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    await tick();
+    (el as any)._ensureRegistryData();
+    await tick();
+
+    expect(ws.calls).toEqual(["config/entity_registry/list"]);
+    expect(groupResults(el)).toEqual(["sensor.synthetic_filters_array"]);
+  });
+
+  it("ignores a fallback response from an obsolete registry identity without clearing the active fetch", async () => {
+    const first = deferred<Record<string, unknown>[]>();
+    const second = deferred<Record<string, unknown>[]>();
+    const calls: string[] = [];
+    const responses = [first.promise, second.promise];
+    const callWS = async (msg: { type: string }) => {
+      calls.push(msg.type);
+      const response = responses.shift();
+      if (!response) throw new Error("unexpected duplicate registry fetch");
+      return response;
+    };
+    const oldHass = hass(
+      { "sensor.synthetic_old": state("sensor.synthetic_old", "on") },
+      {
+        entities: registryEntries(["sensor.synthetic_old"]),
+        callWS,
+      } as Partial<HomeAssistant>,
+    );
+    const newHass = hass(
+      { "sensor.synthetic_new": state("sensor.synthetic_new", "on") },
+      {
+        entities: registryEntries(["sensor.synthetic_new"]),
+        callWS,
+      } as Partial<HomeAssistant>,
+    );
+    const el = card(smartConfig({ hidden_by: "user" }), oldHass.states, {
+      entities: oldHass.entities,
+      callWS,
+    } as Partial<HomeAssistant>);
+
+    (el as any)._ensureRegistryData();
+    el.hass = newHass;
+    expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
+    (el as any)._ensureRegistryData();
+
+    first.resolve([
+      {
+        entity_id: "sensor.synthetic_old",
+        platform: "demo",
+        config_entry_id: null,
+        hidden_by: "user",
+      },
+    ]);
+    await tick();
+    (el as any)._ensureRegistryData();
+
+    expect(calls).toEqual([
+      "config/entity_registry/list",
+      "config/entity_registry/list",
+    ]);
+    expect(groupResults(el)).toEqual([]);
+
+    second.resolve([
+      {
+        entity_id: "sensor.synthetic_new",
+        platform: "demo",
+        config_entry_id: null,
+        hidden_by: "user",
+      },
+    ]);
+    await tick();
+
+    expect(groupResults(el)).toEqual(["sensor.synthetic_new"]);
+    expect(calls).toEqual([
+      "config/entity_registry/list",
+      "config/entity_registry/list",
+    ]);
+  });
+
+  it("ignores a fallback response after config changes to rules that use frontend registries", async () => {
+    const pending = deferred<Record<string, unknown>[]>();
+    const calls: string[] = [];
+    const callWS = async (msg: { type: string }) => {
+      calls.push(msg.type);
+      return pending.promise;
+    };
+    const displayEntities = {
+      "sensor.synthetic_current": {
+        entity_id: "sensor.synthetic_current",
+        platform: "frontend_stub",
+      },
+    };
+    const el = card(
+      smartConfig({ hidden_by: "user" }),
+      { "sensor.synthetic_current": state("sensor.synthetic_current", "on") },
+      {
+        entities: displayEntities,
+        callWS,
+      } as Partial<HomeAssistant>,
+    );
+
+    (el as any)._ensureRegistryData();
+    el.setConfig(smartConfig({ domain: "sensor" }));
+    (el as any)._ensureRegistryData();
+    pending.resolve([
+      {
+        entity_id: "sensor.synthetic_current",
+        platform: "demo",
+        config_entry_id: null,
+        hidden_by: "user",
+      },
+    ]);
+    await tick();
+    (el as any)._ensureRegistryData();
+
+    expect(calls).toEqual(["config/entity_registry/list"]);
+    expect((el as any).__registryEntities).toEqual(Object.values(displayEntities));
+    expect(groupResults(el)).toEqual(["sensor.synthetic_current"]);
+  });
+
+  it("recomputes candidates from frontend registries when registry object identity changes", async () => {
+    const oldHass = hass(
+      { "sensor.synthetic_old": state("sensor.synthetic_old", "on") },
+      { entities: registryEntries(["sensor.synthetic_old"]) },
+    );
+    const newHass = hass(
+      { "sensor.synthetic_new": state("sensor.synthetic_new", "on") },
+      { entities: registryEntries(["sensor.synthetic_new"]) },
+    );
+    const el = card(smartConfig({ domain: "sensor" }), oldHass.states, {
+      entities: oldHass.entities,
+    });
+
+    (el as any)._ensureRegistryData();
+    expect(groupResults(el)).toEqual(["sensor.synthetic_old"]);
+
+    el.hass = newHass;
+    expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
+    (el as any)._ensureRegistryData();
+
+    expect(groupResults(el)).toEqual(["sensor.synthetic_new"]);
+  });
+
+  it("keeps registry Object.values and candidate derivation memoized across unrelated state changes", async () => {
+    const entities = registryEntries([
+      "sensor.synthetic_tracked",
+      "sensor.synthetic_noise",
+    ]);
+    const devices = {} as HomeAssistant["devices"];
+    const areas = {} as HomeAssistant["areas"];
+    const config = smartConfig({ domain: "sensor", attributes: { device_class: "battery" } });
+    const oldHass = hass(
+      {
+        "sensor.synthetic_tracked": state("sensor.synthetic_tracked", "10", {
+          device_class: "battery",
+        }),
+        "sensor.synthetic_noise": state("sensor.synthetic_noise", "1", {
+          device_class: "temperature",
+        }),
+      },
+      { entities, devices, areas },
+    );
+    const el = card(config, oldHass.states, { entities, devices, areas });
+    (el as any)._ensureRegistryData();
+    const entitiesArray = (el as any).__registryEntities;
+    const devicesArray = (el as any).__registryDevices;
+    const areasArray = (el as any).__registryAreas;
+    const candidates = (el as any)._computeGroupCandidatesMemo(
+      config.rulesets,
+      entitiesArray,
+      devicesArray,
+      areasArray,
+      (el as any).hiddenEntities,
+    );
+
+    el.hass = hass(
+      {
+        ...oldHass.states,
+        "sensor.synthetic_noise": state("sensor.synthetic_noise", "2", {
+          device_class: "temperature",
+        }),
+      },
+      { entities, devices, areas },
+    );
+    (el as any)._ensureRegistryData();
+    const candidatesAfterStateChange = (el as any)._computeGroupCandidatesMemo(
+      config.rulesets,
+      (el as any).__registryEntities,
+      (el as any).__registryDevices,
+      (el as any).__registryAreas,
+      (el as any).hiddenEntities,
+    );
+
+    expect((el as any).__registryEntities).toBe(entitiesArray);
+    expect((el as any).__registryDevices).toBe(devicesArray);
+    expect((el as any).__registryAreas).toBe(areasArray);
+    expect(candidatesAfterStateChange).toBe(candidates);
+  });
+
+  it("keeps display-registry visible filtering parity by excluding state-less entries from rendered groups", async () => {
+    const el = card(
+      smartConfig({ domain: "sensor" }),
+      { "sensor.synthetic_visible": state("sensor.synthetic_visible", "on") },
+      {
+        entities: registryEntries([
+          "sensor.synthetic_visible",
+          "sensor.synthetic_disabled_without_state",
+        ]),
+      },
+    );
+
+    (el as any)._ensureRegistryData();
+
+    expect(groupResults(el)).toEqual(["sensor.synthetic_visible"]);
   });
 });

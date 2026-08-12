@@ -15,7 +15,10 @@ import type {
 } from "./data/translation";
 import type { Themes } from "./data/ws-themes";
 import type { LovelaceCardConfig } from "./data/lovelace";
-import type { EntityRegistryEntry } from "./data/entity_registry";
+import type {
+  EntityRegistryDisplayEntry,
+  EntityRegistryEntryLike,
+} from "./data/entity_registry";
 import type { TemplateResult } from "lit";
 
 export interface ConfigChangedEvent {
@@ -82,19 +85,6 @@ export interface Schema {
   default?: any;
   type?: string;
   schema?: Schema[];
-}
-
-interface EntityRegistryDisplayEntry {
-  entity_id: string;
-  name?: string;
-  device_id?: string;
-  area_id?: string;
-  hidden?: boolean;
-  entity_category?: "config" | "diagnostic";
-  translation_key?: string;
-  platform?: string;
-  display_precision?: number;
-  labels?: string[];
 }
 
 export interface DeviceRegistryEntry {
@@ -273,7 +263,7 @@ export interface StatusCardLike {
   entities?: { [key: string]: HassEntity };
   devices?: { [key: string]: DeviceRegistryEntry };
   areas?: { [key: string]: AreaRegistryEntry };
-  __registryEntities?: EntityRegistryEntry[];
+  __registryEntities?: EntityRegistryEntryLike[];
   __registryDevices?: DeviceRegistryEntry[];
   __registryAreas?: AreaRegistryEntry[];
   hiddenEntities?: string[];
@@ -288,8 +278,8 @@ export interface StatusCardInterface extends StatusCardLike {
   getCustomizationForType(key: string): LovelaceCardConfig | undefined;
   list_mode: boolean;
   _computeEntityMap(
-    entities: EntityRegistryEntry[]
-  ): Map<string, EntityRegistryEntry>;
+    entities: EntityRegistryEntryLike[]
+  ): Map<string, EntityRegistryEntryLike>;
   _computeDeviceMap(
     devices: DeviceRegistryEntry[]
   ): Map<string, DeviceRegistryEntry>;
