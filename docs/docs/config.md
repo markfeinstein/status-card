@@ -150,4 +150,14 @@ customization:  # customize almost everything
       action: more-info
     hold_action: # lets you choose a custom hold action
       action: more-info
+    popup_groups: # optional ordered sections inside that item's popup
+      - name: House
+        default: true
+        exclude_entities:
+          - lock.model_3_lock
+          - lock.model_s_lock
+      - name: Car
+        entity_ids:
+          - lock.model_3_lock
+          - lock.model_s_lock
 ```

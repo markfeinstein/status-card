@@ -28,6 +28,7 @@ import { computeLabelCallback, translateEntityState } from "./translations";
 import { DOMAIN_FEATURES } from "./const";
 import { toggleDomain } from "./card-actions";
 import { StatusCard } from "./card";
+import { matchNativeGroupPattern } from "./native-groups";
 import { PopupCardConfigCache, CardElementCache } from "./ha/types";
 
 const TOGGLEABLE_POPUP_DOMAINS = [
@@ -35,6 +36,19 @@ const TOGGLEABLE_POPUP_DOMAINS = [
   "valve", "remote", "media_player", "lock", "vacuum",
   "alarm_control_panel", "lawn_mower", "water_heater", "update",
 ];
+
+type PopupGroupConfig = {
+  name?: string;
+  title?: string;
+  group_id?: string;
+  entity_id?: string | string[];
+  entity_ids?: string | string[];
+  entities?: string[];
+  exclude_entities?: string[];
+  default?: boolean;
+};
+
+type EntityGroup = [string, HassEntity[]];
 
 export class StatusCardPopup extends LitElement {
   @property({ type: Boolean }) public open = false;
@@ -680,12 +694,77 @@ export class StatusCardPopup extends LitElement {
     );
   };
 
+  private _popupGroupPatterns(group: PopupGroupConfig): string[] {
+    const raw = group.entity_ids ?? group.entity_id ?? group.entities ?? [];
+    return (Array.isArray(raw) ? raw : [raw]).map((pattern) => String(pattern));
+  }
+
+  private _popupGroupName(group: PopupGroupConfig, index: number): string {
+    return group.name ?? group.title ?? group.group_id ?? `Group ${index + 1}`;
+  }
+
+  private _matchesPopupGroup(entity: HassEntity, group: PopupGroupConfig): boolean {
+    if (
+      (group.exclude_entities || []).some((pattern) =>
+        matchNativeGroupPattern(entity.entity_id, String(pattern)),
+      )
+    ) {
+      return false;
+    }
+
+    const patterns = this._popupGroupPatterns(group);
+    if (patterns.length === 0) return group.default === true;
+    return patterns.some((pattern) => matchNativeGroupPattern(entity.entity_id, pattern));
+  }
+
+  private _groupEntitiesByPopupGroups(
+    entities: HassEntity[],
+    popupGroups: PopupGroupConfig[],
+    sortEntities: (ents: HassEntity[]) => HassEntity[]
+  ): EntityGroup[] {
+    const remaining = new Set(entities.map((entity) => entity.entity_id));
+    const byId = new Map(entities.map((entity) => [entity.entity_id, entity]));
+    const buckets = popupGroups.map((group, index) => ({
+      id: this._popupGroupName(group, index),
+      entities: [] as HassEntity[],
+    }));
+
+    popupGroups.forEach((group, index) => {
+      if (group.default === true) return;
+      entities.forEach((entity) => {
+        if (!remaining.has(entity.entity_id)) return;
+        if (!this._matchesPopupGroup(entity, group)) return;
+        buckets[index].entities.push(entity);
+        remaining.delete(entity.entity_id);
+      });
+    });
+
+    popupGroups.forEach((group, index) => {
+      if (group.default !== true) return;
+      Array.from(remaining).forEach((entityId) => {
+        const entity = byId.get(entityId);
+        if (!entity || !this._matchesPopupGroup(entity, group)) return;
+        buckets[index].entities.push(entity);
+        remaining.delete(entityId);
+      });
+    });
+
+    return buckets
+      .filter((bucket) => bucket.entities.length > 0)
+      .map((bucket) => [bucket.id, sortEntities(bucket.entities)]);
+  }
+
   private groupAndSortEntities = memoizeOne(
     (
       entities: HassEntity[],
       areaMap: Map<string, string>,
-      sortEntities: (ents: HassEntity[]) => HassEntity[]
-    ): Array<[string, HassEntity[]]> => {
+      sortEntities: (ents: HassEntity[]) => HassEntity[],
+      popupGroups?: PopupGroupConfig[]
+    ): EntityGroup[] => {
+      if (Array.isArray(popupGroups) && popupGroups.length > 0) {
+        return this._groupEntitiesByPopupGroups(entities, popupGroups, sortEntities);
+      }
+
       const groups = new Map<string, HassEntity[]>();
       for (const entity of entities) {
         const areaId = this.getAreaForEntity(entity);
@@ -742,7 +821,8 @@ export class StatusCardPopup extends LitElement {
     const sortedGroups = this.groupAndSortEntities(
       ents,
       areaMap,
-      this.sortEntitiesForPopup
+      this.sortEntitiesForPopup,
+      customization?.popup_groups
     );
 
     const ungroupAreas =

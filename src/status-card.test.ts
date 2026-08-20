@@ -136,6 +136,54 @@ describe("active entity semantics", () => {
       "humidifier.synthetic_idle",
     ]);
   });
+
+  it("groups popup entities by configured sections before area grouping", () => {
+    const popup = new StatusCardPopup();
+    const states = {
+      "lock.front_door": state("lock.front_door", "locked", {
+        friendly_name: "Front Door",
+      }),
+      "lock.garage_door": state("lock.garage_door", "locked", {
+        friendly_name: "Garage Door",
+      }),
+      "lock.model_3_lock": state("lock.model_3_lock", "locked", {
+        friendly_name: "Model 3 Lock",
+      }),
+      "lock.model_s_lock": state("lock.model_s_lock", "locked", {
+        friendly_name: "Model S Lock",
+      }),
+    };
+    popup.hass = hass(states);
+    popup.card = {
+      _config: { type: "custom:status-card" },
+    } as StatusCard;
+
+    const groups = (popup as any).groupAndSortEntities(
+      Object.values(states),
+      new Map(),
+      (entities: HassEntity[]) => entities,
+      [
+        {
+          name: "House",
+          default: true,
+          exclude_entities: ["lock.model_3_lock", "lock.model_s_lock"],
+        },
+        {
+          name: "Car",
+          entity_ids: ["lock.model_3_lock", "lock.model_s_lock"],
+        },
+      ],
+    );
+
+    expect(groups.map(([name]: [string, HassEntity[]]) => name)).toEqual([
+      "House",
+      "Car",
+    ]);
+    expect(groups.map(([, entities]: [string, HassEntity[]]) => entities.map((entity) => entity.entity_id))).toEqual([
+      ["lock.front_door", "lock.garage_door"],
+      ["lock.model_3_lock", "lock.model_s_lock"],
+    ]);
+  });
 });
 
 describe("popup update gating", () => {
