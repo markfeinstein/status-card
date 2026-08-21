@@ -520,6 +520,76 @@ describe("native groups", () => {
     expect(ownKeysCount).toBe(0);
   });
 
+  it("can build native groups from entity_id filters without an explicit domain list", () => {
+    const config: LovelaceCardConfig = {
+      type: "custom:status-card",
+      content: ["synthetic-comfort"],
+      native_groups: [
+        {
+          type: "native-group",
+          group_id: "synthetic-comfort",
+          filters: [
+            {
+              key: "entity_id",
+              value: ["climate.synthetic_*", "fan.synthetic_*"],
+            },
+          ],
+          exclude_entities: ["climate.synthetic_source"],
+        },
+      ],
+    };
+    const el = card(config, {
+      "climate.synthetic_room": state("climate.synthetic_room", "heat", { hvac_action: "idle" }),
+      "climate.synthetic_source": state("climate.synthetic_source", "heat", { hvac_action: "idle" }),
+      "fan.synthetic_room": state("fan.synthetic_room", "off"),
+      "light.synthetic_room": state("light.synthetic_room", "on"),
+    });
+
+    expect((el as any)._nativeGroupEntities(config.native_groups![0]).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "climate.synthetic_room",
+      "fan.synthetic_room",
+    ]);
+  });
+
+  it("can open a native group popup with all entities while badge visibility can still use active entities", () => {
+    const config: LovelaceCardConfig = {
+      type: "custom:status-card",
+      content: ["synthetic-comfort"],
+      native_groups: [
+        {
+          type: "native-group",
+          group_id: "synthetic-comfort",
+          domains: ["climate", "fan"],
+          popup_entities: "all",
+          show_total_entities: false,
+          badge_active_count: true,
+        },
+      ],
+    };
+    const el = card(config, {
+      "climate.synthetic_idle": state("climate.synthetic_idle", "heat", { hvac_action: "idle" }),
+      "climate.synthetic_cooling": state("climate.synthetic_cooling", "cool", { hvac_action: "cooling" }),
+      "fan.synthetic_off": state("fan.synthetic_off", "off"),
+    });
+    const calls: any[] = [];
+    (el as any)._showPopup = (...args: any[]) => calls.push(args);
+
+    (el as any)._openNativeGroupPopup(0);
+
+    const params = calls[0][2];
+    expect(params.entities.map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "climate.synthetic_idle",
+      "climate.synthetic_cooling",
+      "fan.synthetic_off",
+    ]);
+    expect(params.allEntities.map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "climate.synthetic_idle",
+      "climate.synthetic_cooling",
+      "fan.synthetic_off",
+    ]);
+    expect(params.initialShowAll).toBe(true);
+  });
+
   it("keeps unknown native filters permissive for compatibility", () => {
     const config: LovelaceCardConfig = {
       type: "custom:status-card",

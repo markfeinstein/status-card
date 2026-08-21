@@ -25,6 +25,7 @@ import {
   ensureHelpersLoaded,
 } from "./helpers";
 import { computeLabelCallback, translateEntityState } from "./translations";
+import { matchNativeGroupPattern } from "./native-groups";
 import { DOMAIN_FEATURES } from "./const";
 import { toggleDomain } from "./card-actions";
 import { StatusCard } from "./card";
@@ -680,12 +681,68 @@ export class StatusCardPopup extends LitElement {
     );
   };
 
+  private _popupGroupPatterns(group: Record<string, unknown>): string[] {
+    const raw = group.entity_ids ?? group.entity_id ?? group.entities ?? [];
+    return (Array.isArray(raw) ? raw : [raw]).map((value) => String(value));
+  }
+
+  private _popupGroupName(group: Record<string, unknown>, index: number): string {
+    return String(group.name ?? group.title ?? group.group_id ?? `Group ${index + 1}`);
+  }
+
+  private _matchesPopupGroup(entity: HassEntity, group: Record<string, unknown>): boolean {
+    const excludes = Array.isArray(group.exclude_entities)
+      ? group.exclude_entities.map((pattern) => String(pattern))
+      : [];
+    if (excludes.some((pattern) => matchNativeGroupPattern(entity.entity_id, pattern))) {
+      return false;
+    }
+    const patterns = this._popupGroupPatterns(group);
+    return patterns.length === 0
+      ? group.default === true
+      : patterns.some((pattern) => matchNativeGroupPattern(entity.entity_id, pattern));
+  }
+
   private groupAndSortEntities = memoizeOne(
     (
       entities: HassEntity[],
       areaMap: Map<string, string>,
-      sortEntities: (ents: HassEntity[]) => HassEntity[]
+      sortEntities: (ents: HassEntity[]) => HassEntity[],
+      popupGroups?: Record<string, unknown>[],
     ): Array<[string, HassEntity[]]> => {
+      if (Array.isArray(popupGroups) && popupGroups.length > 0) {
+        const remaining = new Set(entities.map((entity) => entity.entity_id));
+        const byId = new Map(entities.map((entity) => [entity.entity_id, entity]));
+        const groups = popupGroups.map((group, index) => ({
+          id: this._popupGroupName(group, index),
+          entities: [] as HassEntity[],
+        }));
+
+        popupGroups.forEach((group, index) => {
+          if (group.default === true) return;
+          entities.forEach((entity) => {
+            if (!remaining.has(entity.entity_id)) return;
+            if (!this._matchesPopupGroup(entity, group)) return;
+            groups[index].entities.push(entity);
+            remaining.delete(entity.entity_id);
+          });
+        });
+
+        popupGroups.forEach((group, index) => {
+          if (group.default !== true) return;
+          Array.from(remaining).forEach((entityId) => {
+            const entity = byId.get(entityId);
+            if (!entity || !this._matchesPopupGroup(entity, group)) return;
+            groups[index].entities.push(entity);
+            remaining.delete(entityId);
+          });
+        });
+
+        return groups
+          .filter((group) => group.entities.length > 0)
+          .map((group) => [group.id, sortEntities(group.entities)]);
+      }
+
       const groups = new Map<string, HassEntity[]>();
       for (const entity of entities) {
         const areaId = this.getAreaForEntity(entity);
@@ -739,18 +796,23 @@ export class StatusCardPopup extends LitElement {
     });
     this._lastEntityIds = ents.map((e) => e.entity_id);
 
+    const popupGroups = Array.isArray(customization?.popup_groups)
+      ? customization.popup_groups
+      : undefined;
     const sortedGroups = this.groupAndSortEntities(
       ents,
       areaMap,
-      this.sortEntitiesForPopup
+      this.sortEntitiesForPopup,
+      popupGroups,
     );
 
     const ungroupAreas =
-      customization?.ungroup_areas === true ||
-      card?._config?.ungroupAreas === true ||
-      card?._config?.ungroup_areas === true ||
-      (card?._config?.area_grouping !== undefined &&
-        card?._config?.area_grouping === false);
+      !popupGroups &&
+      (customization?.ungroup_areas === true ||
+        card?._config?.ungroupAreas === true ||
+        card?._config?.ungroup_areas === true ||
+        (card?._config?.area_grouping !== undefined &&
+          card?._config?.area_grouping === false));
 
     const maxCardsPerArea = sortedGroups.length
       ? Math.max(...sortedGroups.map(([, ents]) => ents.length))

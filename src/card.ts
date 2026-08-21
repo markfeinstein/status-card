@@ -54,10 +54,11 @@ import {
 } from "./smart_groups";
 import {
   matchNativeGroupPattern,
-  nativeGroupDomains,
+  nativeGroupEntityPatterns,
   nativeGroupExcludePatterns,
   nativeGroupFilters,
   nativeGroupMatchesFilter,
+  nativeGroupSourceDomains,
 } from "./native-groups";
 import {
   getBackgroundColor,
@@ -210,7 +211,7 @@ export class StatusCard extends LitElement {
     const nativeGroups = this.getNativeGroupItems();
     if (nativeGroups.length > 0) {
       const domainsKey = this._nativeGroupDomainsKey(
-        nativeGroups.flatMap((item) => nativeGroupDomains(item.config)),
+        nativeGroups.flatMap((item) => nativeGroupSourceDomains(item.config)),
       );
       const cached = this._nativeGroupDomainIndexCache;
       if (cached.domainsKey !== domainsKey || cached.entities !== this.hass.entities) {
@@ -341,12 +342,13 @@ export class StatusCard extends LitElement {
 
   private _configuredNativeGroupDomains(): string[] {
     return this.getNativeGroupItems().flatMap((item) =>
-      nativeGroupDomains(item.config),
+      nativeGroupSourceDomains(item.config),
     );
   }
 
   private _nativeGroupCandidateIds(config: LovelaceCardConfig): string[] {
-    const domains = nativeGroupDomains(config);
+    const domains = nativeGroupSourceDomains(config);
+    const includes = nativeGroupEntityPatterns(config);
     const excludes = nativeGroupExcludePatterns(config);
     const index = this._nativeGroupDomainIndex(
       this._configuredNativeGroupDomains(),
@@ -357,6 +359,12 @@ export class StatusCard extends LitElement {
       (index.get(domain) || []).forEach((entityId) => {
         if (seen.has(entityId)) return;
         seen.add(entityId);
+        if (
+          includes.length &&
+          !includes.some((pattern) => matchNativeGroupPattern(entityId, pattern))
+        ) {
+          return;
+        }
         if (excludes.some((pattern) => matchNativeGroupPattern(entityId, pattern))) {
           return;
         }
@@ -371,8 +379,15 @@ export class StatusCard extends LitElement {
     entity: HassEntity | undefined,
   ): boolean {
     if (!entity) return false;
-    const domains = new Set(nativeGroupDomains(config));
+    const domains = new Set(nativeGroupSourceDomains(config));
     if (!domains.has(computeDomain(entity.entity_id))) return false;
+    const includes = nativeGroupEntityPatterns(config);
+    if (
+      includes.length &&
+      !includes.some((pattern) => matchNativeGroupPattern(entity.entity_id, pattern))
+    ) {
+      return false;
+    }
     if (
       nativeGroupExcludePatterns(config).some((pattern) =>
         matchNativeGroupPattern(entity.entity_id, pattern),
@@ -502,7 +517,7 @@ export class StatusCard extends LitElement {
           const config = nativeGroups?.find(
             (group) => (group.group_id || group.id || group.name) === id,
           );
-          if (!config || !Array.isArray(config.domains)) return undefined;
+          if (!config || nativeGroupSourceDomains(config).length === 0) return undefined;
           return {
             type: "nativeGroup" as const,
             group_id: id,
@@ -775,11 +790,16 @@ export class StatusCard extends LitElement {
       this._config.show_total_entities === true ||
       item.config.show_total_entities === true ||
       customization?.show_total_entities === true;
+    const popupEntitiesMode =
+      customization?.popup_entities ?? item.config.popup_entities;
+    const popupShowsAll =
+      popupEntitiesMode === "all" ||
+      (popupEntitiesMode !== "active" && showAll);
 
     this._showPopup(this, "status-card-popup", {
       title: customization?.name || item.config.name || item.group_id,
       hass: this.hass,
-      entities: showAll ? allEntities : activeEntities,
+      entities: popupShowsAll ? allEntities : activeEntities,
       allEntities,
       selectedGroup: index,
       card: this,
@@ -788,7 +808,7 @@ export class StatusCard extends LitElement {
         ? undefined
         : (this.hass?.localize("ui.card.empty_state.no_entities") ??
           "No entities"),
-      initialShowAll: showAll,
+      initialShowAll: popupShowsAll,
     });
   }
 
@@ -1535,12 +1555,28 @@ export class StatusCard extends LitElement {
       color,
       background_color,
     });
+    const badgeEntitiesMode =
+      customization?.badge_entities ?? item.config.badge_entities;
     const badgeCount =
+      badgeEntitiesMode === "active" ||
       customization?.badge_active_count === true ||
       item.config.badge_active_count === true ||
       this._config.badge_active_count === true
         ? active.length
-        : visibleEntities.length;
+        : badgeEntitiesMode === "all"
+          ? entities.length
+          : visibleEntities.length;
+    const hideBadgeWhenZero =
+      customization?.hide_badge_when_zero === true ||
+      item.config.hide_badge_when_zero === true ||
+      this._config.hide_badge_when_zero === true;
+    const hideCountText =
+      customization?.hide_count_text === true ||
+      item.config.hide_count_text === true;
+    const badgeValue =
+      showBadge && visibleEntities.length > 0 && !(hideBadgeWhenZero && badgeCount === 0)
+        ? String(badgeCount)
+        : undefined;
 
     return html`
       <ha-tab-group-tab
@@ -1550,11 +1586,7 @@ export class StatusCard extends LitElement {
         .actionHandler=${ah}
         class=${showBadge ? "badge-mode" : ""}
         style=${styleMap(badgeStyles)}
-        data-badge=${ifDefined(
-          showBadge && visibleEntities.length > 0
-            ? String(badgeCount)
-            : undefined,
-        )}
+        data-badge=${ifDefined(badgeValue)}
       >
         <div
           class="entity ${classMap(contentClasses)}"
@@ -1568,7 +1600,7 @@ export class StatusCard extends LitElement {
               ? html`<ha-svg-icon .path=${groupIcon}></ha-svg-icon>`
               : html`<ha-icon icon=${groupIcon}></ha-icon>`}
           </div>
-          ${!showBadge
+          ${!showBadge && !hideCountText
             ? html`<div class="entity-info">
                 ${!this.hide_content_name
                   ? html`<div

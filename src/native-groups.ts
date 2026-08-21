@@ -2,16 +2,49 @@ import type { HassEntity } from "home-assistant-js-websocket";
 
 export type NativeGroupFilter = { key: string; value: unknown };
 
+const asStringList = (value: unknown): string[] => {
+  if (Array.isArray(value)) return value.map((item) => String(item));
+  if (value === undefined || value === null) return [];
+  return [String(value)];
+};
+
+const domainFromPattern = (pattern: string): string | undefined => {
+  const dot = pattern.indexOf(".");
+  if (dot <= 0) return undefined;
+  const domain = pattern.slice(0, dot);
+  return domain.includes("*") ? undefined : domain;
+};
+
 export function nativeGroupDomains(config: Record<string, unknown>): string[] {
-  return Array.isArray(config.domains)
-    ? config.domains.map((domain) => String(domain))
-    : [];
+  return asStringList(config.domains);
+}
+
+export function nativeGroupEntityPatterns(config: Record<string, unknown>): string[] {
+  const configuredPatterns = [
+    ...asStringList(config.include_entities),
+    ...asStringList(config.entity_ids),
+    ...asStringList(config.entity_id),
+    ...asStringList(config.entities),
+  ];
+  const filterPatterns = nativeGroupFilters(config)
+    .filter((filter) => filter.key === "entity_id")
+    .flatMap((filter) => asStringList(filter.value));
+  return [...configuredPatterns, ...filterPatterns];
+}
+
+export function nativeGroupSourceDomains(config: Record<string, unknown>): string[] {
+  return Array.from(
+    new Set([
+      ...nativeGroupDomains(config),
+      ...nativeGroupEntityPatterns(config)
+        .map(domainFromPattern)
+        .filter((domain): domain is string => !!domain),
+    ]),
+  );
 }
 
 export function nativeGroupExcludePatterns(config: Record<string, unknown>): string[] {
-  return Array.isArray(config.exclude_entities)
-    ? config.exclude_entities.map((pattern) => String(pattern))
-    : [];
+  return asStringList(config.exclude_entities);
 }
 
 export function nativeGroupFilters(config: Record<string, unknown>): NativeGroupFilter[] {
