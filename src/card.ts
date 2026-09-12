@@ -113,26 +113,40 @@ export class StatusCard extends LitElement {
   private _nativeGroupDomainIndexCache: {
     domainsKey: string;
     entities: HomeAssistant["entities"] | undefined;
+    registryEntities: EntityRegistryEntry[] | undefined;
+    states: HomeAssistant["states"] | undefined;
+    registryDataLoaded: boolean;
+    usedStateFallback: boolean;
     index: Map<string, string[]>;
-  } = { domainsKey: "", entities: undefined, index: new Map() };
+  } = {
+    domainsKey: "",
+    entities: undefined,
+    registryEntities: undefined,
+    states: undefined,
+    registryDataLoaded: false,
+    usedStateFallback: false,
+    index: new Map(),
+  };
+  private __registryDataLoaded = false;
+  private __registryRefreshRequested = false;
+  private __registryRefreshGeneration = 0;
 
-  private _invalidateRegistryData(): void {
-    this.__registryEntities = [];
-    this.__registryDevices = [];
-    this.__registryAreas = [];
-    this.__registryFetchInProgress = false;
+  private _requestRegistryRefresh(): void {
+    this.__registryRefreshRequested = true;
+    this.__registryRefreshGeneration += 1;
   }
 
   private _ensureRegistryData(): void {
     if (
-      this.__registryEntities.length ||
       !this.hass ||
       typeof this.hass.callWS !== "function" ||
-      this.__registryFetchInProgress
+      this.__registryFetchInProgress ||
+      (this.__registryDataLoaded && !this.__registryRefreshRequested)
     ) {
       return;
     }
 
+    const fetchGeneration = this.__registryRefreshGeneration;
     this.__registryFetchInProgress = true;
     Promise.all([
       cacheByProperty<EntityRegistryEntry>(this.hass, "entity", "entity_id"),
@@ -140,16 +154,27 @@ export class StatusCard extends LitElement {
       cacheByProperty<AreaRegistryEntry>(this.hass, "area", "area_id"),
     ])
       .then(([entityMap, deviceMap, areaMap]) => {
+        if (this.__registryRefreshGeneration !== fetchGeneration) {
+          return;
+        }
         this.__registryEntities = Object.values(entityMap);
         this.__registryDevices = Object.values(deviceMap);
         this.__registryAreas = Object.values(areaMap);
+        this.__registryDataLoaded = true;
+        this.__registryRefreshRequested = false;
       })
       .catch((e) => {
         console.error("Error fetching registry data", e);
       })
       .finally(() => {
+        const needsFollowUp =
+          this.__registryRefreshRequested &&
+          this.__registryRefreshGeneration !== fetchGeneration;
         this.__registryFetchInProgress = false;
         this.requestUpdate();
+        if (needsFollowUp) {
+          this._ensureRegistryData();
+        }
       });
   }
 
@@ -189,7 +214,7 @@ export class StatusCard extends LitElement {
       oldHass.areas !== this.hass.areas
     ) {
       this._invalidateNativeGroupDomainIndex();
-      this._invalidateRegistryData();
+      this._requestRegistryRefresh();
       return true;
     }
 
@@ -305,6 +330,10 @@ export class StatusCard extends LitElement {
     this._nativeGroupDomainIndexCache = {
       domainsKey: "",
       entities: undefined,
+      registryEntities: undefined,
+      states: undefined,
+      registryDataLoaded: false,
+      usedStateFallback: false,
       index: new Map(),
     };
   }
@@ -313,8 +342,16 @@ export class StatusCard extends LitElement {
     const domainSet = new Set(Array.from(domains));
     const domainsKey = this._nativeGroupDomainsKey(domainSet);
     const entities = this.hass?.entities;
+    const registryEntities = this.__registryEntities;
+    const states = this.hass?.states;
     const cached = this._nativeGroupDomainIndexCache;
-    if (cached.domainsKey === domainsKey && cached.entities === entities) {
+    if (
+      cached.domainsKey === domainsKey &&
+      cached.entities === entities &&
+      cached.registryEntities === registryEntities &&
+      cached.registryDataLoaded === this.__registryDataLoaded &&
+      (!cached.usedStateFallback || cached.states === states)
+    ) {
       return cached.index;
     }
 
@@ -322,10 +359,6 @@ export class StatusCard extends LitElement {
     const seen = new Set<string>();
     domainSet.forEach((domain) => index.set(domain, []));
 
-    // Native groups discover registry-backed entity IDs from hass.entities.
-    // Direct explicit state entities remain supported elsewhere, but native
-    // groups intentionally do not scan hass.states for state-only additions;
-    // new native-group IDs are picked up when hass.entities identity changes.
     const addId = (entityId: string) => {
       if (seen.has(entityId)) return;
       const domain = computeDomain(entityId);
@@ -334,9 +367,25 @@ export class StatusCard extends LitElement {
       index.get(domain)?.push(entityId);
     };
 
+    if (this.__registryDataLoaded) {
+      registryEntities.forEach((entry) => addId(entry.entity_id));
+    }
     Object.keys(entities || {}).forEach(addId);
 
-    this._nativeGroupDomainIndexCache = { domainsKey, entities, index };
+    const usedStateFallback = !this.__registryDataLoaded;
+    if (usedStateFallback) {
+      Object.keys(states || {}).forEach(addId);
+    }
+
+    this._nativeGroupDomainIndexCache = {
+      domainsKey,
+      entities,
+      registryEntities,
+      states: usedStateFallback ? states : undefined,
+      registryDataLoaded: this.__registryDataLoaded,
+      usedStateFallback,
+      index,
+    };
     return index;
   }
 

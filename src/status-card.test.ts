@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { HassEntity } from "home-assistant-js-websocket";
-import { PropertyValues } from "lit";
+import { PropertyValues, render } from "lit";
 import { StatusCard } from "./card";
 import { StatusCardPopup } from "./popup-dialog";
 import type { HomeAssistant, LovelaceCardConfig } from "./ha";
@@ -75,6 +75,59 @@ const sharedHassParts = () => ({
   locale: { language: "en" },
   localize: (_key: string) => "localized",
 });
+
+const trustRegistry = (el: StatusCard, ids: string[]): void => {
+  (el as any).__registryEntities = Object.values(registryEntries(ids));
+  (el as any).__registryDevices = [];
+  (el as any).__registryAreas = [];
+  (el as any).__registryDataLoaded = true;
+};
+
+const controllableRegistryCallWS = () => {
+  const calls: Array<{
+    message: { type: string };
+    resolve: (value: Array<Record<string, string>>) => void;
+  }> = [];
+  const callWS: HomeAssistant["callWS"] = <T,>(message: any) =>
+    new Promise<T>((resolve) => {
+      calls.push({
+        message,
+        resolve: resolve as (value: Array<Record<string, string>>) => void,
+      });
+    });
+  const resolveNextFetch = (entityIds: string[]) => {
+    const batch = calls.splice(0, 3);
+    expect(batch.map((call) => call.message.type)).toEqual([
+      "config/entity_registry/list",
+      "config/device_registry/list",
+      "config/area_registry/list",
+    ]);
+    batch[0].resolve(entityIds.map((entity_id) => ({ entity_id })));
+    batch[1].resolve([]);
+    batch[2].resolve([]);
+  };
+  return { calls, callWS, resolveNextFetch };
+};
+
+const flushPromises = async () => {
+  for (let index = 0; index < 5; index += 1) {
+    await Promise.resolve();
+  }
+};
+
+const nativeGroupTabElement = (
+  el: StatusCard,
+  item: {
+    type: "nativeGroup";
+    group_id: string;
+    order: number;
+    config: LovelaceCardConfig;
+  },
+): Element | null => {
+  const host = document.createElement("div");
+  render((el as any).renderNativeGroupTab(item), host);
+  return host.querySelector("ha-tab-group-tab");
+};
 
 describe("active entity semantics", () => {
   it("treats idle climate and humidifier entities as inactive", () => {
@@ -397,6 +450,7 @@ describe("native groups", () => {
       areas: sharedAreas,
     });
     const el = card(nativeConfig, oldStates, { entities: oldHass.entities });
+    trustRegistry(el, ["sensor.synthetic_existing"]);
     el.hass = newHass;
 
     expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
@@ -423,6 +477,7 @@ describe("native groups", () => {
     let ownKeysCount = 0;
     const oldStates = statesWithoutOwnKeys(baseStates, () => ownKeysCount++);
     const el = card(nativeConfig, oldStates, shared);
+    trustRegistry(el, ["sensor.synthetic_low", "sensor.synthetic_noise"]);
     (el as any)._nativeGroupEntities(config);
     expect(ownKeysCount).toBe(0);
 
@@ -460,6 +515,233 @@ describe("native groups", () => {
     expect(ownKeysCount).toBe(0);
   });
 
+  it("uses state fallback while the fetched registry has not loaded", () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_low": state("sensor.synthetic_low", "12", { device_class: "battery" }),
+      "binary_sensor.synthetic_problem": state("binary_sensor.synthetic_problem", "on", { device_class: "problem" }),
+      "sensor.synthetic_noise": state("sensor.synthetic_noise", "1", { device_class: "temperature" }),
+    };
+    const el = card(nativeConfig, states, { entities: {} });
+
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "binary_sensor.synthetic_problem",
+    ]);
+  });
+
+  it("does not let a partial frontend registry suppress pending state fallback", () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_low": state("sensor.synthetic_low", "12", { device_class: "battery" }),
+      "binary_sensor.synthetic_problem": state("binary_sensor.synthetic_problem", "on", { device_class: "problem" }),
+      "sensor.synthetic_noise": state("sensor.synthetic_noise", "1", { device_class: "temperature" }),
+    };
+    const oldHass = hass(states, { entities: registryEntries(Object.keys(states)) });
+    const el = card(nativeConfig, states, { entities: oldHass.entities });
+
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "binary_sensor.synthetic_problem",
+    ]);
+
+    el.hass = hass(states, {
+      entities: registryEntries(["sensor.synthetic_noise"]),
+    });
+
+    expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "binary_sensor.synthetic_problem",
+    ]);
+  });
+
+  it("keeps a native-group tab renderable while registry fetch is pending", () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_low": state("sensor.synthetic_low", "12", { device_class: "battery" }),
+    };
+    const el = card(nativeConfig, states, { entities: {} });
+    const item = {
+      type: "nativeGroup" as const,
+      group_id: "synthetic-low-batteries",
+      order: 0,
+      config,
+    };
+
+    const template = (el as any).renderNativeGroupTab(item);
+
+    expect(template.strings.join("")).toContain("ha-tab-group-tab");
+  });
+
+  it("rebuilds a native group index when fetched registry entities arrive", () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_low": state("sensor.synthetic_low", "12", { device_class: "battery" }),
+      "binary_sensor.synthetic_problem": state("binary_sensor.synthetic_problem", "on", { device_class: "problem" }),
+      "sensor.synthetic_state_only": state("sensor.synthetic_state_only", "9", { device_class: "battery" }),
+    };
+    const el = card(nativeConfig, states, {
+      entities: registryEntries(["sensor.synthetic_low"]),
+    });
+
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "sensor.synthetic_state_only",
+      "binary_sensor.synthetic_problem",
+    ]);
+
+    trustRegistry(el, ["sensor.synthetic_low", "binary_sensor.synthetic_problem"]);
+
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "binary_sensor.synthetic_problem",
+    ]);
+  });
+
+  it("refreshes fetched registries with a controllable callWS lifecycle", async () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_low": state("sensor.synthetic_low", "12", { device_class: "battery" }),
+      "binary_sensor.synthetic_problem": state("binary_sensor.synthetic_problem", "on", { device_class: "problem" }),
+      "sensor.synthetic_state_only": state("sensor.synthetic_state_only", "9", { device_class: "battery" }),
+    };
+    const registry = controllableRegistryCallWS();
+    const el = card(nativeConfig, states, {
+      entities: registryEntries(["sensor.synthetic_low"]),
+      callWS: registry.callWS,
+    });
+
+    (el as any)._ensureRegistryData();
+    expect(registry.calls).toHaveLength(3);
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "sensor.synthetic_state_only",
+      "binary_sensor.synthetic_problem",
+    ]);
+
+    registry.resolveNextFetch(["sensor.synthetic_low", "binary_sensor.synthetic_problem"]);
+    await flushPromises();
+
+    expect((el as any).__registryDataLoaded).toBe(true);
+    expect((el as any).__registryRefreshRequested).toBe(false);
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_low",
+      "binary_sensor.synthetic_problem",
+    ]);
+  });
+
+  it("runs a follow-up registry fetch when identity changes during an active fetch", async () => {
+    const states = {
+      "sensor.synthetic_old": state("sensor.synthetic_old", "12", { device_class: "battery" }),
+      "sensor.synthetic_new": state("sensor.synthetic_new", "10", { device_class: "battery" }),
+    };
+    const registry = controllableRegistryCallWS();
+    const shared = {
+      ...sharedHassParts(),
+      callWS: registry.callWS,
+    };
+    const oldHass = hass(states, {
+      ...shared,
+      entities: registryEntries(["sensor.synthetic_old"]),
+    });
+    const el = card(nativeConfig, states, {
+      ...shared,
+      entities: oldHass.entities,
+    });
+
+    (el as any)._ensureRegistryData();
+    expect(registry.calls).toHaveLength(3);
+
+    el.hass = hass(states, {
+      ...shared,
+      entities: registryEntries(["sensor.synthetic_new"]),
+    });
+    expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
+    expect((el as any).__registryRefreshRequested).toBe(true);
+
+    registry.resolveNextFetch(["sensor.synthetic_old"]);
+    await flushPromises();
+
+    expect(registry.calls).toHaveLength(3);
+    expect((el as any).__registryRefreshRequested).toBe(true);
+
+    registry.resolveNextFetch(["sensor.synthetic_new"]);
+    await flushPromises();
+
+    expect(registry.calls).toHaveLength(0);
+    expect((el as any).__registryRefreshRequested).toBe(false);
+    expect((el as any)._nativeGroupEntities(nativeConfig.native_groups![0]).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_new",
+    ]);
+  });
+
+  it("keeps state fallback until the latest registry refresh succeeds", async () => {
+    const config = nativeConfig.native_groups![0];
+    const states = {
+      "sensor.synthetic_live": state("sensor.synthetic_live", "12", { device_class: "battery" }),
+    };
+    const registry = controllableRegistryCallWS();
+    const shared = {
+      ...sharedHassParts(),
+      callWS: registry.callWS,
+    };
+    const oldHass = hass(states, {
+      ...shared,
+      entities: {},
+    });
+    const el = card(nativeConfig, states, {
+      ...shared,
+      entities: oldHass.entities,
+    });
+    const item = {
+      type: "nativeGroup" as const,
+      group_id: "synthetic-low-batteries",
+      order: 0,
+      config,
+    };
+
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_live",
+    ]);
+    expect(nativeGroupTabElement(el, item)).not.toBeNull();
+
+    (el as any)._ensureRegistryData();
+    expect(registry.calls).toHaveLength(3);
+
+    el.hass = hass(states, {
+      ...shared,
+      entities: registryEntries(["sensor.synthetic_partial_registry_only"]),
+    });
+    expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
+    expect((el as any).__registryRefreshRequested).toBe(true);
+
+    registry.resolveNextFetch([]);
+    await flushPromises();
+
+    expect(registry.calls).toHaveLength(3);
+    expect((el as any).__registryDataLoaded).toBe(false);
+    expect((el as any).__registryRefreshRequested).toBe(true);
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_live",
+    ]);
+    expect(nativeGroupTabElement(el, item)).not.toBeNull();
+
+    registry.resolveNextFetch(["sensor.synthetic_live"]);
+    await flushPromises();
+
+    expect(registry.calls).toHaveLength(0);
+    expect((el as any).__registryDataLoaded).toBe(true);
+    expect((el as any).__registryRefreshRequested).toBe(false);
+    expect((el as any).__registryEntities.map((entry: { entity_id: string }) => entry.entity_id)).toEqual([
+      "sensor.synthetic_live",
+    ]);
+    expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
+      "sensor.synthetic_live",
+    ]);
+    expect(nativeGroupTabElement(el, item)).not.toBeNull();
+  });
+
   it("keeps one configured-domain index across multiple native groups", () => {
     const multiGroupConfig: LovelaceCardConfig = {
       type: "custom:status-card",
@@ -494,6 +776,7 @@ describe("native groups", () => {
     };
     const oldHass = hass(baseStates, shared);
     const el = card(multiGroupConfig, baseStates, shared);
+    trustRegistry(el, Object.keys(baseStates));
     for (const group of multiGroupConfig.native_groups!) {
       (el as any)._nativeGroupEntities(group);
     }
@@ -612,7 +895,7 @@ describe("native groups", () => {
     ]);
   });
 
-  it("invalidates native and ruleset registry caches when hass registries change", () => {
+  it("invalidates native cache and refreshes registries without dropping fetched entries", () => {
     const shared = sharedHassParts();
     const oldHass = hass({}, {
       ...shared,
@@ -626,14 +909,15 @@ describe("native groups", () => {
     (el as any).__registryEntities = [{ entity_id: "sensor.synthetic_old" }];
     (el as any).__registryDevices = [{ id: "device-old" }];
     (el as any).__registryAreas = [{ area_id: "area-old" }];
-    (el as any).__registryFetchInProgress = true;
+    (el as any).__registryDataLoaded = true;
     el.hass = newHass;
 
     expect((el as any).shouldUpdate(changed(oldHass))).toBe(true);
-    expect((el as any).__registryEntities).toEqual([]);
-    expect((el as any).__registryDevices).toEqual([]);
-    expect((el as any).__registryAreas).toEqual([]);
-    expect((el as any).__registryFetchInProgress).toBe(false);
+    expect((el as any)._nativeGroupDomainIndexCache.index).toEqual(new Map());
+    expect((el as any).__registryEntities).toEqual([{ entity_id: "sensor.synthetic_old" }]);
+    expect((el as any).__registryDevices).toEqual([{ id: "device-old" }]);
+    expect((el as any).__registryAreas).toEqual([{ area_id: "area-old" }]);
+    expect((el as any).__registryRefreshRequested).toBe(true);
   });
 
   it("native groups use registry-backed IDs and ignore state-only additions", () => {
@@ -649,6 +933,7 @@ describe("native groups", () => {
     const el = card(nativeConfig, states, {
       entities: registryEntries(["sensor.synthetic_registry"]),
     });
+    trustRegistry(el, ["sensor.synthetic_registry"]);
 
     expect((el as any)._nativeGroupEntities(config).map((entity: HassEntity) => entity.entity_id)).toEqual([
       "sensor.synthetic_registry",
